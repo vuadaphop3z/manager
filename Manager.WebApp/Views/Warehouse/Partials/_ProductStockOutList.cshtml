@@ -1,0 +1,173 @@
+﻿@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.ManageWarehouseModel
+
+<div class="row" id="StockOutProductList">
+    <div class="col-sm-12">
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ManagerResource.LB_STOCK_OUT
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+                    <ul class="m-portlet__nav">
+                        @if (Model.TotalCount > 0)
+                        {
+                            <li class="m-portlet__nav-item">
+                                <a href="javascript:;" class="btn btn-warning pull-right exportcsv" data-tableid="StockOutTable" data-filename="Stockout">
+                                    @ManagerResource.BT_OUTPUT_CSV
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form", @class = "", id = "frmStockOutSearch" }))
+                {
+                    <input type="hidden" id="CurrentPageStockOut" name="CurrentPage" value="@Model.CurrentPage" />
+                    <input type="hidden" id="PageSizeStockOut" name="PageSize" value="@Model.PageSize" />
+                }
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="StockOutTable" class="table m-table m-table--head-bg-brand table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="50">#</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_CODE</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_NAME</th>
+                                    <th class="text-center">@ManagerResource.LB_REORDER_POINT</th>
+                                    <th class="text-center">@ManagerResource.LB_STOCK_QTY</th>
+                                    <th class="text-center">@ManagerResource.LB_UNIT</th>
+                                    @*<th class="text-center">@ManagerResource.LB_STOCK_TAKE_QTY</th>*@
+                                    <th class="text-center">@ManagerResource.LB_SHORTAGE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResults)
+                                    {
+                                        if (record.ProductInfo != null)
+                                        {
+                                            var shortage = record.ProductInfo.CalculateMissingRemains();
+                                            stt++;
+                                            <tr class="@((shortage >= 0) ? string.Empty : "text-danger")" data-id="@record.Id" data-productid="@record.ProductId">
+                                                <td class="text-center">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                                <td class="text-center">
+                                                    @record.ProductInfo.Code
+                                                </td>
+                                                <td>
+                                                    <b>@record.ProductInfo.Name</b>
+                                                </td>
+                                                <td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(record.ProductInfo.MinInventory)</b>
+                                                </td>
+                                                <td class="text-right">
+                                                    <b title="@ManagerResource.LB_ITEM_REMAINS_IN_WAREHOUSE">@Utils.DoubleToStringFormat(record.WarehouseNum)</b>
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (Model.Units.HasData())
+                                                    {
+                                                        var myUnit = Model.Units.Where(x => x.Id == record.ProductInfo.UnitId).FirstOrDefault();
+                                                        if (myUnit != null)
+                                                        {
+                                                            <span>@myUnit.Name</span>
+                                                        }
+                                                    }
+                                                </td>
+                                                @*<td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(record.StockTakeQTY)</b>
+                                                </td>*@                                                
+                                                <td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(shortage)</b>
+                                                </td>
+                                                @*<td>
+                                            @{
+                                                var newModel = Model;
+                                                newModel.Id = record.Id;
+                                                newModel.SearchExec = "Y";
+                                            }
+                                            <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Edit", "Warehouse", new { id = record.Id,SearchExec = 'Y',Page = Model.CurrentPage,Keyword = Model.Keyword })" title="@ManagerResource.LB_EDIT">
+                                                <i class="la la-pencil"></i>
+                                            </a>
+                                            <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Delete", "Warehouse", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                <i class="la la-trash"></i>
+                                            </a>
+                                        </td>*@
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @RenderPaging()
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+@helper RenderPaging()
+{
+    <div class="m_datatable m-datatable m-datatable--default m-datatable--brand m-datatable--loaded">
+        <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
+            @if (Model.WasOverRecordsInPage())
+            {
+                @Html.BootstrapPager(Model.CurrentPage, index => "javascript:;",
+                    Model.TotalCount, pageSize: Model.PageSize, numberOfLinks: 10, onclickEnvent: "StockOutListNext")
+            }
+
+            @if (Model.TotalCount > 0)
+            {
+                <div class="m-datatable__pager-info">
+                    <span class="m-datatable__pager-detail">
+                        @ManagerResource.LB_DISPLAYING @Model.StartCount() @ManagerResource.LB_TO @Model.EndCount(Model.SearchResults.Count()) @ManagerResource.LB_OF @Model.TotalCount @ManagerResource.LB_RECORDS
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script>
+    function StockOutListNext(pageNum) {
+        $("#CurrentPageStockOut").val(pageNum);
+        StockOutListSearch();
+    }
+
+    function StockOutListSearch() {
+        var frmData = $("#frmStockOutSearch").serialize();
+        var params = $.extend({}, doAjax_params_default);
+        params['url'] = "/Warehouse/GetListProductStockOut";
+        params['requestType'] = "POST";
+        params['data'] = frmData;
+        params['dataType'] = "html";
+
+        params['successCallbackFunction'] = function (data) {
+            $("#StockOutProductList").parent().html(data);
+        };
+
+        doAjax(params);
+    }
+</script>

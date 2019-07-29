@@ -1,0 +1,45 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.PriceTypeEditModel
+
+<div class="m-section__content">
+    <!--begin::Preview-->
+    <div class="m-demo">
+        <div class="m-demo__preview">
+            <div class="m-list-timeline">
+                <div class="m-list-timeline__items">
+                    @if (Model != null && Model.LangList != null && Model.LangList.Count > 0)
+                    {
+                        @RenderLangList()
+                    }
+                    else {
+                        <p>@ManagerResource.LB_HAS_NO_DATA</p>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--end::Preview-->
+</div>
+
+@helper RenderLangList()
+{
+    foreach (var item in Model.LangList)
+    {
+        <div class="m-list-timeline__item">
+            <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
+            <span class="m-list-timeline__text">
+                @item.Name (@item.LangCode)
+            </span>
+            <span class="m-list-timeline__time">
+                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" data-modal="" href="/PropertyCategory/UpdateProperty?id=@item.Id&PropertyCategoryId=@item.PropertyCategoryId" title="@ManagerResource.LB_EDIT">
+                    <i class="la la-pencil"></i>
+                </a>
+                <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("DeleteProperty", "PropertyCategory", new { id = item.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                    <i class="la la-trash"></i>
+                </a>
+            </span>
+        </div>
+    }
+}

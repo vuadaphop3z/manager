@@ -1,0 +1,216 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-white btn-sm" id="btnGet">GET request</button>
+        <button class="btn btn-white btn-sm" id="btnPost">POST request</button>
+    </div>
+</div>
+
+@section PageInlineScripts{
+    <script>
+        String.prototype.endsWith = function (suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+
+        var doAjax_params_default = {
+            'url': null,
+            'requestType': "GET",
+            'contentType': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'dataType': 'json',
+            'data': {},
+            'beforeSendCallbackFunction': null,
+            'successCallbackFunction': null,
+            'completeCallbackFunction': null,
+            'errorCallBackFunction': null,
+        };
+
+
+        function doAjax(doAjax_params) {
+
+            var url = doAjax_params['url'];
+            var requestType = doAjax_params['requestType'];
+            var contentType = doAjax_params['contentType'];
+            var dataType = doAjax_params['dataType'];
+            var data = doAjax_params['data'];
+            var beforeSendCallbackFunction = doAjax_params['beforeSendCallbackFunction'];
+            var successCallbackFunction = doAjax_params['successCallbackFunction'];
+            var completeCallbackFunction = doAjax_params['completeCallbackFunction'];
+            var errorCallBackFunction = doAjax_params['errorCallBackFunction'];
+
+            //make sure that url ends with '/'
+            if (!url.endsWith("/")) {
+                url = url + "/";
+            }
+
+            $.ajax({
+                url: url,
+                crossDomain: true,
+                type: requestType,
+                contentType: contentType,
+                dataType: dataType,
+                data: data,
+                beforeSend: function (jqXHR, settings) {
+                    if (typeof beforeSendCallbackFunction === "function") {
+                        beforeSendCallbackFunction();
+                    }
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (typeof successCallbackFunction === "function") {
+                        successCallbackFunction(data);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (typeof errorCallBackFunction === "function") {
+                        errorCallBackFunction(errorThrown);
+                    }
+
+                },
+                complete: function (jqXHR, textStatus) {
+                    if (typeof completeCallbackFunction === "function") {
+                        completeCallbackFunction();
+                    }
+                }
+            });
+        }
+
+        $('#btnTest1').on('click', function () {
+            var params = $.extend({}, doAjax_params_default);
+            params['url'] = 'Demo/Test1';
+            params['requestType'] = 'GET';
+            params['data'] = { id: 123 };
+
+            params['successCallbackFunction'] = afterGetSuccess;
+            params['beforeSendCallbackFunction'] = beforeSendGet;           
+            params['completeCallbackFunction'] = completeGet;
+            doAjax(params);
+        });
+
+        function beforeSendGet() {
+            $body.removeClass("loading");
+            $(".overlay").hide();
+            console.log('Before send with no overlay');
+        }
+
+        function afterGetSuccess(data) {
+            alert('ok');
+            console.log(data);
+        }
+
+        function completeGet() {
+            console.log('Completed');
+        }
+
+
+        $('#btnGet').on('click', function () {
+            var params = $.extend({}, doAjax_params_default);
+            params['url'] = 'Demo/Test1';
+            params['requestType'] = 'GET';
+            params['data'] = { id: 123 };
+            params['beforeSendCallbackFunction'] = beforeSendGet;
+            params['successCallbackFunction'] = afterGetSuccess;
+            params['completeCallbackFunction'] = completeGet;
+            doAjax(params);
+        });
+
+        function beforeSendGet() {
+            $body.removeClass("loading");
+            $(".overlay").hide();
+            console.log('Before send with no overlay');
+        }
+
+        function afterGetSuccess(data) {
+            alert('ok');
+            console.log(data);
+        }
+
+        function completeGet() {
+            console.log('Completed');
+        }
+
+        //----------------------------------------POST request------------------------------------------------------
+
+        $('#btnPost').on('click', function () {
+            var params = $.extend({}, doAjax_params_default);
+            params['url'] = 'Demo/Test2';
+            params['requestType'] = 'POST';
+            params['data'] = { id: 456, name: "New application", isBase: true };
+            params['beforeSendCallbackFunction'] = beforeSendPost;
+            params['successCallbackFunction'] = afterPostSuccess;
+            params['completeCallbackFunction'] = completePost;
+            doAjax(params);
+        });
+
+        function beforeSendPost() {
+            //$body.removeClass("loading");
+            //$(".overlay").hide();
+            console.log('Before send POST with overlay');
+        }
+
+        function afterPostSuccess(data) {
+            alert('POST ok');
+            console.log(data);
+            if (data) {
+                if (data.result)
+                    console.log(data.result.Name);
+            }
+        }
+
+        function completePost() {
+            console.log('Post Completed');
+        }
+
+
+
+        function Person(first, last, age, eyecolor) {
+            this.firstName = first;
+            this.lastName = last;
+            this.age = age;
+            this.eyeColor = eyecolor;
+        }
+
+        Person.prototype.getname = function () {
+            return this.firstName + " " + this.lastName;
+        };
+
+        var myFather = new Person("John", "Doe", 50, "blue");
+        //alert("My father is " + myFather.getname());        
+
+        //-----------------------------------------------------
+
+        function CustomerPrototype(proto) {
+            this.proto = proto;
+
+            this.clone = function () {
+                var customer = new Customer();
+
+                customer.first = proto.first;
+                customer.last = proto.last;
+                customer.status = proto.status;
+
+                return customer;
+            };
+        }
+
+        function Customer(first, last, status) {
+
+            this.first = first;
+            this.last = last;
+            this.status = status;
+
+            this.say = function () {
+                alert("name: " + this.first + " " + this.last +
+                    ", status: " + this.status);
+            };
+        }
+
+        function run() {
+
+            var proto = new Customer("n/a", "n/a", "pending");
+            var prototype = new CustomerPrototype(proto);
+
+            var customer = prototype.clone();
+            customer.say();
+        }
+
+        run();
+    </script>
+}

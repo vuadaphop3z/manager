@@ -1,0 +1,80 @@
+﻿<div class="row">
+    <div class="col-sm-5">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-signal"></i>
+                    Kplus Website Statistics
+                </h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="piechart-placeholder" style="width: 100%; min-height: 120px; padding: 0px; position: relative; text-align:center">
+                        <span class="btn btn-app btn-sm btn-success no-hover" style="width:40%">
+                            <span class="line-height-1 bigger-170" id="lblTotal"> 0 </span>
+
+                            <br>
+                            <span class="line-height-1 smaller-90"> Users online</span>
+                        </span>
+                    </div>
+                    <div class="clearfix">
+
+                        @*<div class="grid3">
+                                <span class="grey">
+                                    <i class="ace-icon fa fa-twitter-square fa-2x purple"></i>
+                                    &nbsp; tweets
+                                </span>
+                                <h4 class="bigger pull-right">941</h4>
+                            </div>
+
+                            <div class="grid3">
+                                <span class="grey">
+                                    <i class="ace-icon fa fa-pinterest-square fa-2x red"></i>
+                                    &nbsp; pins
+                                </span>
+                                <h4 class="bigger pull-right">1,050</h4>
+                            </div>*@
+                    </div>
+
+                    <div class="fc-header-right hr8"></div>
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div><!-- /.widget-box -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5 text-center">
+
+        <br />
+        <button onclick="Refresh()" class="btn btn-sm btn-info" type="button">Refresh</button>
+    </div>
+</div>
+
+@section PageInlineScripts{  
+    <script src="http://ottmsdev.kplus.vn:3000/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://ottmsdev.kplus.vn:3000');
+        socket.emit('adduser', 'admin');
+        // listener, whenever the server emits 'update_count'
+        socket.on('update_count', function (count_num) {
+            $("#lblTotal").html(count_num);
+        });
+
+        $(document).ready(function () {
+            Refresh();
+        });
+
+        function Refresh() {
+            socket.emit('adminrefresh');
+        }
+    </script>
+}
+
+@*<script src="http://ottmsdev.kplus.vn:3000/socket.io/socket.io.js"></script>
+<script>
+    //var socket = io();
+    var socket = io.connect('http://ottmsdev.kplus.vn:3000');
+    socket.emit('adduser', 'user');
+</script>*@

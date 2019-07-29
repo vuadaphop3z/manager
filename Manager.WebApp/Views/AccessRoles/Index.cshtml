@@ -1,0 +1,154 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.AccessRolesViewModel
+
+@{
+    ViewBag.Title = ManagerResource.LB_GRANT_PERMISSION;    
+}
+
+
+@Html.Partial("_Notifications")
+
+<div class="row">
+    <div class="col-lg-12">
+        @RenderForm()
+    </div>    
+</div>
+
+@helper RenderForm() { 
+    var isAdmin = AccountHelper.CurrentUserIsAdmin();
+     <!--begin::Portlet-->
+        <div class="m-portlet m-portlet--full-height">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ManagerResource.LB_GRANT_PERMISSION_TO_ROLE
+                        </h3>
+                    </div>
+                </div>
+            </div>            
+            <div class="m-portlet__body">
+                @if (Model.AllRoles != null && Model.AllRoles.Count > 0)
+                {                   
+                    <select class="form-control col-md-4" name="RoleId" id="RoleId" onchange="SelectRole();">
+                        <option value="">@ManagerResource.LB_SELECT_ROLE</option>                        
+                        @foreach (var role in Model.AllRoles)
+                        {
+                            if (!isAdmin)
+                            {
+                                if(role.Name.ToLower() == "admin")
+                                {
+                                    continue;
+                                }
+                            }
+                            <option value="@role.Id" @((Model.RoleId == role.Id)? "selected" : string.Empty)>@role.Name</option>
+                        }
+                    </select>
+                }
+
+                @using (Html.BeginForm("UpdateAccessRoles", "AccessRoles", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.RoleId)
+
+                     <!--begin::Section-->
+                    if (Model.AllAccess != null && Model.AllAccess.Count > 0)
+                    {
+                        var count = 0;
+
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="la la-save"></i>
+                                    @ManagerResource.LB_SAVE
+                                </button>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_7" role="tablist">
+                        <!--begin::Item-->
+                             @foreach (var acc in Model.AllAccess)
+                             {
+                                 if(!isAdmin && (acc.AccessName == "Menu" || acc.AccessName == "FrontEndSystem" || acc.AccessName == "Navigation"
+                                     || acc.AccessName == "Access" || acc.AccessName == "Function")){
+
+                                     count++;
+                                     continue;
+                                 }
+
+                                 <div class="m-accordion__item">
+                                    <div class="m-accordion__item-head collapsed" role="tab" id="m_accordion_@(count)_item_1_head" data-toggle="collapse" href="#m_accordion_@(count)_item_1_body" aria-expanded="false">
+                                       
+                                        <span class="m-accordion__item-title">
+                                            @acc.AccessName - @acc.Description
+                                        </span>
+                                        <span class="m-accordion__item-mode"></span>
+                                    </div>
+                                    <div class="m-accordion__item-body collapse" id="m_accordion_@(count)_item_1_body" role="tabpanel" aria-labelledby="m_accordion_@(count)_item_1_head" data-parent="#m_accordion_@(count)">
+                                        <div class="m-accordion__item-content">
+                                            <div class="m-checkbox-inline">
+                                                @if (acc.OperationsList != null && acc.OperationsList.Count > 0)
+                                                {
+                                                    foreach (var op in acc.OperationsList)
+                                                    {
+                                                        var isChecked = false;
+                                                        if (Model.PermissionsList != null && Model.PermissionsList.Count > 0)
+                                                        {
+                                                            if (Model.PermissionsList != null && Model.PermissionsList.Count > 0)
+                                                            {
+                                                                foreach (var per in Model.PermissionsList)
+                                                                {
+                                                                    if (op.Id == per.OperationId)
+                                                                    {
+                                                                        isChecked = true;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        if (isChecked)
+                                                        {
+                                                            <label class="m-checkbox">
+                                                                <input name="selectedOperations" id="@op.Id" value="@op.Id" class="m-checkbox m-checkbox--state-success" checked type="checkbox">
+                                                                @op.OperationName
+                                                                <span></span>
+                                                            </label>
+                                                        }
+                                                        else
+                                                        {
+                                                             <label class="m-checkbox">
+                                                                <input name="selectedOperations" id="@op.Id" value="@op.Id" class="m-checkbox m-checkbox--state-primary" type="checkbox">
+                                                                @op.OperationName
+                                                                <span></span>
+                                                            </label>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div><label class="label label-default">No operation in here</label></div>
+                                                }                                          
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                 count++;
+                             }
+                        
+                        <!--end::Item-->
+                    </div>
+                    }                
+                <!--end::Section-->
+                }
+               
+            </div>
+        </div>
+        <!--end::Portlet-->    
+}
+
+<script type="text/javascript">
+    function SelectRole() {
+        window.location.href = "?RoleId=" + $("#RoleId").val();
+    }
+</script>

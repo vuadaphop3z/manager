@@ -1,0 +1,68 @@
+﻿@*@using Manager.WebApp.Models*@
+@using MsSql.AspNet.Identity
+@using Manager.WebApp.Helpers
+
+@*@{  
+    var menuParentList = new List<IdentityMenu>();
+          
+    var currentMenuItem = MenuHelper.GetCurrentMenuItemCustom();
+
+    IdentityMenu parentMenuItem = null;
+    if (currentMenuItem!=null && currentMenuItem.ParentId!=null)
+    {
+        parentMenuItem = MenuHelper.GetMenuItemByIDCustom(currentMenuItem.ParentId.Value);
+    }
+
+    while (parentMenuItem != null)
+    {
+        menuParentList.Insert(0, parentMenuItem);
+
+        if (parentMenuItem.ParentId == null)
+        {
+            parentMenuItem = null;
+        }
+        else
+        {
+            parentMenuItem = MenuHelper.GetMenuItemByIDCustom(parentMenuItem.ParentId.Value);
+        }
+    }       
+}
+
+
+<ul class="breadcrumb">
+    <li>
+        <i class="ace-icon fa fa-home home-icon"></i>
+        <a href="@Url.Action("Index","Home")">Home</a>
+    </li>
+
+    @foreach(var pmi in menuParentList)
+    {
+
+        var itemUrl = !string.IsNullOrEmpty(pmi.Action) && !string.IsNullOrEmpty(pmi.Controller) ?
+                      Url.Action(pmi.Action, pmi.Controller) : "javascript:;";
+        
+    <li>
+        <a href="@itemUrl">@pmi.Title</a>
+    </li>
+    }
+
+    @if (currentMenuItem!=null)
+    { 
+        <li class="active">@currentMenuItem.Title</li>
+    }
+</ul>*@
+
+
+@*<ul class="breadcrumb">
+    <li>
+        <i class="ace-icon fa fa-home home-icon"></i>
+        <a href="#">Home</a>
+    </li>
+
+    <li>
+        <a href="#">Other Pages</a>
+    </li>
+    <li class="active">Blank Page</li>
+</ul>*@
+
+

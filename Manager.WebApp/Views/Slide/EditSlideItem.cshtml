@@ -1,0 +1,41 @@
+﻿@using Manager.WebApp.Settings;
+@using Manager.WebApp.Models;
+@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.SlideItemUpdateModel
+
+@{
+    ViewBag.Title = "Quản lý các thành phần của slide";
+    ViewBag.HideSubHeader = true;
+}
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h4 class="m-portlet__head-text">
+                    @ManagerResource.LB_UPDATE_INFO
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!--begin::Form-->
+    @RenderUpdateSlideForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderUpdateSlideForm()
+{
+    using (Html.BeginForm("EditSlideItem", "Slide", FormMethod.Post, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed", enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(m => m.SlideId)
+        @Html.Partial("../Slide/_UpdateSlideItemForm", Model)
+    }
+}
+
+@section PageInlineScripts{
+    <script src="~/Scripts/Common/common.mediaselect.js"></script>
+}

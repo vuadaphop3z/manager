@@ -1,0 +1,162 @@
+﻿@using Newtonsoft.Json
+@using MsSql.AspNet.Identity.Entities
+@model MsSql.AspNet.Identity.Entities.MetaShopPolicy
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.PolicyData))
+    {
+        MetaChildCommon myPolicy = null;
+        try
+        {
+            myPolicy = JsonConvert.DeserializeObject<MetaChildCommon>(Model.PolicyData);
+        }
+        catch(Exception ex)
+        {
+            <div>
+                RenderView error: @ex.ToString()
+            </div>
+        }
+
+        if (myPolicy != null)
+        {
+            @RenderPolicyData(myPolicy)
+        }
+    }
+}
+
+@helper RenderPolicyData(MetaChildCommon myPolicy)
+    {
+        <div class="row property-content">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-12">
+                        <fieldset>
+                            <legend style="font-size: 15px;">Chính sách chung</legend>
+                            <div>
+                                @if (myPolicy.AcceptGuest > 0)
+                                {
+                                    <p>+ Không cho phép khách dưới @myPolicy.AcceptGuest tuổi được ở một mình.</p>
+                                }
+
+                                @if (myPolicy.ChildrenOver > 0)
+                                {
+                                    <p>+ Trẻ em trên @myPolicy.ChildrenOver tuổi sẽ tính phí như người lớn.</p>
+                                }
+
+                                @if (!string.IsNullOrEmpty(myPolicy.PolicyDes))
+                                {
+                                    <p>+ @Html.Raw(myPolicy.PolicyDes)</p>
+                                }
+                            </div>
+                        </fieldset>                       
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12" style="height:300px;overflow:auto;">
+                        @if (myPolicy.ChildrenExtraBeds != null && myPolicy.ChildrenExtraBeds.Count > 0)
+                        {
+                            <fieldset>
+                                <legend style="font-size:15px">Chính sách khác</legend>
+                                <div>
+                                    @RenderChildAndExtraBedsInfo(myPolicy.ChildrenExtraBeds)
+                                </div>
+                            </fieldset>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-sm btn-white pull-right btnEditPolicy" onclick="EditPolicy(this);" data-id="@Model.PolicyId" data-code="@Model.PolicyCode" typeof="button"><i class="fa fa-icon fa-pencil"></i> Chung</button>
+                <button class="btn btn-sm btn-white pull-right btnAddExtraBed" onclick="AddExtraBed(this);" style="margin-right:5px" data-id="@Model.PolicyId" data-code="@Model.PolicyCode" typeof="button"><i class="fa fa-icon fa-plus"></i> Chính sách khác</button>
+            </div>
+        </div>
+}
+
+@helper RenderChildAndExtraBedsInfo(List<MetaPolicyDataChildAndBeds> myList)
+    {
+        var counter = 0;
+        <table class="table table-responsive table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-center">Đối tượng áp dụng</th>
+                    <th class="text-center">Chi tiết</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in myList)
+                {
+                    counter++;
+                    <tr>
+                        <td class="text-center">@counter</td>
+                        <td class="text-left">
+                            <p>Trẻ em từ @item.AgeFrom - @item.AgeTo tuổi</p>
+                        </td>
+                        <td class="text-left">
+                            @if (item.BedShare == 1)
+                            {
+                                if(item.BedShareSurcharge > 0)
+                                {
+                                     <p>+ Giường chung kèm phụ phí @(string.Format("{0:n0}", item.BedShareSurcharge)) (@item.CurrencyCode)</p>
+                                }
+                                else
+                                {
+                                    <p>+ Giường chung miễn phí </p>
+                                }
+                            }
+                            else {
+                                <p>+ Giường chung miễn phí </p>
+                            }
+
+                            @if (item.ExtraInfantBed == 1)
+                            {
+                                if(item.ExtraInfantBedSurcharge > 0)
+                                {
+                                     <p>+ Thêm giường em bé với phụ phí @(string.Format("{0:n0}", item.ExtraInfantBedSurcharge)) (@item.CurrencyCode)</p>
+                                }
+                                else
+                                {
+                                     <p>+ Miễn phí thêm giường em bé</p>
+                                }                               
+                            }
+
+                            @if (item.BreakFast == 0)
+                            {
+                                <p>+ Bữa sáng: Không</p>
+                            }
+                            else
+                            {
+                                if (item.BreakFastSurcharge <= 0)
+                                {
+                                    <p>+ Bữa sáng: Có</p>
+                                }
+                                else
+                                {
+                                    <p>+ Bữa sáng: Thêm phụ phí @(string.Format("{0:n0}", item.BreakFastSurcharge)) (@item.CurrencyCode)</p>
+                                }
+                            }
+
+                            @if (!string.IsNullOrEmpty(item.Note))
+                            {
+                                <p>
+                                    <b>* Ghi chú: </b>
+                                    @Html.Raw(item.Note)
+                                </p>
+                            }
+                        </td>
+                        <td style="width:120px;" class="text-center">
+                            <div class="btn-group">                                    
+                                <button class="btn btn-xs btn-danger btnDeleteChildPolicy" onclick="DeleteChildPolicy(this);" data-policyid="@Model.PolicyId" data-id="@item.Id" data-code="@Model.PolicyCode">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                <tr></tr>
+            </tbody>
+        </table>
+}

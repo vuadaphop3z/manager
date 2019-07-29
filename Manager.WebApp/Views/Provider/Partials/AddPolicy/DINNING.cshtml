@@ -1,0 +1,112 @@
+﻿@using Manager.WebApp.Settings
+@model Manager.WebApp.Models.PolicyDinningModel
+
+@using (Html.BeginForm("UpdateDinningPolicy", "Shop", FormMethod.Post, new { role = "form", @id = "FormAddPolicy" }))
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="frmUpdateLabel">Dinning</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-horizontal" style="width: 100%">
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.ShopId)
+            @Html.HiddenFor(m => m.PolicyId)
+            @Html.HiddenFor(m => m.PolicyCode)
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <select name="@Html.NameFor(m => m.DinningType)" id="@Html.IdFor(m => m.DinningType)" class="form-control">
+                        @foreach (var item in Enum.GetValues(typeof(EnumMealTypes)))
+                        {
+                            var chkItem = (int)item;
+                            <option value="@chkItem">@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    @Html.CheckBoxFor(m => m.IsBuffet)
+                    @Html.LabelFor(m => m.IsBuffet, new { style = "vertical-align: top;" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    @Html.LabelFor(m => m.Surcharge)
+                    @Html.TextBoxFor(m => m.Surcharge, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(m => m.CurrencyCode)
+                    <select name="@Html.NameFor(m=>m.CurrencyCode)" class="form-control">
+                        @if (Model.Currencies != null && Model.Currencies.Count > 0)
+                        {
+                            foreach (var item in Model.Currencies)
+                            {
+                                <option value="@item.Code">@item.Code (@item.Name)</option>
+                            }
+                        }
+                    </select>
+                </div>                
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    @Html.LabelFor(m=>m.Note)
+                    @Html.TextAreaFor(m=>m.Note, new { style="resize:none;", @class="form-control", rows="5" })
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-primary btnSavePolicy"><i class="ace-icon fa fa-floppy-o bigger-110"></i>Lưu</button>
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Đóng lại</button>
+    </div>
+}
+
+<script src="@Url.VersionedContent("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.VersionedContent("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+<script>
+    $("#FormAddPolicy").submit(function (e) {
+        e.preventDefault();
+        var frmVlalidation = $('#FormAddPolicy').valid();
+
+        if (frmVlalidation == true) {
+            var self = this;
+            SavePolicy();
+
+            return false;
+        }
+
+        return (false);
+    });
+
+    function SavePolicy() {
+        var currentPolicyId = $("#PolicyId").val();
+        $.ajax({
+            url: $('#FormAddPolicy').attr("action"),
+            method: 'POST',
+            data: $('#FormAddPolicy').serialize(),
+            success: function (data) {
+                if (data) {
+                    if (data.success) {
+                        $("#Policy_" + currentPolicyId).html(data.html);
+                        RegisterPolicyEvents();
+                    } else {
+                        bootbox.alert(data.errorMessage);
+                    }
+                }
+
+                $('#myModal').modal('hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var responseTitle = "Error encountered";
+                bootbox.alert($(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown));
+                $('#myModal').modal('hide');
+            }
+        });
+    }
+</script>

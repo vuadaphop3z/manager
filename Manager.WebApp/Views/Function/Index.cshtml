@@ -1,0 +1,232 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.FunctionViewModel
+
+@{
+    ViewBag.Title = "Function management";
+}
+
+@Html.Partial("_Notifications")
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<!-- modal placeholder-->
+<div id='frmUpdate' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">
+                        Create new function
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Create", "Function", FormMethod.Post, new { role = "form" }))
+                    {
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(m => m.Id, new { id = Html.IdFor(m => m.Id) })
+                                    @Html.HiddenFor(m => m.AccessName)
+                                    <label>Access (Controller) </label>
+                                    @Html.DropDownListFor(m => m.AccessId, new SelectList(Model.AllAccesses, "Id", "AccessName"), "-- Choose one controller --", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.AccessId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Operation (Function) </label>
+                                    <input type="hidden" id="hdCurrentAction" value="" />
+                                    @*@Html.DropDownList(Html.IdFor(m => m.ActionName).ToString(), Enumerable.Empty<SelectListItem>(), "-- Choose one action --", new { @class="form-control" })*@
+                                    @Html.TextBoxFor(m => m.ActionName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ActionName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Desc</label>
+                                    @Html.TextBoxFor(m => m.OperationName, new { id = Html.IdFor(m => m.OperationName), @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.OperationName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input class="btn btn-danger" type="submit" value="Save" />
+                            <button class="btn" data-dismiss="modal">Cancel</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="clearfix pull-right">
+            <button type="button" onclick="UpdateData('create','')" class="btn btn-white btn-info">Create function</button>
+        </div>
+        <br />
+        <br />
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">Controller name</th>
+                    <th class="text-center">Function name</th>                    
+                    <th class="text-center">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.AllOperations != null && Model.AllOperations.Count > 0)
+                {
+                    var count = 0;
+                    foreach (var record in Model.AllOperations)
+                    {
+                        count++;
+                        <tr>
+                            <td class="text-center">@count</td>
+                            <td>@record.AccessName</td>
+                            <td>@record.ActionName</td>                            
+                            <td>
+                                <div>@record.OperationName</div>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <input type="hidden" id="hdAccessId_@record.Id" value="@record.AccessId" />
+                                    <input type="hidden" id="hdAccessName_@record.Id" value="@record.AccessName" />
+                                    <input type="hidden" id="hdActionName_@record.Id" value="@record.ActionName" />
+                                    <button class="btn btn-xs btn-info" onclick="UpdateData('edit','@record.Id', '@record.OperationName')">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+
+                                    <a class="btn btn-xs btn-danger" href="@Url.Action("Delete", "Function", new { id = record.Id })" data-modal="" title="Delete this function">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </a>  
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@section PagePluginStyles
+{
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" />
+}
+
+@section PageInlineStyles
+{
+    <style>
+    </style>
+}
+
+@section PagePluginScripts
+ {
+    <script src="/assets/js/jquery.gritter.min.js"></script>
+
+}
+
+
+@section PageInlineScripts
+{
+@*<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#@Html.IdFor(m=>m.AccessId)").change(function () {
+                if (this.val === '') {
+                    return false;
+                }
+                var ctrlName = $("#@Html.IdFor(m => m.AccessId) option:selected").text();
+                $("#@Html.IdFor(m=>m.AccessName)").val(ctrlName);
+                //GetOperationsByController(ctrlName);
+            });
+
+            $.validator.unobtrusive.parse("#frmUpdate");
+        });
+
+        function UpdateData(action,id,desc) {
+            if (action === 'create') {
+                $("#frmUpdateLabel").html("Create new function");
+                $("#frmUpdate form").attr("action", "/Function/Create");
+                $("#@Html.IdFor(m=>m.AccessId)").val("");
+                $("#@Html.IdFor(m=>m.Id)").val("");
+                $("#@Html.IdFor(m=>m.OperationName)").val("");
+                $("#@Html.IdFor(m=>m.AccessName)").val("");
+                $("#hdCurrentAction").val("");
+            }
+            else {
+                $("#frmUpdate form").attr("action", "/Function/Update");
+                $("#frmUpdateLabel").html("Edit function");
+                $("#@Html.IdFor(m=>m.Id)").val(id);
+                $("#@Html.IdFor(m=>m.AccessId)").val($("#hdAccessId_" + id).val());
+                $("#@Html.IdFor(m=>m.AccessName)").val($("#hdAccessName_" + id).val());
+                $("#@Html.IdFor(m=>m.OperationName)").val(desc);
+                $("#hdCurrentAction").val($("#hdActionName_" + id).val());
+            }
+
+            var actionName = $("#hdActionName_" + id).val();
+            $("#AccessId").val($("#hdAccessId_" + id).val()).change();
+            $("#ActionName").val(actionName);
+            $('#frmUpdate').modal('show');
+        }
+
+        function GetOperationsByController(ctrlName) {
+            $.ajax({
+                url: 'Function/GetOperationsByControllerName',
+                data: {
+                    ControllerName: ctrlName
+                },
+                success: function (result) {
+                    var myData = result.data;
+                    $("#@Html.IdFor(m => m.ActionName)").html("<option value=''>-- Choose one action --</option>");
+                    if (myData) {
+                        if (myData.AllOperations) {
+                            var opList = myData.AllOperations;
+                            for (var i in opList) {
+                                var optText = opList[i].ActionName + " (" + opList[i].OperationName + ")";
+                                $("#@Html.IdFor(m => m.ActionName)").append("<option value='" + opList[i].ActionName + "'>" + optText + "</option>")
+                               // console.log(opList[i].OperationName);
+                            }
+                        }
+
+                        $("#ActionName").val($("#hdCurrentAction").val());
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var responseTitle = "Error encountered"
+                    $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), null);
+                }
+            });
+        }
+    </script>
+}
+
+
+
+
+
+

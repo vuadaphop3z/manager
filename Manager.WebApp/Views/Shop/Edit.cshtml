@@ -1,0 +1,258 @@
+﻿@using Manager.WebApp.Helpers
+@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ShopEditModel
+
+@{
+    var title = "Sửa thông tin cửa hàng";
+    ViewBag.Title = title;
+    ViewBag.HideSubHeader = true;
+    var currentController = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon">
+                    <i class="fa fa-shop"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                    @title
+                </h3>
+            </div>
+        </div>
+    </div>
+    <!--begin::Form-->
+    @RenderCreateForm(currentController)
+    <!--end::Form-->
+</div>
+
+@helper RenderCreateForm(string currentController)
+    {
+        using (Html.BeginForm("edit", currentController, FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Code)
+                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Phone)
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-md-3">
+                        <select name="@Html.NameFor(m => m.AreaId)" id="@Html.IdFor(m=>m.AreaId)" class="form-control selectpicker btn-white" data-live-search="true">
+                            <option value="0">Chọn khu vực</option>
+                            @if (Model.Areas != null && Model.Areas.Count > 0)
+                            {
+                                foreach (var item in Model.Areas)
+                                {
+                                    var chkItem = item.Id;
+                                    var chkStr = string.Empty;
+                                    if (chkItem == Model.AreaId)
+                                    {
+                                        chkStr = "selected";
+                                    }
+                                    <option value="@chkItem" @chkStr>@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="@Html.NameFor(m => m.CountryId)" id="@Html.IdFor(m=>m.CountryId)" class="form-control selectpicker btn-white" data-live-search="true">
+                            <option value="0">Chọn nước</option>
+                            @if(Model.Countries.HasData())
+                            {
+                                foreach (var item in Model.Countries)
+                                {
+                                    var chkItem = item.Id;
+                                    var chkStr = string.Empty;
+                                    if (chkItem == Model.CountryId)
+                                    {
+                                        chkStr = "selected";
+                                    }
+                                    <option value="@chkItem" @chkStr>@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="@Html.NameFor(m => m.ProvinceId)" id="@Html.IdFor(m=>m.ProvinceId)" class="form-control selectpicker btn-white" data-live-search="true">
+                            <option value="0">Chọn tỉnh/thành phố</option>
+                            @if(Model.Provinces.HasData())
+                            {
+                                foreach (var item in Model.Provinces)
+                                {
+                                    var chkItem = item.Id;
+                                    var chkStr = string.Empty;
+                                    if (chkItem == Model.ProvinceId)
+                                    {
+                                        chkStr = "selected";
+                                    }
+                                    <option value="@chkItem" @chkStr>@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="@Html.NameFor(m => m.DistrictId)" id="@Html.IdFor(m=>m.DistrictId)" class="form-control selectpicker btn-white" data-live-search="true">
+                            <option value="0">Chọn quận/huyện</option>
+                            @if(Model.Districts.HasData())
+                            {
+                                foreach (var item in Model.Districts)
+                                {
+                                    var chkItem = item.Id;
+                                    var chkStr = string.Empty;
+                                    if (chkItem == Model.DistrictId)
+                                    {
+                                        chkStr = "selected";
+                                    }
+                                    <option value="@chkItem" @chkStr>@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">                   
+
+                    @*<div class="col-md-2">
+                            @Html.LabelFor(m => m.Openned)
+                            @Html.TextBoxFor(m => m.Openned, new { @class = "form-control" })
+                        </div>*@
+                   
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.PostCode)
+                        @Html.TextBoxFor(m => m.PostCode, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                @*<div class="form-group m-form__group row">
+                        <div class="col-md-4">
+                            <label class="m-checkbox">
+                                @Html.CheckBoxFor(m => m.IsInternal)
+                                @Html.LabelFor(m => m.IsInternal)
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>*@
+                <br />
+                @*<div class="form-group m-form__group row">
+                        <div class="col-md-6">
+                            <b> + Block theo đêm</b>
+                            <div class="form-group m-form__group row" style="padding-left:10px">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.CheckInNight)
+                                    @Html.TextBoxFor(m => m.CheckInNight, new { @class = "form-control m_timepicker" })
+                                    @Html.ValidationMessageFor(model => model.CheckInNight, null, new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.CheckOutNight)
+                                    @Html.TextBoxFor(m => m.CheckOutNight, new { @class = "form-control m_timepicker" })
+                                    @Html.ValidationMessageFor(model => model.CheckOutNight, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <b> + Block theo ngày</b>
+                            <div class="form-group m-form__group row" style="padding-left:10px">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.CheckInDay)
+                                    @Html.TextBoxFor(m => m.CheckInDay, new { @class = "form-control m_timepicker" })
+                                    @Html.ValidationMessageFor(model => model.CheckInDay, null, new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.CheckOutDay)
+                                    @Html.TextBoxFor(m => m.CheckOutDay, new { @class = "form-control m_timepicker" })
+                                    @Html.ValidationMessageFor(model => model.CheckOutDay, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="form-group m-form__group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Address)
+                        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = "4", style = "resize:none;" })
+                        @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.ContactInfo)
+                        @Html.TextAreaFor(m => m.ContactInfo, new { @class = "form-control", rows = "4", style = "resize:none;" })
+                        @Html.ValidationMessageFor(model => model.ContactInfo)
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Description)
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = "4", style = "resize:none;" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Status)
+                        <select name="@Html.NameFor(m => m.Status)" id="@Html.IdFor(m => m.Status)" class="form-control btn-white">
+                            @foreach (var item in Enum.GetValues(typeof(EnumStatus)))
+                            {
+                                var chkItem = (int)item;
+                                var chkStr = string.Empty;
+                                if (chkItem == Model.Status)
+                                {
+                                    chkStr = "selected";
+                                }
+                                <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-md-12">
+                        <a class="btn btn-danger" href="/@currentController"><i class="ace-icon fa fa-arrow-left"></i> @ManagerResource.LB_GOBACK</a>
+                        <button type="submit" class="btn btn-primary"><i class="ace-icon fa fa-check bigger-110"></i> @ManagerResource.LB_SAVE</button>
+                    </div>
+                </div>
+            </div>
+        }
+}
+
+
+@section PagePluginStyles{
+
+}
+
+@section PagePluginScripts{
+}
+@section PageInlineScripts{
+    <script src="~/Scripts/Shop/main.js"></script>
+}

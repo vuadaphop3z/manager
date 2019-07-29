@@ -1,0 +1,98 @@
+﻿@using Manager.WebApp.Settings
+@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ProviderEditModel
+
+@{
+    var title = ManagerResource.LB_PROVIDER_MANAGE;
+    ViewBag.Title = title;
+    //ViewBag.HideSubHeader = true;
+    var currentController = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon">
+                        <i class="fa fa-edit text-info"></i>
+                    </span>
+                    <h3 class="m-portlet__head-text">
+                        @ManagerResource.LB_UPDATE_INFO
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--begin::Form-->
+    @RenderEditForm(currentController)
+    <!--end::Form-->
+</div>
+
+@helper RenderEditForm(string currentController)
+    {
+        using (Html.BeginForm("edit", currentController, FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-2">
+                        @Html.LabelFor(m => m.Code)
+                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Phone)
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.Address)
+                        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = "4", style = "resize:none;" })
+                        @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>
+                        <div class="m-checkbox-inline">
+                            <label class="m-checkbox">
+                                <input name="@Html.NameFor(m => m.Status)" @((Model.Status == 1) ? "checked" : null) value="1" type="checkbox">
+                                @ManagerResource.LB_ACTIVE
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-md-12">
+                        <a class="btn btn-danger" href="/@currentController"><i class="ace-icon fa fa-arrow-left"></i> @ManagerResource.LB_GOBACK</a>
+                        <button type="submit" class="btn btn-info">@ManagerResource.LB_SAVE</button>
+                    </div>
+                </div>
+            </div>
+        }
+}
+
+@section PagePluginScripts{
+    <!--validate-->
+    <script src="~/Scripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+}

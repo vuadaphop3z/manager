@@ -1,0 +1,121 @@
+﻿@using Manager.WebApp.Resources
+@using Manager.WebApp.Models
+@model Manager.WebApp.Models.FrontEndSettingsViewModel
+
+@{
+    ViewBag.Title = "Cấu hình trang khách hàng";
+    ViewBag.HideSubHeader = true;
+}
+
+
+@Html.Partial("_Notifications")
+
+<div class="modal fade" id="fileModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body" id="fileModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("FrontEndSettings", "FrontEndSystem", FormMethod.Post, new { id = "frmFrontEndSettings", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.CurrentFrontEndSettingsType)
+            <!--begin::Portlet-->
+            <div class="m-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                Cấu hình trang khách hàng
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <ul class="nav nav-tabs  m-tabs-line m-tabs-line--primary" role="tablist">
+                        <li class="nav-item m-tabs__item" @(Model.CurrentFrontEndSettingsType == Model.SystemSestings.General.GetType().Name ? "active" : "")>
+                            <a class="nav-link m-tabs__link active" data-toggle="tab" href="#@Model.SystemSestings.General.GetType().Name" role="tab">
+                                <i class="fa fa-cog"></i>
+                                Chung
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active @(Model.CurrentFrontEndSettingsType == Model.SystemSestings.General.GetType().Name ? "active in" : "")" id="@Model.SystemSestings.General.GetType().Name" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(m => m.SystemSestings.General.SiteName)
+                                        @Html.HelpButtonFor(m => m.SystemSestings.General.SiteName, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                        <div>
+                                            @Html.TextBoxFor(m => m.SystemSestings.General.SiteName, new { @class = "form-control", placeholder = "Tên trang" })
+                                            @Html.ValidationMessageFor(m => m.SystemSestings.General.SiteName, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.Partial("../Widgets/FormControls/_MediaBrowser", new MediaFileViewModel { FieldName = "SiteLogoUpload", FieldValue = Model.SystemSestings.General.SiteLogo, StorageElementName = "CurrentLogo" })
+
+                                        @*<input type="file" name="@Html.IdFor(m => m.SiteLogoUpload)" id="@Html.IdFor(m => m.SiteLogoUpload)" class="hidden FilePreviewChange" data-preview="thumb-sitelogo" />
+                                        @Html.LabelForRequired(m => m.SystemSestings.General.SiteLogo)
+                                        @Html.HelpButtonFor(m => m.SystemSestings.General.SiteLogo, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                        <div id="thumb-sitelogo">
+                                            @if (!string.IsNullOrEmpty(Model.SystemSestings.General.SiteLogo))
+        {
+                                    <img src="@SocialCdnHelper.GetFullImgPath(Model.SystemSestings.General.SiteLogo)" class="img-res thumbImg" width="100" height="50" style="float:left;margin-right:10px;" />
+}
+                                        </div>
+
+                                        <button class="btn btn-info btn-sm" type="button" onclick="return $('#@Html.IdFor(m => m.SiteLogoUpload)').click();">Máy tính</button>
+                                        <a data-toggle="modal" class="btn btn-info btn-sm myBrowserBtn" data-control="@Html.IdFor(m => m.CurrentLogo)" href="javascript:;" data-target="#fileModal">Media server</a>
+                                        <input type="hidden" value="@Model.SystemSestings.General.SiteLogo" name="@Html.IdFor(m=>m.CurrentLogo)" id="@Html.IdFor(m=>m.CurrentLogo)" data-preview="thumb-sitelogo" />*@
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelForRequired(m => m.SystemSestings.General.EmbeddedScripts)
+                                        @Html.HelpButtonFor(m => m.SystemSestings.General.EmbeddedScripts, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                        <div>
+                                            @Html.TextAreaFor(m => m.SystemSestings.General.EmbeddedScripts, new { rows = "10", style = "resize:none;background-color: #ededed;color: #2e2b2b;", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+            <!--end::Portlet-->
+            <div class="pull-right">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fa fa-floppy-o"></i>
+                    @ManagerResource.LB_SAVE
+                </button>
+            </div>
+        }
+
+    </div>
+</div>
+
+@section PageInlineScripts{
+    <script src="~/Scripts/Common/common.mediaselect.js"></script>
+}
+

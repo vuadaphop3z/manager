@@ -1,0 +1,451 @@
+﻿@{
+    ViewBag.Title = "BssApi Realtime";
+}
+
+<div class="row">
+    <div class="col-md-12" id="chartContainer">
+        <canvas id="canvasForBssNOReqsLineChart" width="800" height="300"></canvas>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <fieldset id="LoadingContainer">
+            <legend>Logs <button class="pull-right btn btn-sm btn-primary" id="btnClear">Clear</button></legend>
+            <div class="list-container" id="listContainer">
+                <ul id="LogsList"></ul>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+@section PagePluginStyles
+{
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css" />
+    <link href="/assets/js/calendar/fullcalendar.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/css/datepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-timepicker.css" />
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-datetimepicker.css" />
+
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" />
+}
+
+
+@section PageInlineStyles
+{
+    <style type="text/css">
+    .element-loading {
+        background-color: #706363 !important;
+    }
+
+        .element-loading * {
+            opacity: 0.1;
+        }
+
+    .loader-img {
+        opacity: 1 !important;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px;
+        margin-top: -32px;
+    }
+
+    .list-container {
+        background: #000;
+        max-height: 350px;
+        min-height: 350px;
+        overflow: auto;
+    }
+
+        .list-container > ul {
+            list-style: none;
+            padding: 5px;
+        }
+
+            .list-container > ul > li.success {
+                color: #b6ff00;
+                padding: 5px 0;
+            }
+
+            .list-container > ul > li.error {
+                color: red;
+                padding: 5px 0;
+            }
+</style>
+}
+
+@section PagePluginScripts{
+    <script src="/Scripts/Plugins/Chart/Chart.min.js"></script>
+    <script src="/Scripts/Plugins/Chart/utils.js"></script>
+
+    <script src="/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src='@(AppSettings.OTTSignalrServer_BaseAddress + "signalr/hubs/")'></script>
+}
+
+@section PageInlineScripts
+{
+    <script type="text/javascript">
+
+        var config = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Total requests",
+                    backgroundColor: window.chartColors.red,
+                    borderColor: window.chartColors.red,
+                    data: [],
+                    fill: false
+                },
+                {
+                    label: "Average time",
+                    borderColor: window.chartColors.blue,
+                    backgroundColor: window.chartColors.blue,
+                    fill: false,
+                    data: [],
+                    yAxisID: "y-axis-2"
+                }
+                ]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'BssApi Requests Realtime Chart'
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time in 10 seconds step'
+                        }
+                    }],
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Bss Number Of Requests'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            //max: 10000
+                            userCallback: function (label, index, labels) {
+                                //Skip decimal points on y-axis in chartJS
+                                // when the floored value is the same as the value we have a whole number
+                                // ref: http://stackoverflow.com/questions/37699485/skip-decimal-points-on-y-axis-in-chartjs
+                                if (Math.floor(label) === label) {
+                                    return label;
+                                }
+
+                            },
+
+                        }
+                    },
+                    {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Average Response Time (ms)'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            //max: 10000
+                        },
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        }
+                    }
+                    ],
+                }
+            }
+        };
+
+
+        window.onload = function () {
+            var ctx = document.getElementById("canvasForBssNOReqsLineChart").getContext("2d");
+            window.myLine = new Chart(ctx, config);
+        };
+
+
+
+        var connection = $.hubConnection('@AppSettings.OTTSignalrServer_BaseAddress' + 'signalr/hubs/');
+        var logCount = 0;
+        //var connected = false;
+
+        //Ready shorthand
+        $(function () {
+            InitSignalrHub();
+
+            ////Re-connect after 5 seconds
+            //if (!connected) {
+            //    setInterval(function () {
+            //        try {
+            //            //connection.start({ jsonp: true });
+            //            connection.start();
+            //            console.log('Reconnect at: ' + new Date());
+            //        } catch (e) {
+            //            alert(e);
+            //        }
+            //    }, 5000);
+            //}
+                
+        });
+
+        //$.connection.hub.disconnected(function () {
+        //    if ($.connection.hub.lastError)
+        //    {
+        //        alert("Disconnected. Reason: " + $.connection.hub.lastError.message);
+        //        connected = false;
+        //    }
+        //});
+
+        function InitSignalrHub() {
+            //Waiting for connect Signalr server
+            ShowLoading($("#listContainer"));
+            ShowLoading($("#chartContainer"));
+
+            var myHubProxy = connection.createHubProxy('bssHub');
+
+            myHubProxy.on('ClientInitLineChart', function (lineChartConfig) {
+                InitBssNOReqsLineChart(lineChartConfig);
+            });
+            myHubProxy.on('UpdateChartData', function (chartData) {
+                UpdateLineChart(chartData);
+                UpdateLogConsole(chartData);
+            });
+
+            connection.start()
+                .done(function () {
+                    HideLoading($("#listContainer"));
+                    HideLoading($("#chartContainer"));
+                    console.log('Now connected, connection ID=' + connection.id);
+
+                    //Trigger initlinechart function from SignalR server
+                    //this function will call ClientInitLineChart back.
+                    //myHubProxy.initLineChart();
+                    myHubProxy.invoke('initLineChart');
+                })
+                .fail(function (error) {
+                    console.log('Could not connect');
+
+                    alert("Cannot connect to SignalR server because: " + error);
+                });
+
+            connection.disconnected(function () {
+                connection.log('Connection closed. Retrying...');
+                setTimeout(function () { connection.start(); }, 5000);
+            });          
+
+            connection.reconnecting = function () {
+                console.log("reconnecting...");
+            };
+
+            connection.reconnected = function () {
+                console.log("We have been reconnected");
+            };
+
+            connection.error(function (error) {
+                setInterval(function () { connection.start(); }, 5000);
+                alert('SignalR error: ' + error);                
+            });
+
+            $('#btnTest').click(function (ev) {
+                ev.preventDefault();
+                var data = {
+                    EntryId: Math.floor(Math.random() * 10000) + 1000,
+                    DateCreated: new Date(),
+                    ServerName: 'BangPC',
+                    ServerIp: '192.168.170.228',
+                    EntryKey: 'Demo',
+                    ExpiredTime: new Date(),
+                    TotalRequests: Math.floor(Math.random() * 10000) + 1000,
+                    TotalResTime: (Math.floor(Math.random() * 1000) + 100) * 100
+                };
+
+                //myHub.server.clientSendData(data);
+                myHubProxy.invoke('clientSendData', data);
+            });
+        }
+
+
+
+        function InitBssNOReqsLineChart(lineChartConfig) {
+            var labelItems = config.data.labels;
+            lineChartConfig.lineChartLabels.forEach(function (item) {                
+                labelItems.push(item);
+            });
+
+
+            var numReqsItems = config.data.datasets[0].data;
+            lineChartConfig.lineChartNumReqs.forEach(function (item) {
+                numReqsItems.push(item);
+            });
+
+            var resTimeAvgItems = config.data.datasets[1].data;
+            lineChartConfig.lineChartResTimeAvg.forEach(function (item) {
+                resTimeAvgItems.push(item);
+            });
+
+            config.data.labels = labelItems;
+            config.data.datasets[0].data = numReqsItems;
+            config.data.datasets[1].data = resTimeAvgItems;
+
+            //Refresh chart
+            window.myLine.update();
+            //console.log(lineChartConfig);
+        }
+
+        //function UpdateLineChart(chartData) {
+        //    console.log('Posted time: ' + chartData.label);
+        //    var labelItems = config.data.labels;
+        //    var foundidx = 0;
+
+        //    for(var i= 0; i< labelItems.length; i++ ) {                
+        //        if (labelItems[i] == chartData.label) {
+        //            foundidx = i;
+        //            break;
+        //        }
+        //    };
+
+
+
+        //    if (foundidx >0 )
+        //    {
+        //        labelItems[foundidx] = chartData.label;
+        //        dataNumReqsItems[foundidx] = chartData.numreqs;
+        //        dataResTimeItems[foundidx] = chartData.restime;
+        //    }
+        //    else
+        //    {
+        //        labelItems.shift();
+        //        labelItems.push(chartData.label);
+
+        //        var dataNumReqsItems = config.data.datasets[0].data;
+        //        dataNumReqsItems.shift();
+        //        dataNumReqsItems.push(chartData.numreqs);
+
+        //        var dataResTimeItems = config.data.datasets[1].data;
+        //        dataResTimeItems.shift();
+        //        dataResTimeItems.push(chartData.restime);
+
+               
+        //    }
+        //    //Refresh chart
+        //    window.myLine.update();
+        //    //console.log(chartData);     
+        //}
+
+        function UpdateLineChart(chartData) {
+            console.log('Posted time: ' + chartData.label);
+            var labelItems = config.data.labels;
+            var dataNumReqsItems = config.data.datasets[0].data;
+            var dataResTimeItems = config.data.datasets[1].data;
+            var foundidx = 0;
+
+            for (var i = 0; i < labelItems.length; i++) {
+                if (labelItems[i] == chartData.label) {
+                    foundidx = i;
+                    break;
+                }
+            };
+
+
+            //console.log(dataNumReqsItems);
+            if (foundidx > 0) {
+                labelItems[foundidx] = chartData.label;
+                dataNumReqsItems[foundidx] = chartData.numreqs;
+                dataResTimeItems[foundidx] = chartData.restime;
+            }
+            else {
+                labelItems.shift();
+                labelItems.push(chartData.label);
+
+
+                dataNumReqsItems.shift();
+                dataNumReqsItems.push(chartData.numreqs);
+
+
+                dataResTimeItems.shift();
+                dataResTimeItems.push(chartData.restime);
+
+
+            }
+            //Refresh chart
+            window.myLine.update();
+            //console.log(chartData);     
+        }
+
+        Array.prototype.clear = function () {
+            while (this.length) {
+                this.pop();
+            }
+        };
+
+        function UpdateLogConsole(chartData) {
+            if (logCount >= 100)
+            {
+                //Reset the log view
+                logCount = 0;
+                $("#LogsList").html("");
+            }
+
+            var currentTimeStr = Date().toLocaleString();
+            if (chartData.success) {
+                var msg = 'Your chart data is sent successfully.';
+                if (chartData.hasOwnProperty('message') && chartData.message != null && chartData.message.length > 0)
+                    msg = chartData.message;
+                if (chartData.message)
+                    $("#LogsList").append("<li class='success'> <b>- " + chartData.message + "</b>: " + currentTimeStr + "</li>");
+            }
+            else {
+                var msg = 'Your chart data is sent failed.';
+                if (chartData.hasOwnProperty('message') && chartData.message != null && chartData.message.length > 0)
+                    msg = chartData.message;
+                if (chartData.message)
+                    $("#LogsList").append("<li class='error'> <b>- " + chartData.message + "</b>: " + currentTimeStr + "</li>");
+            }
+
+            var containerList = document.getElementById("listContainer");
+            containerList.scrollTop = containerList.scrollHeight;
+
+            logCount++;
+        }
+
+
+        //Button SaveConfig click event
+        $('#btnClear').on('click', function () {
+            $("#LogsList").html("");
+        });
+
+        function ShowLoading(element) {
+            $(element).prepend("<img class='loader-img' src='/Content/images/reload.gif' />");
+            $(element).addClass("element-loading");
+        }
+
+        function HideLoading(element) {
+            $(element).find("img.loader-img").remove();
+            $(element).removeClass("element-loading");
+        }
+
+
+        Array.prototype.contains = function (v) {
+            return this.indexOf(v) > -1;
+        }
+
+    </script>
+}

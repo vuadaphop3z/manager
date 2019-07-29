@@ -1,0 +1,152 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.SettingsViewModel
+
+@{
+    ViewBag.Title = "System Settings";
+}
+
+@Html.Partial("_Notifications")
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Settings", "System", FormMethod.Post, new { id = "frmSettings", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.CurrentSettingsType)
+            <!--begin::Portlet-->
+            <div class="m-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                @ManagerResource.LB_SETTINGS
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <ul class="nav nav-tabs  m-tabs-line m-tabs-line--primary" role="tablist">
+                        <li class="nav-item m-tabs__item" @(Model.CurrentSettingsType == Model.SystemSestings.General.GetType().Name?"active":"")>
+                            <a class="nav-link m-tabs__link active" data-toggle="tab" href="#@Model.SystemSestings.General.GetType().Name" role="tab">
+                                <i class="fa fa-cog"></i>
+                                @ManagerResource.LB_GENERAL
+                            </a>
+                        </li>
+                        @*<li class="nav-item dropdown m-tabs__item">
+                                <a class="nav-link m-tabs__link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-cog"></i>
+                                    Settings
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" data-toggle="tab" href="#m_tabs_6_2">
+                                        Action
+                                    </a>
+                                    <a class="dropdown-item" data-toggle="tab" href="#m_tabs_6_2">
+                                        Another action
+                                    </a>
+                                    <a class="dropdown-item" data-toggle="tab" href="#m_tabs_6_2">
+                                        Something else here
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" data-toggle="tab" href="#m_tabs_6_2">
+                                        Separated link
+                                    </a>
+                                </div>
+                            </li>*@
+                        @*<li class="nav-item m-tabs__item @(Model.CurrentSettingsType == Model.SystemSestings.Cache.GetType().Name?"active":"")">
+                            <a class="nav-link m-tabs__link" data-toggle="tab" href="#@Model.SystemSestings.Cache.GetType().Name" role="tab">
+                                <i class="fa fa-save"></i>
+                                Caching
+                            </a>
+                        </li>*@
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active @(Model.CurrentSettingsType == Model.SystemSestings.General.GetType().Name ? "active in" : "")" id="@Model.SystemSestings.General.GetType().Name" role="tabpanel">
+                            <div class="form-group hidden">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.SiteName)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.SiteName, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.General.SiteName, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.General.SiteName) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.SiteName, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.StoragePeriodTime)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.StoragePeriodTime, "m-form__heading-help-icon flaticon-info orange-tooltip", "i", "right", "")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.General.StoragePeriodTime, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.StoragePeriodTime, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.AdminEmail)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.AdminEmail, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.General.AdminEmail, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.General.AdminEmail) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.AdminEmail, null, new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                            @*<div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.TimeZoneId)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.TimeZoneId, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.DropDownListFor(m => m.SystemSestings.General.TimeZoneId, Model.TimeZoneList(), "Choose a specific timezone", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.TimeZoneId, null, new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        </div>
+                        @*<div class="tab-pane @(Model.CurrentSettingsType == Model.SystemSestings.Cache.GetType().Name ? "active in" : "")" id="@Model.SystemSestings.Cache.GetType().Name" role="tabpanel">
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.Cache.CacheProvider)
+                                @Html.HelpButtonFor(m => m.SystemSestings.Cache.CacheProvider, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.DropDownListFor(m => m.SystemSestings.Cache.CacheProvider, Model.CacheProviderList(), "Choose a specific CacheProvider", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.Cache.CacheProvider, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.Cache.SystemDefaultCacheDuration)
+                                @Html.HelpButtonFor(m => m.SystemSestings.Cache.SystemDefaultCacheDuration, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.Cache.SystemDefaultCacheDuration, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.Cache.SystemDefaultCacheDuration) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.Cache.SystemDefaultCacheDuration, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.Cache.WebsiteCacheDuration)
+                                @Html.HelpButtonFor(m => m.SystemSestings.Cache.WebsiteCacheDuration, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.Cache.WebsiteCacheDuration, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.Cache.WebsiteCacheDuration) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.Cache.WebsiteCacheDuration, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-danger" type="submit">
+                                <i class="fa fa-floppy-o"></i>
+                                @ManagerResource.LB_SAVE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+            <!--end::Portlet-->           
+        }
+
+    </div>
+</div>
+

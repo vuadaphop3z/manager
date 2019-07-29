@@ -1,0 +1,66 @@
+﻿@using Manager.WebApp.Helpers.Business
+@using MsSql.AspNet.Identity.Entities
+@model MetaDataShop
+
+@{
+    var listPayment = CommonHelpers.GetListPayment();
+
+    var selectedValues = new List<string>();
+
+    if (Model != null && !string.IsNullOrEmpty(Model.Payments))
+    {
+        selectedValues = Model.Payments.Split(',').ToList();
+    }
+
+    if (listPayment != null && listPayment.Count > 0)
+    {
+        foreach (var pay in listPayment)
+        {
+            var matched = false;
+            if(selectedValues != null && selectedValues.Count > 0)
+            {
+                foreach (var item in selectedValues)
+                {
+                    if (item == pay.Id.ToString())
+                    {
+                        matched = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!matched)
+            {
+                <div class="checkbox inline no_indent">
+                    <label>
+                        <input name="selectedOperations" id="@pay.Id" value="@pay.Id" class="ace" type="checkbox">
+                        @if (!string.IsNullOrEmpty(pay.Icon))
+                        {
+                            <span class="lbl"> <i class="fa @pay.Icon"></i> @pay.Name</span>
+                        }
+                        else
+                        {
+                            <span class="lbl"> @pay.Name</span>
+                        }
+                    </label>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox inline no_indent">
+                    <label>
+                        <input name="selectedOperations" id="@pay.Id" value="@pay.Id" class="ace ace-checkbox-2" checked type="checkbox">
+                        @if (!string.IsNullOrEmpty(pay.Icon))
+                        {
+                            <span class="lbl"> <i class="fa @pay.Icon"></i> @pay.Name</span>
+                        }
+                        else
+                        {
+                            <span class="lbl"> @pay.Name</span>
+                        }
+                    </label>
+                </div>
+            }
+        }       
+    }
+}

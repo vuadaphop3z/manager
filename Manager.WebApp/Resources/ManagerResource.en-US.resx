@@ -1,0 +1,744 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BT_ALLOW" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="BT_CANCEL" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="COMMON_ERROR_EXTERNALSERVICE_TIMEOUT" xml:space="preserve">
+    <value>System is busy now. Please try again later </value>
+  </data>
+  <data name="CONFIRM_DELETE" xml:space="preserve">
+    <value>Are you sure you want to delete this item?</value>
+  </data>
+  <data name="ERROR_NOT_SELECT_MEMBER" xml:space="preserve">
+    <value>Please select member</value>
+  </data>
+  <data name="ERROR_USERNAME_EXISTED" xml:space="preserve">
+    <value>User name was existed</value>
+  </data>
+  <data name="LB_ACTION" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="LB_ACTIVATED" xml:space="preserve">
+    <value>Activated</value>
+  </data>
+  <data name="LB_ACTIVE" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="LB_ADDNEW" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="LB_ADD_NEW_POST" xml:space="preserve">
+    <value>Add post</value>
+  </data>
+  <data name="LB_ALL" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="LB_ALLOW_SHOW_FILTER" xml:space="preserve">
+    <value>Allow to display on filter</value>
+  </data>
+  <data name="LB_ASSIGNED_USER" xml:space="preserve">
+    <value>Operator list</value>
+  </data>
+  <data name="LB_ASSIGN_CATEGORY" xml:space="preserve">
+    <value>Assign to category</value>
+  </data>
+  <data name="LB_ASSIGN_TO_USER" xml:space="preserve">
+    <value>Add operator</value>
+  </data>
+  <data name="LB_AVATAR" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="LB_CANCEL" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LB_CATEGORY_MANAGE" xml:space="preserve">
+    <value>Master manage</value>
+  </data>
+  <data name="LB_CHOOSE_FILE" xml:space="preserve">
+    <value>Select file</value>
+  </data>
+  <data name="LB_CLICK_VIEW_DETAIL" xml:space="preserve">
+    <value>Click to view detail</value>
+  </data>
+  <data name="LB_CLOSE" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="LB_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="LB_CONTENT" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="LB_COVER" xml:space="preserve">
+    <value>Cover image</value>
+  </data>
+  <data name="LB_COVER_IMAGE" xml:space="preserve">
+    <value>Cover image</value>
+  </data>
+  <data name="LB_CREATED_BY" xml:space="preserve">
+    <value>Creator</value>
+  </data>
+  <data name="LB_CREATED_DATE" xml:space="preserve">
+    <value>Created date</value>
+  </data>
+  <data name="LB_DEFAULT" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="LB_DELAYTIME" xml:space="preserve">
+    <value>Delay time</value>
+  </data>
+  <data name="LB_DELETE" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LB_DELETE_SUCCESS" xml:space="preserve">
+    <value>Deleted successfully</value>
+  </data>
+  <data name="LB_DESCRIPTION" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="LB_DISPLAY" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="LB_DISPLAYNAME" xml:space="preserve">
+    <value>Display name</value>
+  </data>
+  <data name="LB_DUPLICATE_DATA" xml:space="preserve">
+    <value>Data was duplicated. Please check again</value>
+  </data>
+  <data name="LB_EDIT" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="LB_EDIT_POST" xml:space="preserve">
+    <value>Edit post</value>
+  </data>
+  <data name="LB_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LB_FILTER_ON_MAP" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="LB_FIRST_PAGE" xml:space="preserve">
+    <value>First page</value>
+  </data>
+  <data name="LB_GOBACK" xml:space="preserve">
+    <value>Go back</value>
+  </data>
+  <data name="LB_GROUP" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="LB_HAS_NO_ASSIGNED_USER" xml:space="preserve">
+    <value>Has no operator</value>
+  </data>
+  <data name="LB_HAS_NO_DATA" xml:space="preserve">
+    <value>Has no data</value>
+  </data>
+  <data name="LB_ICON" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="LB_IMAGE" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="LB_INFORMATION" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="LB_INSERT_SUCCESS" xml:space="preserve">
+    <value>Added successfully</value>
+  </data>
+  <data name="LB_IS_OWNER" xml:space="preserve">
+    <value>Is owner</value>
+  </data>
+  <data name="LB_KEYWORD" xml:space="preserve">
+    <value>Keyword</value>
+  </data>
+  <data name="LB_KEYWORD_CAT_PLACEHOLDER" xml:space="preserve">
+    <value>Master name, code</value>
+  </data>
+  <data name="LB_KEYWORD_SEARCH" xml:space="preserve">
+    <value>Keyword search</value>
+  </data>
+  <data name="LB_LANGUAGE" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LB_LAST_PAGE" xml:space="preserve">
+    <value>Last page</value>
+  </data>
+  <data name="LB_LINK" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="LB_LIST" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="LB_LOADING" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="LB_LOCKED" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="LB_MANAGE_SLIDE_ITEM" xml:space="preserve">
+    <value>Slide items manage</value>
+  </data>
+  <data name="LB_MARK_HIGHLIGHTS" xml:space="preserve">
+    <value>Highlight mark</value>
+  </data>
+  <data name="LB_MULTI_LANGUAGES" xml:space="preserve">
+    <value>Multilanguage</value>
+  </data>
+  <data name="LB_NAME" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="LB_NEXT_PAGE" xml:space="preserve">
+    <value>Next page</value>
+  </data>
+  <data name="LB_NO" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="LB_NOTE" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="LB_NOTE_MULTILANG_NULL" xml:space="preserve">
+    <value>The default value will be select if the multiple language data is not existed</value>
+  </data>
+  <data name="LB_NOTIFICATION" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="LB_NO_RECORD" xml:space="preserve">
+    <value>Has no record found</value>
+  </data>
+  <data name="LB_OPERATION_SUCCESS" xml:space="preserve">
+    <value>Operation success</value>
+  </data>
+  <data name="LB_ORDER_DISPLAY" xml:space="preserve">
+    <value>Display order</value>
+  </data>
+  <data name="LB_PHONE" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="LB_POSTER" xml:space="preserve">
+    <value>Poster</value>
+  </data>
+  <data name="LB_POST_HIGHLIGHTS" xml:space="preserve">
+    <value>Highlight post</value>
+  </data>
+  <data name="LB_POST_TYPE" xml:space="preserve">
+    <value>Post type</value>
+  </data>
+  <data name="LB_PREVIOUS_PAGE" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
+  <data name="LB_RECORD" xml:space="preserve">
+    <value>record</value>
+  </data>
+  <data name="LB_RESET" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="LB_SAVE" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="LB_SEARCH" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="LB_SELECT_MEMBER" xml:space="preserve">
+    <value>Select member</value>
+  </data>
+  <data name="LB_STAR" xml:space="preserve">
+    <value>star</value>
+  </data>
+  <data name="LB_STATUS" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="LB_SYSTEM_BUSY" xml:space="preserve">
+    <value>System is busy now. Please try again later</value>
+  </data>
+  <data name="LB_TITLE" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="LB_TYPE_USER_SEARCH" xml:space="preserve">
+    <value>Email, phone or address</value>
+  </data>
+  <data name="LB_UPDATE_INFO" xml:space="preserve">
+    <value>Update information</value>
+  </data>
+  <data name="LB_UPDATE_SUCCESS" xml:space="preserve">
+    <value>Updated successfully</value>
+  </data>
+  <data name="LB_USERNAME" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="LB_VIEW_ASSIGNED_USER" xml:space="preserve">
+    <value>View operators list</value>
+  </data>
+  <data name="LB_YES" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="SEARCH_TITLE_CONTENT" xml:space="preserve">
+    <value>Title, content,...</value>
+  </data>
+  <data name="LB_PARENT_CATEGORY" xml:space="preserve">
+    <value>Parent category</value>
+  </data>
+  <data name="ERROR_PERMISSION_DENNIED" xml:space="preserve">
+    <value>You don't have permission to access this page !!!</value>
+  </data>
+  <data name="LB_CREATE_NEW_FUNCTION" xml:space="preserve">
+    <value>Add new function</value>
+  </data>
+  <data name="LB_DASHBOARD" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ERROR_PAGE_NOT_FOUND" xml:space="preserve">
+    <value>Page not found</value>
+  </data>
+  <data name="LB_PROVIDER_MANAGE" xml:space="preserve">
+    <value>Provider manage</value>
+  </data>
+  <data name="LB_ADDRESS" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="LB_PROPERTIES" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="LB_PRODUCT_MANAGE" xml:space="preserve">
+    <value>Item manage</value>
+  </data>
+  <data name="LB_WAREHOUSE_STATUS" xml:space="preserve">
+    <value>Warehouse remains</value>
+  </data>
+  <data name="LB_ITEM_REMAINS_IN_WAREHOUSE" xml:space="preserve">
+    <value>Stock QTY</value>
+  </data>
+  <data name="LB_PROVIDER" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="LB_PRODUCT_CATEGORY" xml:space="preserve">
+    <value>Item category</value>
+  </data>
+  <data name="LB_WAREHOUSE_MANAGE" xml:space="preserve">
+    <value>Warehouse manage</value>
+  </data>
+  <data name="LB_UNIT" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="BT_CHOOSE_PRODUCT" xml:space="preserve">
+    <value>Select item</value>
+  </data>
+  <data name="LB_MIN_INVENTORY" xml:space="preserve">
+    <value>Reorder Point</value>
+  </data>
+  <data name="LB_SHORTAGE" xml:space="preserve">
+    <value>Shortage</value>
+  </data>
+  <data name="LB_UNIT_MASTER" xml:space="preserve">
+    <value>Unit master</value>
+  </data>
+  <data name="ERROR_NOT_NULL_REQUIRED" xml:space="preserve">
+    <value>Please fill in this field</value>
+  </data>
+  <data name="LB_SELECT_PRODUCT_CATEGORY" xml:space="preserve">
+    <value>Select item category</value>
+  </data>
+  <data name="LB_SELECT_PROVIDER" xml:space="preserve">
+    <value>Select provider</value>
+  </data>
+  <data name="LB_UNIT_SELECT" xml:space="preserve">
+    <value>Select unit</value>
+  </data>
+  <data name="LB_COLLAPSE" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="LB_LANG_ENGLISH" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LB_LANG_VIETNAMESE" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="BT_RESET" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="LB_MYPROFILE" xml:space="preserve">
+    <value>My profile</value>
+  </data>
+  <data name="LB_LOGOUT" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="LB_ITEM_CODE" xml:space="preserve">
+    <value>Item code</value>
+  </data>
+  <data name="LB_ITEM_NAME" xml:space="preserve">
+    <value>Item name</value>
+  </data>
+  <data name="LB_CONFIRM_STOCK_QTY" xml:space="preserve">
+    <value>Confirm the stock-take QTY</value>
+  </data>
+  <data name="LB_STOCK_OUT" xml:space="preserve">
+    <value>Stock out</value>
+  </data>
+  <data name="BT_CLEAR" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="BT_OUTPUT_CSV" xml:space="preserve">
+    <value>Output CSV</value>
+  </data>
+  <data name="LB_GOODS_ISSUE" xml:space="preserve">
+    <value>Goods Issue</value>
+  </data>
+  <data name="LB_GOODS_RECEIPT" xml:space="preserve">
+    <value>Goods Receipt</value>
+  </data>
+  <data name="LB_REFLECT_STOCK_TAKE" xml:space="preserve">
+    <value>Reflect stock-take</value>
+  </data>
+  <data name="LB_REORDER_POINT" xml:space="preserve">
+    <value>Reorder Point</value>
+  </data>
+  <data name="LB_STOCK_QTY" xml:space="preserve">
+    <value>Stock QTY</value>
+  </data>
+  <data name="LB_STOCK_TAKE_QTY" xml:space="preserve">
+    <value>Stock-take QTY</value>
+  </data>
+  <data name="ERROR_NOT_SELECT_ITEM" xml:space="preserve">
+    <value>Please select one item</value>
+  </data>
+  <data name="LB_QTY" xml:space="preserve">
+    <value>QTY</value>
+  </data>
+  <data name="LB_GOODS_ISSUE_SUCCESS" xml:space="preserve">
+    <value>Success ! GoodsIssue was done !</value>
+  </data>
+  <data name="LB_GOODS_RECEIPT_SUCCESS" xml:space="preserve">
+    <value>Success ! GoodsReceipt was done !</value>
+  </data>
+  <data name="LB_GOODS_REFLECT_STOCK_TAKE_SUCCESS" xml:space="preserve">
+    <value>Success ! Reflect Stock-take was done !</value>
+  </data>
+  <data name="ERROR_GOODS_ISSUE_NOT_ENOUGH_FORMAT" xml:space="preserve">
+    <value>Number of items in Stock is not enough [{0}] for goods issue !</value>
+  </data>
+  <data name="ERROR_PRODUCT_ITEM_CODE_NOTFOUND_FORMAT" xml:space="preserve">
+    <value>Item with code [{0}] was not found. Please check again!</value>
+  </data>
+  <data name="ERROR_PRODUCT_ITEM_NOTFOUND" xml:space="preserve">
+    <value>Item not found. Please check again !</value>
+  </data>
+  <data name="LB_ERROR_OCCURED" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="LB_CURRENT_QTY" xml:space="preserve">
+    <value>Current QTY</value>
+  </data>
+  <data name="ERROR_NUMBER_MIN_0" xml:space="preserve">
+    <value>Please fill in the minimum value must be greater than 0</value>
+  </data>
+  <data name="LB_CONFIRM_REFLECT_STOCK_TAKE" xml:space="preserve">
+    <value>Stock QTY will be updated by Reflect Stock-take QTY. Are you sure ?</value>
+  </data>
+  <data name="ERROR_THIS_ITEM_DONT_NEED_REFLECT" xml:space="preserve">
+    <value>This item don't need Reflect Stock-take !</value>
+  </data>
+  <data name="ERROR_INVALID_LOGIN" xml:space="preserve">
+    <value>Account or password is incorrect !</value>
+  </data>
+  <data name="LB_ACCOUNT_WAS_LOCKED" xml:space="preserve">
+    <value>Your account has been locked !</value>
+  </data>
+  <data name="LB_CHECK_VALID_LINK" xml:space="preserve">
+    <value>Re-check the access link</value>
+  </data>
+  <data name="LB_CHECK_YOUR_PEMISSIONS" xml:space="preserve">
+    <value>Re-check your permission</value>
+  </data>
+  <data name="LB_LOGIN" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LB_PASSWORD" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LB_REMEMBER_LOGIN" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="LB_TELL_ADMIN_ABOUTIT" xml:space="preserve">
+    <value>Contact to "Admin" for more details</value>
+  </data>
+  <data name="LB_TRY_ONE_FOLLOWING" xml:space="preserve">
+    <value>Try one of the following</value>
+  </data>
+  <data name="LB_WAREHOUSE_HISTORY" xml:space="preserve">
+    <value>Stock activity history</value>
+  </data>
+  <data name="ERROR_DATE_RANGE_IN_PAST" xml:space="preserve">
+    <value>FromDate must be lower than ToDate</value>
+  </data>
+  <data name="LB_DEVICE" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="LB_DEVICE_ID" xml:space="preserve">
+    <value>Device Id</value>
+  </data>
+  <data name="LB_DEVICE_NAME" xml:space="preserve">
+    <value>Device name</value>
+  </data>
+  <data name="LB_DISPLAYING" xml:space="preserve">
+    <value>Displaying</value>
+  </data>
+  <data name="LB_EVENT_ACTIVITY" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="LB_FROM_DATE" xml:space="preserve">
+    <value>From date</value>
+  </data>
+  <data name="LB_OF" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="LB_OPERATION_DATE" xml:space="preserve">
+    <value>Operation date</value>
+  </data>
+  <data name="LB_RECORDS" xml:space="preserve">
+    <value>records</value>
+  </data>
+  <data name="LB_TO" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="LB_TO_DATE" xml:space="preserve">
+    <value>To date</value>
+  </data>
+  <data name="LB_THE_LATEST_HISTORY" xml:space="preserve">
+    <value>The latest history</value>
+  </data>
+  <data name="LB_DASHBOARD_WELCOME_SLOGAN" xml:space="preserve">
+    <value>the lightweight, feature-rich and easy to use admin UI to manage backend data.</value>
+  </data>
+  <data name="LB_DASHBOARD_WELCOME_TO" xml:space="preserve">
+    <value>Welcome to</value>
+  </data>
+  <data name="LB_STORAGE_HISTORY_PERIOD_TIME" xml:space="preserve">
+    <value>Storage period system log (in months)</value>
+  </data>
+  <data name="LB_STORAGE_HISTORY_PERIOD_TIME_DES" xml:space="preserve">
+    <value>The storage period of system activities (auto clear after 'x' months)</value>
+  </data>
+  <data name="LB_GENERAL" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="LB_SETTINGS" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="LB_SYTEM_SETTING" xml:space="preserve">
+    <value>System Settings</value>
+  </data>
+  <data name="LB_ROLES_ASSIGNED" xml:space="preserve">
+    <value>Roles assigned</value>
+  </data>
+  <data name="LB_CHANGE_PWD" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="ERROR_SYSTEM_PERIOD_MIN_0_MAX_24" xml:space="preserve">
+    <value>System clear period time must be within from 1 to 24 months</value>
+  </data>
+  <data name="LB_PROVIDER_NAME" xml:space="preserve">
+    <value>Provider name</value>
+  </data>
+  <data name="LB_KEYWORD_ITEMNAME_ITEMCODE" xml:space="preserve">
+    <value>Item code, item name</value>
+  </data>
+  <data name="LB_STAFF" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="ERROR_CONFRIM_PASSWORD_NOT_MATCH" xml:space="preserve">
+    <value>The password and confirmation password do not match</value>
+  </data>
+  <data name="ERROR_PHONE_INVALID" xml:space="preserve">
+    <value>Phone number is invalid</value>
+  </data>
+  <data name="LB_ACCOUNT_LOCKED" xml:space="preserve">
+    <value>Account is locked</value>
+  </data>
+  <data name="LB_ACCOUNT_NOT_LOCKED" xml:space="preserve">
+    <value>Account is actived</value>
+  </data>
+  <data name="LB_CONFIRM_PASSWORD" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="LB_CONFIRM_RESET_PWD" xml:space="preserve">
+    <value>Are you sure you want to reset password ?</value>
+  </data>
+  <data name="LB_IS_LOCKED" xml:space="preserve">
+    <value>Is locked</value>
+  </data>
+  <data name="LB_LOCK" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="LB_NEW_PASSWORD" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="LB_OLD_PASSWORD" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="LB_PROFILE" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="LB_RESET_PASSWORD" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="LB_RESET_PASSWORD_SUCCESS" xml:space="preserve">
+    <value>Reset password successfully</value>
+  </data>
+  <data name="LB_ROLE" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="LB_SELECT_ROLE" xml:space="preserve">
+    <value>Select role</value>
+  </data>
+  <data name="LB_UNLOCK" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="LB_PASSWORD_RESET_SUCCESS" xml:space="preserve">
+    <value>Password has been reset to defaut password</value>
+  </data>
+  <data name="LB_GRANT_PERMISSION" xml:space="preserve">
+    <value>Grant permission</value>
+  </data>
+  <data name="LB_GRANT_PERMISSION_TO_ROLE" xml:space="preserve">
+    <value>Grant permission to role</value>
+  </data>
+  <data name="ERROR_QTY_MUST_LARGE_THAN_0" xml:space="preserve">
+    <value>QTY number must be larger than 0</value>
+  </data>
+  <data name="LB_CODE_MAX_LENGTH" xml:space="preserve">
+    <value>Length of code</value>
+  </data>
+  <data name="LB_HT_DEFAULT_SETTING" xml:space="preserve">
+    <value>Default setting of Handy Terminal</value>
+  </data>
+  <data name="LB_NUMBER_OF_CHARACTERS" xml:space="preserve">
+    <value>Number of characters</value>
+  </data>
+  <data name="LB_START_POSITION" xml:space="preserve">
+    <value>Start position</value>
+  </data>
+  <data name="LB_ENUM_VALUE" xml:space="preserve">
+    <value>Enum value</value>
+  </data>
+  <data name="ERROR_ENUMVALUE_EXISTED" xml:space="preserve">
+    <value>Enum value has been existed, please check again !</value>
+  </data>
+</root>

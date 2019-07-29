@@ -1,0 +1,370 @@
+﻿@using Manager.WebApp.Settings;
+@using Manager.WebApp.Models;
+@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.ManageWarehouseModel
+
+@{
+    ViewBag.Title = ManagerResource.LB_WAREHOUSE_MANAGE;
+}
+
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_LargeModal")
+
+<!-- modal placeholder-->
+<div id='prdModalSelect' class='modal modal-wide fade '>
+    <div class="modal-dialog modal-wide-dialog">
+        <div class="modal-content">
+            <div id='prdModalSelectContent'></div>
+        </div>
+    </div>
+</div>
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    @RenderSearchForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderSearchForm()
+{
+    using (Html.BeginForm("Index", "Warehouse", FormMethod.Get, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" }))
+    {
+        @Html.HiddenFor(m => m.SearchExec)
+        <input type="hidden" value="" id="SelectedId" />
+        <div class="m-portlet__body">
+            <div class="form-group row">
+                <div class="col-md-3 m-form__group--inline">
+                    @Html.LabelFor(m => m.Code)
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control m-input" })
+                    @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3 m-form__group--inline">
+                    @Html.LabelFor(m => m.Name)
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control m-input" })
+                </div>
+                @*<div class="col-md-1 m-form__group">
+                        <a class="btn btn-primary btn-warning" href="@Url.Action("ChooseProduct", "Warehouse")" data-modal="" title="@ManagerResource.LB_EDIT">
+                            @ManagerResource.BT_CHOOSE_PRODUCT
+                        </a>
+                    </div>*@
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <div class="m-checkbox-inline">
+                        <label class="m-checkbox">
+                            <input name="@Html.NameFor(m => m.IsStockOut)" @((Model.IsStockOut == 1) ? "checked" : null) value="1" type="checkbox">
+                            @ManagerResource.LB_STOCK_OUT
+                            <span></span>
+                        </label>
+                        <label class="m-checkbox">
+                            <input name="@Html.NameFor(m => m.IsConfirmStockTakeQTY)" @((Model.IsConfirmStockTakeQTY == 1) ? "checked" : null) value="1" type="checkbox">
+                            @ManagerResource.LB_CONFIRM_STOCK_QTY
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12 m-form__group--inline">
+                    <button type="reset" class="btn btn-outline-info pull-right">
+                        @ManagerResource.BT_CLEAR
+                    </button>
+
+                    <button type="submit" class="btn btn-info pull-right" style="margin-right:10px;">
+                        @ManagerResource.LB_SEARCH
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        @*<div class="clearfix pull-right">
+                <a class="btn btn-white btn-info" href="@Url.Action("Create", "Warehouse")" title="@ManagerResource.LB_ADDNEW">
+                <i class="la la-plus"></i> @ManagerResource.LB_ADDNEW
+                </a>
+            </div>*@
+        <div class="m-portlet">
+            @*<div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                @ManagerResource.LB_LIST
+                            </h3>
+                        </div>
+                    </div>
+                </div>*@
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="dataTable" class="table m-table m-table--head-bg-brand table-bordered dataTable">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="50">#</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_CODE</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_NAME</th>
+                                    <th class="text-center">@ManagerResource.LB_STOCK_QTY</th>
+                                    <th class="text-center">@ManagerResource.LB_UNIT</th>
+                                    <th class="text-center">@ManagerResource.LB_STOCK_TAKE_QTY</th>
+                                    <th class="text-center">@ManagerResource.LB_REORDER_POINT</th>
+                                    <th class="text-center">@ManagerResource.LB_SHORTAGE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResults)
+                                    {
+                                        if (record.ProductInfo != null)
+                                        {
+                                            var shortage = record.ProductInfo.CalculateMissingRemains();
+                                            stt++;
+                                            <tr class="pointer tr-select @((shortage >= 0) ? "text-none" : "text-danger")" data-needreflect="@((record.StockTakeQTY > 0)? "true": "false")" data-id="@record.Id" data-productid="@record.ProductId">
+                                                <td class="text-center">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                                <td class="text-center">
+                                                    @record.ProductInfo.Code
+                                                </td>
+                                                <td>
+                                                    <b class="product-name">@record.ProductInfo.Name</b>
+                                                </td>
+                                                @*<td>@((record.CreatedDate != null) ? record.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm") : string.Empty)</td>*@
+                                                <td class="text-right">
+                                                    <b title="@ManagerResource.LB_ITEM_REMAINS_IN_WAREHOUSE">@Utils.DoubleToStringFormat(record.WarehouseNum)</b>
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (Model.Units.HasData())
+                                                    {
+                                                        var myUnit = Model.Units.Where(x => x.Id == record.ProductInfo.UnitId).FirstOrDefault();
+                                                        if (myUnit != null)
+                                                        {
+                                                            <span>@myUnit.Name</span>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(record.StockTakeQTY)</b>
+                                                </td>
+                                                <td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(record.ProductInfo.MinInventory)</b>
+                                                </td>
+                                                <td class="text-right">
+                                                    <b>@Utils.DoubleToStringFormat(shortage)</b>
+                                                </td>
+                                                @*<td>
+                                                        @{
+                                                            var newModel = Model;
+                                                            newModel.Id = record.Id;
+                                                            newModel.SearchExec = "Y";
+                                                        }
+                                                        <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Edit", "Warehouse", new { id = record.Id,SearchExec = 'Y',Page = Model.CurrentPage,Keyword = Model.Keyword })" title="@ManagerResource.LB_EDIT">
+                                                            <i class="la la-pencil"></i>
+                                                        </a>
+                                                        <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Delete", "Warehouse", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                            <i class="la la-trash"></i>
+                                                        </a>
+                                                    </td>*@
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @RenderPaging()
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    <div class="m-portlet__body">
+        <div class="row">
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.ProductId)
+                @Html.HiddenFor(m => m.WarehouseId)
+                <a href="/Warehouse/GoodsReceipt" class="btn btn-info warehouse-control" data-current="" id="btnGoodsReceipt" data-control="GoodsReceipt" data-modal="">
+                    @ManagerResource.LB_GOODS_RECEIPT
+                </a>
+                <a href="/Warehouse/GoodsIssue" class="btn btn-info warehouse-control" data-current="" id="btnGoodsIssue" data-control="GoodsIssue" data-modal="">
+                    @ManagerResource.LB_GOODS_ISSUE
+                </a>
+                <a href="javascript:;" class="btn btn-info warehouse-control" data-current="" id="btnReflectStockTake" data-control="ReflectStockTake">
+                    @ManagerResource.LB_REFLECT_STOCK_TAKE
+                </a>
+            </div>
+
+            <div class="col-md-6">
+                <a href="javascript:;" class="btn btn-warning pull-right exportcsv" data-tableid="dataTable" data-filename="StockExport">
+                    @ManagerResource.BT_OUTPUT_CSV
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <!--end::Form-->
+</div>
+
+@helper RenderPaging()
+{
+    <div class="m_datatable m-datatable m-datatable--default m-datatable--brand m-datatable--loaded">
+        <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
+            @if (Model.WasOverRecordsInPage())
+            {
+
+                @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("Index", "Warehouse",
+                     new
+                     {
+                         Page = index,
+                         SearchExec = "Y",
+                         Code = Model.Code,
+                         Name = Model.Name,
+                         IsStockOut = Model.IsStockOut,
+                         IsConfirmStockTakeQTY = Model.IsConfirmStockTakeQTY,
+                         Keyword = Model.Keyword
+                     }),
+                     Model.TotalCount, pageSize: Model.PageSize, numberOfLinks: 10)
+            }
+
+            @if (Model.TotalCount > 0)
+            {
+                <div class="m-datatable__pager-info">
+                    <span class="m-datatable__pager-detail">
+                        @ManagerResource.LB_DISPLAYING @Model.StartCount() @ManagerResource.LB_TO @Model.EndCount(Model.SearchResults.Count()) @ManagerResource.LB_OF @Model.TotalCount @ManagerResource.LB_RECORDS
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@section PageInlineScripts{
+    <script type="text/javascript">
+        $("body").on("click", "#btnReflectStockTake", function () {
+            return CheckReflectCondition();
+        });
+
+        $("body").on("click", ".tr-select", function () {
+            if ($(this).hasClass("tr-selected")) {
+                $(this).removeClass("tr-selected");
+                $("#SelectedId").val("");
+                $(".warehouse-control").each(function () {
+                    var currentControl = $(this).data("control");
+                    if (currentControl == "ReflectStockTake") {
+                        $("#btnReflectStockTake").removeAttr("data-modal");
+                        $("#btnReflectStockTake").attr("href", "javascript:;");
+                    } else {
+                        $(this).attr("href", "/Warehouse/" + currentControl);
+                    }
+                });
+                return false;
+            }
+            $(".tr-select.tr-selected").removeClass("tr-selected");
+            $(this).toggleClass("tr-selected");
+            var needReflect = $(this).data("needreflect");
+
+            var id = $(this).data("id");
+            var productid = $(this).data("productid");
+            $("#WarehouseId").val();
+            $("#ProductId").val($(this).data("productid"));
+            $("#SelectedId").val($(this).data("productid"));
+
+            $(".warehouse-control").each(function () {
+                var currentControl = $(this).data("control");
+                $(this).attr("href", "/Warehouse/" + currentControl + "?id=" + id + "&productid=" + productid);
+                $(this).data("current", productid);
+
+                if (currentControl == "ReflectStockTake") {
+                    if (!needReflect) {
+                        $("#btnReflectStockTake").removeAttr("data-modal");
+                        $("#btnReflectStockTake").attr("href", "javascript:;");
+                    } else {
+                        $("#btnReflectStockTake").attr("data-modal", "");
+                        $(this).attr("href", "/Warehouse/" + currentControl + "?id=" + id + "&productid=" + productid);
+                    }
+                }
+            });
+        });
+
+        $("body").on("click", ".tr-choose", function () {
+            $(".tr-choose.tr-selected").removeClass("tr-selected");
+            $(this).toggleClass("tr-selected");
+
+            var id = $(this).data("id");
+            $("#SelectedId").val(id);
+            $(".cbxSelectProduct").removeAttr("checked");
+            $("#rdProduct_" + id).attr("checked", "checked");
+        });
+
+        function ProductChooseForReceipt() {
+            var productId = $("#SelectedId").val();
+            var myBtn = $("#btnGoodsReceipt").val($("#SelectedId").val());
+            var myHref = myBtn.attr("href", "/Warehouse/GoodsReceipt" + "?&productid=" + productId);
+            $('#prdModalSelect').modal('hide');
+            myBtn.click();
+        }
+
+        function ProductChooseForIssue() {
+            var productId = $("#SelectedId").val();
+            var myBtn = $("#btnGoodsIssue").val($("#SelectedId").val());
+            var myHref = myBtn.attr("href", "/Warehouse/GoodsIssue" + "?&productid=" + productId);
+            $('#prdModalSelect').modal('hide');
+            myBtn.click();
+        }
+
+        function CheckReflectCondition() {
+            var currentId = $("#SelectedId").val();
+            if (currentId.length == 0) {
+                $.showErrorMessage(LanguageDic["LB_ERROR_OCCURED"], LanguageDic["ERROR_NOT_SELECT_ITEM"], function () { });
+                return false;
+            }
+
+            $(".tr-select").each(function () {
+                //var currentRowProductId = $(this).data("productid");
+                //if (currentRowProductId == currentId) {
+                //    var needReflect = $(this).data("needreflect");
+                //    if (!needReflect) {
+                //        $.showErrorMessage(LanguageDic["LB_ERROR_OCCURED"], LanguageDic["ERROR_THIS_ITEM_DONT_NEED_REFLECT"], function () { return false; });
+                //        return false;
+                //    }
+                //}
+
+                if ($(this).hasClass("tr-selected")) {
+                    var needReflect = $(this).data("needreflect");
+                    if (!needReflect) {
+                        $.showErrorMessage(LanguageDic["LB_ERROR_OCCURED"], LanguageDic["ERROR_THIS_ITEM_DONT_NEED_REFLECT"], function () { return false; });
+                        return false;
+                    }
+                }
+            });
+
+            return true;
+        }
+    </script>
+}

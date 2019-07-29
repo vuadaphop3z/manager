@@ -1,0 +1,47 @@
+﻿@using Newtonsoft.Json
+@using MsSql.AspNet.Identity.Entities
+@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    var nearPlaces = new List<MetaShopNearPlace>();
+    try
+    {
+        nearPlaces = JsonConvert.DeserializeObject<List<MetaShopNearPlace>>(Model);
+
+        if (nearPlaces != null && nearPlaces.Count > 0)
+        {
+            nearPlaces = nearPlaces.OrderByDescending(x => x.CreatedDate).ToList();
+
+            foreach (var item in nearPlaces)
+            {
+                @RenderPlaceItem(item)
+            }
+        }
+    }
+    catch
+    {
+
+    }
+}
+
+@helper RenderPlaceItem(MetaShopNearPlace item)
+{
+        <div class="profile-activity clearfix place-item">
+            <div>
+                <i class="pull-left thumbicon fa @((!string.IsNullOrEmpty(item.Icon)? item.Icon : "fa-info-circle")) btn-inverse no-hover"></i>
+                <a class="user" href="javascript:;"> @item.Name </a>
+
+                <div class="time">
+                    <i class="ace-icon fa fa-taxi bigger-110"></i>
+                    @(string.Format("{0} {1}", item.Range, item.UnitCode))
+                </div>
+            </div>
+
+            <div class="tools action-buttons" style="bottom: 30px;">
+                <a href="javascript:;" class="red" title="Xóa" data-id="@item.Id" onclick="RemovePlace(this);">
+                    <i class="ace-icon fa fa-times bigger-125"></i>
+                </a>
+            </div>
+        </div>
+}

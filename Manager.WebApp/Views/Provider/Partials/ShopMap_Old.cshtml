@@ -1,0 +1,44 @@
+﻿@using Manager.WebApp.Settings
+@model Manager.WebApp.Models.ShopEditModel
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset class="gllpLatlonPicker">
+            <div class="row">
+                <div class="col-md-6 form-inline">
+                    <div class="form-group">
+                        <input type="text" class="gllpSearchField form-control" style="width:300px;">
+                        <button type="button" class="gllpSearchButton btn btn-danger btn-sm">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="gllpMap" style="height:400px;width:100%;">Google Maps</div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12 form-inline">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Latitude)/@Html.LabelFor(m => m.Longitude)
+                        <input id="@Html.IdFor(m=>m.Latitude)" name="@Html.IdFor(m=>m.Latitude)" type="text" class="gllpLatitude form-control" value="@((!string.IsNullOrEmpty(Model.Latitude))? Model.Latitude: MapSettings.DefaultLatitude)" />
+                        /
+                        <input id="@Html.IdFor(m=>m.Longitude)" name="@Html.IdFor(m=>m.Longitude)" type="text" class="gllpLongitude form-control" value="@(!string.IsNullOrEmpty(Model.Longitude)? Model.Longitude: MapSettings.DefaultLongitude)" />
+                        <input type="text" class="gllpZoom form-control hidden" value="@MapSettings.DefaultZoomSize" />
+                        <button type="button" class="gllpUpdateButton btn btn-danger btn-sm">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-sm btn-primary" id="btnSaveMap"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

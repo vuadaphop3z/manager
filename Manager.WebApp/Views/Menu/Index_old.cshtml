@@ -1,0 +1,315 @@
+﻿@using MsSql.AspNet.Identity
+@model Manager.WebApp.Models.MenuViewModels
+
+@{
+    ViewBag.Title = "Menu";
+}
+
+@Html.Partial("_Notifications")
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section PagePluginStyles{
+
+}
+@section PageInlineStyles{
+    <link href="~/Scripts/Plugins/Nestable/jquery.nestable.css" rel="stylesheet" />
+    <style type="text/css">
+        .dd {
+            max-width: 100% !important;
+        }
+
+        .btn-yellow{background-color:darkorange;}
+    </style>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="pull-left">
+            <div class="pull-left btn-yellow" style="width: 20px;height:20px;"></div>
+            <div class="pull-left"> &nbsp;Hidden item</div>
+        </div>
+        <div class="pull-right" id="nestable-menu">
+            <button type="button" class="btn btn-primary btn-xs" onclick="Create(0);">Create Menu Parent</button>
+            <button type="button" class="btn btn-primary btn-xs" data-action="expand-all">Expand All</button>
+            <button type="button" class="btn btn-primary btn-xs" data-action="collapse-all">Collapse All</button>
+        </div>
+    </div>
+</div>
+
+<div class="space"></div>
+
+@*<div class="row">
+        <div class="col-md-12">
+            <div id="load"></div>
+            <menu id="nestable-menu">
+                <button type="button" data-action="expand-all">Expand All</button>
+                <button type="button" data-action="collapse-all">Collapse All</button>
+            </menu>
+            <table>
+                <tr>
+                    <td>Label</td>
+                    <td>:</td>
+                    <td><input type="text" id="label" placeholder="Fill label" required></td>
+                </tr>
+                <tr>
+                    <td>Link</td>
+                    <td>:</td>
+                    <td><input type="text" id="link" placeholder="Fill link" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><button id="submit">Submit</button> <button id="reset">Reset</button></td>
+                </tr>
+            </table>
+            <input type="hidden" id="id">
+            <br /><br />
+
+            <div class="cf nestable-lists">
+                <div class="dd" id="nestable">
+                    @RenderMenu(Model.AllMenus, 0)
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <input type="hidden" id="nestable-output" />
+        <div class="dd" id="nestable">
+            @RenderMenu(Model.AllMenus)
+        </div>
+    </div>
+    <div class="vspace-16-sm"></div>
+</div>
+
+@helper RenderMenu(List<IdentityMenu> menuItems)
+{
+    if (menuItems != null && menuItems.Count > 0)
+    {
+        <ol class="dd-list">
+            @foreach (var item in menuItems)
+            {
+                var link = string.Format("/{0}/{1}", item.Controller, item.Action);
+                if (link == "//")
+                {
+                    link = string.Empty;
+                }
+                if (item.ParentId == 0)
+                {
+                    <li class="dd-item item-orange" data-id="@item.Id">
+                        <div class="dd-handle @((item.Visible == false) ? " btn-yellow no-hover" : "")">
+                            <span><i class="@item.IconCss"></i> @item.Title</span>
+                            <div class="pull-right action-buttons dd-nodrag">
+                                <a href="@link" target="_blank" style="color:#212121; padding-right:10px">
+                                    @link
+                                </a>
+                                <a class="green" href="#" data-content="@item.Controller" onclick="Create(@item.Id);" title="Thêm mới">
+                                    <i class="ace-icon fa fa-plus bigger-130" data-id="@item.Id"></i>
+                                </a>
+                                <a class="blue" href="#" onclick="Update(@item.Id);" title="Cập nhật">
+                                    <i class="ace-icon fa fa-pencil bigger-130" data-id="@item.Id"></i>
+                                </a>
+
+                                <a class="red btn-delete" href="@Url.Action("PopupDelete", "Menu", new { id = item.Id })" data-modal="" title="Xóa">
+                                    <i class="ace-icon fa fa-trash-o bigger-130" data-id="@item.Id"></i>
+                                </a>
+                            </div>
+                        </div>
+                        @GetSubMenus(menuItems, item.Id)
+                    </li>
+                }
+            }
+        </ol>
+    }
+}
+
+@helper GetSubMenus(List<IdentityMenu> menuItems, int id)
+{
+    <ol class="dd-list">
+        @foreach (var item in menuItems)
+        {
+            var link = string.Format("/{0}/{1}", item.Controller, item.Action);
+            if (link == "//")
+            {
+                link = string.Empty;
+            }
+
+            if (item.ParentId == id)
+            {
+                <li class="dd-item" data-id="@item.Id">
+                    <div class="dd-handle @((item.Visible == false) ? " btn-yellow no-hover" : "")">
+                        <span>@item.Title</span>
+                        <div class="pull-right action-buttons dd-nodrag">
+                            <a href="@link" target="_blank" style="color:#212121; padding-right:10px">
+                                @link
+                            </a>
+                            <a class="green" href="#" data-content="@item.Controller" onclick="Create(@item.Id);" title="Thêm mới">
+                                <i class="ace-icon fa fa-plus bigger-130" data-id="@item.Id"></i>
+                            </a>
+                            <a class="blue" href="#" onclick="Update(@item.Id);" title="Cập nhật">
+                                <i class="ace-icon fa fa-pencil bigger-130" data-id="@item.Id"></i>
+                            </a>
+
+                            <a class="red btn-delete" href="@Url.Action("PopupDelete", "Menu", new { id = item.Id })" title="Xóa" data-modal="">
+                                <i class="ace-icon fa fa-trash-o bigger-130" data-id="@item.Id"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @GetSubMenus(menuItems, item.Id)
+                </li>
+            }
+        }
+    </ol>
+}
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog" style="width: 60%; height: auto;max-height: 100%;margin: 0 auto;">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section PagePluginScripts{
+    @*<link href="~/assets/css/bootstrap-select.min.css" rel="stylesheet" />
+        <script src="~/assets/js/bootstrap-select.js"></script>*@
+    <script src="~/Scripts/Plugins/Nestable/jquery.nestable.js"></script>
+}
+
+
+@section PageInlineScripts{
+    <script>
+        jQuery(function ($) {
+            $('.dd').each(function () {
+                $(this).nestable({
+                    maxDepth: 0,
+                    noDragClass: 'dd-nodrag'
+                });
+            });
+        });
+
+        $(document).ready(function () {
+
+            var updateOutput = function (e) {
+                var list = e.length ? e : $(e.target),
+                    output = list.data('output');
+                if (window.JSON) {
+                    output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+                } else {
+                    output.val('JSON browser support required for this demo.');
+                }
+            };
+
+            // activate Nestable for list 1
+            $('#nestable').nestable({
+                group: 1
+            })
+                .nestable('collapseAll')
+                .on('change', updateOutput);
+            // output initial serialised data
+            updateOutput($('#nestable').data('output', $('#nestable-output')));
+
+            $('#nestable-menu').on('click', function (e) {
+                var target = $(e.target),
+                    action = target.data('action');
+                if (action === 'expand-all') {
+                    $('.dd').nestable('expandAll');
+                    ResetForm();
+                }
+                if (action === 'collapse-all') {
+                    $('.dd').nestable('collapseAll');
+                    ResetForm();
+                }
+            });
+            ResetForm();
+
+            $('.dd').on('change', function () {
+                $("#load").show();
+                // output initial serialised data
+                updateOutput($('#nestable').data('output', $('#nestable-output')));
+
+                var dataString = {
+                    data: $("#nestable-output").val(),
+                };
+
+                console.log(dataString);
+                return false;
+                $.ajax({
+                    type: "POST",
+                    url: "Menu/UpdateSorting",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                    }, error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                });
+            });
+        });
+
+        function ResetForm() {
+            $(".dd-item").each(function () {
+                if ($(this).find(".dd-list").children().length == 0) {
+                    $(this).find("[data-action='collapse']").hide();
+                    $(this).find("[data-action='expand']").hide();
+                }
+                else {
+                    $(this).find(".dd-handle").first().find(".btn-delete").hide();
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function Create(parentid) {
+            $.ajax({
+                url: 'Menu/Create',
+                data: {
+                    parentid: parentid
+                },
+                success: function (result) {
+                    if (result) {
+                        $("#myModalContent").html(result);
+                        $('body').addClass('modal-open');
+                        $('.modal-backdrop').show();
+                        $('#myModal').modal('show');
+                        $('.selectpicker').selectpicker({ style: "btn-default" });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var responseTitle = "Error encountered"
+                    $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), function () { });
+                }
+            });
+        }
+        function Update(id) {
+            $.ajax({
+                url: 'Menu/Update',
+                data: {
+                    id: id
+                },
+                success: function (result) {
+                    if (result) {
+                        $("#myModalContent").html(result);
+                        $('body').addClass('modal-open');
+                        $('.modal-backdrop').show();
+                        $('#myModal').modal('show');
+                        $('.selectpicker').selectpicker({ style: "btn-default" });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var responseTitle = "Error encountered"
+                    $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), function () { });
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,118 @@
+﻿@{
+    var errorList = Html.GetNotifications(NotificationType.ERROR);
+    var warningList = Html.GetNotifications(NotificationType.WARNING);
+    var successList = Html.GetNotifications(NotificationType.SUCCESS);
+    var infoList = Html.GetNotifications(NotificationType.INFO);
+}
+
+<!-- display errors -->
+@if (errorList != null)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="la la-warning"></i>
+        </div>
+        <div class="m-alert__text">
+            @if (errorList.Count() > 1)
+            {
+                <ul>
+                    @foreach (String message in errorList)
+                    {
+                        <li>@Html.Raw(message)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                @Html.Raw(errorList.First())
+            }
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<!-- display warnings -->
+@if (warningList != null)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="la la-warning"></i>
+        </div>
+        <div class="m-alert__text">
+            @if (warningList.Count() > 1)
+            {
+                <ul>
+                    @foreach (String message in warningList)
+                    {
+                        <li>@Html.Raw(message)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                @Html.Raw(warningList.First())
+            }
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<!-- display success -->
+@if (successList != null)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="la la-check"></i>
+        </div>
+        <div class="m-alert__text">
+            @if (successList.Count() > 1)
+            {
+                <ul>
+                    @foreach (String message in successList)
+                    {
+                        <li>@Html.Raw(message)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                @Html.Raw(successList.First())
+            }
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<!-- display success -->
+@if (infoList != null)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-info alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="la la-info"></i>
+        </div>
+        <div class="m-alert__text">
+            @if (infoList.Count() > 1)
+            {
+                <ul>
+                    @foreach (String message in infoList)
+                    {
+                        <li>@Html.Raw(message)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                @Html.Raw(infoList.First())
+            }
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}

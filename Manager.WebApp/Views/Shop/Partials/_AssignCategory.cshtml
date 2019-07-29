@@ -1,0 +1,50 @@
+﻿@using Manager.WebApp.Helpers
+@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ShopAssignCategoryModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        @ManagerResource.LB_ASSIGN_CATEGORY
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div class="row">
+                @RenderCategoryList()
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">
+            @ManagerResource.LB_SAVE
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+    </div>
+}
+
+@helper RenderCategoryList()
+{
+    foreach (var item in Enum.GetValues(typeof(EnumShopCategory)))
+    {
+        var itemValue = (int)item;
+        <div class="col-md-2">
+            <label class="m-radio">
+                <input type="radio" name="cat" @((Model.ShopCategory == itemValue) ? "checked" : "") value="@itemValue">
+                @EnumExtensions.GetEnumDescription((Enum)item)
+                <span></span>
+            </label>
+        </div>
+    }
+}

@@ -1,0 +1,135 @@
+﻿@using Manager.WebApp.Resources
+@using Manager.WebApp.Models
+@model Manager.WebApp.Models.PostEditModel
+
+@Html.AntiForgeryToken()
+<div class="m-portlet__body">
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_TITLE
+        </label>
+        <div class="col-lg-11 col-md-11 col-sm-12">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_POST_TYPE
+        </label>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <select name="@Html.NameFor(m => m.PostType)" id="@Html.IdFor(m => m.PostType)" class="form-control btn-white">
+                @foreach (var item in Enum.GetValues(typeof(EnumPostType)))
+                {
+                    var chkItem = (int)item;
+                    var chkStr = string.Empty;
+                    if (chkItem == Model.PostType)
+                    {
+                        chkStr = "selected";
+                    }
+                    <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_COVER_IMAGE
+        </label>
+        <div class="col-lg-11 col-md-11 col-sm-12">
+            <div class="form-group">
+                @Html.Partial("../Widgets/FormControls/_MediaBrowser", new MediaFileViewModel { FieldName = "Cover", FieldValue = Model.CurrentCover, StorageElementName = "CurrentCover" })
+            </div>
+        </div>
+    </div>
+
+    @*<div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_COVER_IMAGE
+        </label>
+        <div class="col-lg-11 col-md-11 col-sm-12">
+            <div class="form-group">
+                <input type="file" name="Avatar" id="Avatar" class="hidden FilePriviewChange" data-preview="thumb-avatar" />
+                <div id="thumb-avatar">
+                    @if (!string.IsNullOrEmpty(Model.CurrentCoverFullPath))
+                    {
+                        <img src="@Model.CurrentCoverFullPath" class="img-res thumbImg" width="100" height="50" style="float:left;margin-right:10px;" />
+                    }
+                </div>
+
+                <button class="btn btn-info btn-sm" type="button" onclick="return $('#Avatar').click();">Máy tính</button>
+                <a data-toggle="modal" class="btn btn-info btn-sm myBrowserBtn" data-control="CurrentAvatar" href="javascript:;" data-target="#fileModal">Media server</a>
+                <input id="CurrentAvatar" type="hidden" data-preview="thumb-avatar" />
+            </div>
+        </div>
+    </div>*@
+
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_DESCRIPTION
+        </label>
+        <div class="col-lg-11 col-md-11 col-sm-12">
+            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_CONTENT
+        </label>
+        <div class="col-lg-11 col-md-11 col-sm-12">
+            @*<div class="summernote BodyContent">
+                    @if (!string.IsNullOrEmpty(Model.BodyContent))
+                    {
+                        @Html.Raw(Model.BodyContent)
+                    }
+                </div>*@
+
+            @Html.TextAreaFor(m => m.BodyContent)
+        </div>
+    </div>
+
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-1 col-sm-12">
+            @ManagerResource.LB_STATUS
+        </label>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <select name="@Html.NameFor(m => m.Status)" id="@Html.IdFor(m => m.Status)" class="form-control btn-white">
+                @foreach (var item in Enum.GetValues(typeof(EnumStatus)))
+                {
+                    var chkItem = (int)item;
+                    var chkStr = string.Empty;
+                    if (chkItem == Model.Status)
+                    {
+                        chkStr = "selected";
+                    }
+                    <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                }
+            </select>
+        </div>
+        <div class="">
+            <label class="m-checkbox m-checkbox--air">
+                <input type="checkbox" value="true" name="@Html.NameFor(m=>m.IsHighlights)" @((Model.IsHighlights) ? "checked" : string.Empty)>
+                @ManagerResource.LB_POST_HIGHLIGHTS
+                <span></span>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="m-portlet__foot m-portlet__foot--fit">
+    <div class="m-form__actions m-form__actions">
+        <div class="row">
+            <div class="col-lg-11 ml-lg-auto">
+                <button type="submit" class="btn btn-info">
+                    <i class="fa fa-floppy-o"></i> @ManagerResource.LB_SAVE
+                </button>
+                <a href="/Post" class="btn btn-secondary">
+                    @ManagerResource.LB_GOBACK
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@*<textarea class="" id="@Html.IdFor(m=>m.BodyContent)" name="@Html.IdFor(m=>m.BodyContent)" style="opacity:0;"></textarea>*@

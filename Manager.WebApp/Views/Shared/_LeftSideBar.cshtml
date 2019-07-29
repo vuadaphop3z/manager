@@ -1,0 +1,117 @@
+﻿@using MsSql.AspNet.Identity
+
+@{
+    var menuItems = ViewBag.AdminNavMenu as IEnumerable<IdentityMenu>;
+    if (menuItems != null && menuItems.Count() > 0)
+    {
+        menuItems = MenuHelper.GetCurrentListMenuByLang(menuItems.ToList());
+    }
+}
+
+@helper RenderTopMenuItem(IdentityMenu mi)
+    {
+        var cssParent = MenuHelper.CheckCurrentGroupCustom(mi) ? mi.HasVisbleChildren ? "m-menu__item--open" : "m-menu__item--submenu m-menu__item--open" : "";
+
+        var cssLink = mi.HasVisbleChildren ? "m-menu__toggle" : "";
+
+        var itemUrl = !string.IsNullOrEmpty(mi.Action) && !string.IsNullOrEmpty(mi.Controller) ?
+                            Url.Action(mi.Action, mi.Controller) : "javascript:;";
+
+        <li class="m-menu__item @cssParent" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <a href="@itemUrl" title="@mi.FullDesc" class="m-menu__link @cssLink">
+                <i class="m-menu__link-icon @mi.IconCss"></i>
+                <span class="m-menu__link-text"> @mi.CurrentTitleLang </span>
+
+                @if (mi.HasVisbleChildren)
+                {
+                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                }
+            </a>
+
+            @if (mi.HasVisbleChildren)
+            {
+                <div class="m-menu__submenu">
+                    <span class="m-menu__arrow"></span>
+                    <ul class="m-menu__subnav">
+
+                        @foreach (var smi in mi.SubMenu)
+                        {
+                            if (smi.Visible)
+                            {
+                                @RenderSubMenuItem(smi);
+                            }
+                        }
+
+                    </ul>
+                </div>
+
+            }
+
+        </li>
+}
+
+@helper RenderSubMenuItem(IdentityMenu mi)
+    {
+        var cssParent = MenuHelper.CheckCurrentActionCustom(mi) ? "m-menu__item--active" : "";
+
+        var cssLink = mi.HasVisbleChildren ? "m-menu__toggle" : "";
+
+        var itemUrl = !string.IsNullOrEmpty(mi.Action) && !string.IsNullOrEmpty(mi.Controller) ? Url.Action(mi.Action, mi.Controller) : "javascript:;";
+        <li class="m-menu__item @cssParent" aria-haspopup="true">
+            <a href="@itemUrl" class="m-menu__link @cssLink" title="@mi.FullDesc">
+                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                    <span></span>
+                </i>
+                <span class="m-menu__link-text">
+                    @mi.CurrentTitleLang
+                </span>
+
+                @if (mi.HasVisbleChildren)
+                {
+                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                }
+            </a>
+            @if (mi.HasVisbleChildren)
+            {
+                <div class="m-menu__submenu">
+                    <ul class="m-menu__subnav">
+                        @foreach (var smi in mi.SubMenu)
+                        {
+                            if (smi.Visible)
+                            {
+                                @RenderSubMenuItem(smi);
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </li>        
+}
+
+<button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn">
+    <i class="la la-close"></i>
+</button>
+
+<div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+    <!-- BEGIN: Aside Menu -->
+    <div id="m_ver_menu"
+         class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
+         m-menu-vertical="1"
+         m-menu-scrollable="0" m-menu-dropdown-timeout="500">
+
+        <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow">
+            @if (menuItems != null)
+            {
+                foreach (var mi in menuItems)
+                {
+                    if (mi.Visible && (mi.HasChildren || (!string.IsNullOrEmpty(mi.Action) && !string.IsNullOrEmpty(mi.Controller)))
+                        )
+                    {
+                        @RenderTopMenuItem(mi);
+                    }
+                }
+            }
+        </ul>
+    </div>
+    <!-- END: Aside Menu -->
+</div>

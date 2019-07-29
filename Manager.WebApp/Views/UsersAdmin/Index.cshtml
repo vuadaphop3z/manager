@@ -1,0 +1,219 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Users Management";
+}
+
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    @RenderSearchForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderSearchForm()
+    {
+        using (Html.BeginForm("Index", "UsersAdmin", FormMethod.Get, new { role = "form", @class = "m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" }))
+        {
+            @Html.HiddenFor(m => m.SearchExec)
+
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-3">
+                        @Html.LabelFor(m => m.RoleId)
+                        <select class="form-control" name="RoleId">
+                            @if (Model.AllRoles != null && Model.AllRoles.Count > 0)
+                            {
+                                <option value="">@ManagerResource.LB_SELECT_ROLE</option>
+                                foreach (var role in Model.AllRoles)
+                                {
+                                    if (Model.RoleId != role.Id)
+                                    {
+                                        <option value="@role.Id">@role.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role.Id" selected>@role.Name</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(m => m.RoleId, "", new { @class = "m-form__help" })
+                    </div>
+                    <div class="col-lg-3">
+                        <label>@ManagerResource.LB_KEYWORD</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control m-input", placeholder=ManagerResource.LB_KEYWORD })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "m-form__help" })
+                    </div>
+                    <div class="col-lg-6">
+                        <label></label>
+                        <div class="m-checkbox-inline">
+                            <label class="m-checkbox">
+                                <input name="@Html.NameFor(m => m.IsLocked)" @((Model.IsLocked == 1) ? "checked" : null) value="1" type="checkbox">
+                                @ManagerResource.LB_IS_LOCKED
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn btn-info">
+                            @ManagerResource.LB_SEARCH
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        }
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix pull-right">
+            <a class="btn btn-white btn-info" href="@Url.Action("Create", "UsersAdmin")" title="@ManagerResource.LB_ADDNEW"><i class="fa fa-plus"></i> @ManagerResource.LB_ADDNEW</a>
+        </div>
+        <br />
+        <br />
+
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ManagerResource.LB_LIST
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="sample-table-1" class="table m-table m-table--head-bg-brand">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>@ManagerResource.LB_USERNAME</th>
+                                    <th>@ManagerResource.LB_ROLE</th>
+                                    <th>@ManagerResource.LB_EMAIL</th>
+                                    <th>@ManagerResource.LB_PHONE</th>
+                                    <th>@ManagerResource.LB_CREATED_DATE</th>
+                                    <th>@ManagerResource.LB_ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResult != null && Model.SearchResult.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResult)
+                                    {
+                                        stt++;
+                                        <tr>
+                                            <td>@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                            <td>
+                                                @if (record.LockoutEndDateUtc == null)
+                                                {
+                                                    @record.UserName
+                                                }
+                                                else if (record.LockoutEndDateUtc != null)
+                                                {
+                                                    if (record.LockoutEnabled)
+                                                    {
+                                                        <b class="text-danger">@record.UserName (@ManagerResource.LB_LOCKED)</b>
+                                                    }
+                                                    else
+                                                    {
+                                                        @record.UserName
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (record.Roles != null)
+                                                {
+                                                    @String.Join(", ", record.Roles.ToArray());
+                                                }
+                                            </td>
+                                            <td>@record.Email</td>
+                                            <td>@record.PhoneNumber</td>
+                                            <td>@record.CreatedDateUtc.ToLocalTime()</td>
+                                            <td>
+                                                <input type="hidden" id="hdName_@record.Id" value="@record.Id" />
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Details", "UsersAdmin", new { id = record.Id,SearchExec = 'Y',Page = Model.CurrentPage,Email = Model.Email, RoleId = Model.RoleId, IsLocked = Model.IsLocked })" title="@ManagerResource.LB_CLICK_VIEW_DETAIL">
+                                                    <i class="la la-eye"></i>
+                                                </a>
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Edit", "UsersAdmin", new { id = record.Id, SearchExec = 'Y', Page = Model.CurrentPage, Email = Model.Email, RoleId = Model.RoleId, IsLocked = Model.IsLocked })" title="@ManagerResource.LB_EDIT">
+                                                    <i class="la la-pencil"></i>
+                                                </a>
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("DeleteUser", "UsersAdmin", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                    <i class="la la-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @RenderPaging()
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+@helper RenderPaging()
+    {
+        if (Model.SearchResult != null && Model.Total != 0)
+        {
+            <div class="m_datatable m-datatable m-datatable--default m-datatable--brand m-datatable--loaded">
+                <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
+                    @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("Index", "UsersAdmin",
+                         new
+                         {
+                             Page = index,
+                             SearchExec = "Y",
+                             IsLocked = Model.IsLocked,
+                             RoleId = Model.RoleId,
+                             Email = Model.Email
+                         }),
+                         Model.Total, pageSize: Model.PageSize, numberOfLinks: 10)
+                </div>
+            </div>
+        }
+}
+
+@section PageInlineScripts
+{
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        function CreateUser() {
+            $('#frmCreate').modal('show');
+        }
+    </script>
+}
+
+
+
+
+
+

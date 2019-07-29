@@ -1,0 +1,11 @@
+﻿@using Manager.WebApp.Resources
+@model int
+
+@if (Model == 1)
+{
+    <span class="m-badge m-badge--wide m-badge--success">@ManagerResource.LB_ACTIVATED</span>
+}
+else if (Model == 0)
+{
+    <span class="m-badge m-badge--wide m-badge--danger">@ManagerResource.LB_LOCKED</span>
+}

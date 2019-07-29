@@ -1,0 +1,45 @@
+﻿@using Manager.WebApp.Models;
+@model MySql.Epg.Store.Entities.Log4netRecord
+
+@{
+    var classLevel = string.Empty;
+    if (Model.Level == Log4netLevel.ERROR.ToString())
+    {
+        if (!string.IsNullOrEmpty(Model.Throwable))
+        {
+            classLevel = "error-record";
+        }
+        else
+        {
+            classLevel = "alert-record";
+        }
+    }
+    else
+    {
+        classLevel = Model.Level.ToLower() + "-record";
+    }   
+}
+   
+<div class="row panel panel-default">
+    <div class="panel-heading">
+        <a href="#faq-@Model.EntryId" data-id="@Model.EntryId" data-parent="#logList" data-toggle="collapse" class="accordion-toggle collapsed log-item @classLevel">
+            <i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+            <i class="ace-icon fa fa-credit-card bigger-130"></i>
+            &nbsp; <b>@Model.Level: @Model.AppName (@Model.MachineName) - @Model.TimeStamp.ToString()</b>
+        </a>
+    </div>
+
+    <div class="panel-collapse collapse in" id="faq-@Model.EntryId">
+        <div class="row panel-body log-detail">
+            <div class="col-md-11 log-content">
+                @(Model.Message.Length > 300 ? Model.Message.Substring(0, 300) + " ..." : Model.Message)
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-sm btn-info pull-right" href="@Url.Action("LogDetails", "Monitoring", new { id = Model.EntryId })" data-modal="" title="Show details">
+                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

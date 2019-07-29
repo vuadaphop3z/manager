@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1A8EE178-3D0C-46F7-A54F-ABCFD03C0C6C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MsSql.AspNet.Identity</RootNamespace>
+    <AssemblyName>MsSql.AspNet.Identity</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Business\Common\IdentityCommon.cs" />
+    <Compile Include="Entities\Business\IdentityCompany.cs" />
+    <Compile Include="Entities\Business\Common\IdentityMemberInfo.cs" />
+    <Compile Include="Entities\Business\Common\IdentityLanguage.cs" />
+    <Compile Include="Entities\Business\IdentityProduct.cs" />
+    <Compile Include="Entities\Business\IdentityProductCategory.cs" />
+    <Compile Include="Entities\Business\IdentityPlace.cs" />
+    <Compile Include="Entities\Business\IdentityCategory.cs" />
+    <Compile Include="Entities\Business\IdentityFilter.cs" />
+    <Compile Include="Entities\Business\IdentityLocation.cs" />
+    <Compile Include="Entities\Business\IdentityPost.cs" />
+    <Compile Include="Entities\Business\IdentityMember.cs" />
+    <Compile Include="Entities\Business\IdentitySlide.cs" />
+    <Compile Include="Entities\Business\IdentityWarehouse.cs" />
+    <Compile Include="Entities\Business\IdentityProjectCategory.cs" />
+    <Compile Include="Entities\Business\IdentityProject.cs" />
+    <Compile Include="Entities\System\ActivityLog.cs" />
+    <Compile Include="Entities\Business\IdentityPricePlan.cs" />
+    <Compile Include="Entities\Business\IdentityMaster.cs" />
+    <Compile Include="Entities\Business\IdentityShop.cs" />
+    <Compile Include="Entities\Business\IdentityProvider.cs" />
+    <Compile Include="Entities\Business\IdentityArea.cs" />
+    <Compile Include="Entities\System\CommonIdentity.cs" />
+    <Compile Include="Entities\System\IdentityAccessRoles.cs" />
+    <Compile Include="Entities\System\IdentityMenu.cs" />
+    <Compile Include="Entities\System\IdentityOperation.cs" />
+    <Compile Include="Entities\System\IdentityRole.cs" />
+    <Compile Include="Entities\System\IdentityUser.cs" />
+    <Compile Include="Entities\System\Log4netIdentity.cs" />
+    <Compile Include="Entities\System\Setting.cs" />
+    <Compile Include="Entities\System\UserSchedule.cs" />
+    <Compile Include="Interface\System\IAccessRolesStore.cs" />
+    <Compile Include="Interface\System\IMsSqlIdentityStore.cs" />
+    <Compile Include="MsSqlStores\Business\StoreCategory.cs" />
+    <Compile Include="MsSqlStores\Business\StoreCompany.cs" />
+    <Compile Include="MsSqlStores\Business\StoreDevice.cs" />
+    <Compile Include="MsSqlStores\Business\StoreHTDefaultSetting.cs" />
+    <Compile Include="MsSqlStores\Business\StoreWarehouse.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProduct.cs" />
+    <Compile Include="MsSqlStores\Business\StorePropertyCategory.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProductCategory.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProperty.cs" />
+    <Compile Include="MsSqlStores\Business\StorePriceType.cs" />
+    <Compile Include="MsSqlStores\Business\StoreMember.cs" />
+    <Compile Include="MsSqlStores\Business\StoreLanguage.cs" />
+    <Compile Include="MsSqlStores\Business\StorePlaceTypeGroup.cs" />
+    <Compile Include="MsSqlStores\Business\StorePlace.cs" />
+    <Compile Include="MsSqlStores\Business\StorePost.cs" />
+    <Compile Include="MsSqlStores\Business\StoreSlide.cs" />
+    <Compile Include="MsSqlStores\Business\StoreCurrency.cs" />
+    <Compile Include="MsSqlStores\Business\StoreUser.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProjectCategory.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProject.cs" />
+    <Compile Include="MsSqlStores\System\AccessRolesStore.cs" />
+    <Compile Include="MsSqlStores\Business\StoreShop.cs" />
+    <Compile Include="MsSqlStores\Business\StorePolicy.cs" />
+    <Compile Include="MsSqlStores\Business\StoreCredit.cs" />
+    <Compile Include="MsSqlStores\Business\StorePayment.cs" />
+    <Compile Include="MsSqlStores\Business\StoreUnit.cs" />
+    <Compile Include="MsSqlStores\Business\StoreGroupProperty.cs" />
+    <Compile Include="MsSqlStores\Business\StoreProvider.cs" />
+    <Compile Include="Repositories\Business\RpsArea.cs" />
+    <Compile Include="Repositories\Business\RpsCompany.cs" />
+    <Compile Include="Repositories\Business\RpsDevice.cs" />
+    <Compile Include="Repositories\Business\RpsHTDefaultSetting.cs" />
+    <Compile Include="Repositories\Business\RpsWarehouse.cs" />
+    <Compile Include="Repositories\Business\RpsProduct.cs" />
+    <Compile Include="Repositories\Business\RpsPropertyCategory.cs" />
+    <Compile Include="Repositories\Business\RpsProductCategory.cs" />
+    <Compile Include="Repositories\Business\RpsProperty.cs" />
+    <Compile Include="Repositories\Business\RpsPriceType.cs" />
+    <Compile Include="Repositories\Business\RpsLanguage.cs" />
+    <Compile Include="Repositories\Business\RpsPlaceTypeGroup.cs" />
+    <Compile Include="Repositories\Business\RpsPlace.cs" />
+    <Compile Include="Repositories\Business\RpsCategory.cs" />
+    <Compile Include="Repositories\Business\RpsPolicy.cs" />
+    <Compile Include="Repositories\Business\RpsCredit.cs" />
+    <Compile Include="Repositories\Business\RpsPayment.cs" />
+    <Compile Include="Repositories\Business\RpsPost.cs" />
+    <Compile Include="Repositories\Business\RpsSlide.cs" />
+    <Compile Include="Repositories\Business\RpsCurrency.cs" />
+    <Compile Include="Repositories\Business\RpsUnit.cs" />
+    <Compile Include="Repositories\Business\RpsGroupProperty.cs" />
+    <Compile Include="Repositories\Business\RpsShop.cs" />
+    <Compile Include="Repositories\Business\RpsProvider.cs" />
+    <Compile Include="MsSqlStores\Business\StoreArea.cs" />
+    <Compile Include="MsSqlStores\System\IdentityStore.cs" />
+    <Compile Include="MsSqlStores\System\RoleStore.cs" />
+    <Compile Include="MsSqlStores\System\UserStore.cs" />
+    <Compile Include="MsSqlHelper.cs" />
+    <Compile Include="MsSqlStores\System\ActivityStore.cs" />
+    <Compile Include="MsSqlStores\System\MsSqlStore.cs" />
+    <Compile Include="Repositories\Business\RpsMember.cs" />
+    <Compile Include="Repositories\Business\RpsProjectCategory.cs" />
+    <Compile Include="Repositories\Business\RpsProject.cs" />
+    <Compile Include="Repositories\System\MenuRepository.cs" />
+    <Compile Include="MsSqlStores\System\MsSqlFrontEndStore.cs" />
+    <Compile Include="Repositories\System\MsSqlFrontEndRepository.cs" />
+    <Compile Include="Repositories\System\MsSqlRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\System\AccessRolesRepository.cs" />
+    <Compile Include="Repositories\System\IdentityRepository.cs" />
+    <Compile Include="Repositories\System\ActivityRepository.cs" />
+    <Compile Include="Repositories\System\RoleRepository.cs" />
+    <Compile Include="Repositories\System\UserClaimRepository.cs" />
+    <Compile Include="Repositories\System\UserLoginRepository.cs" />
+    <Compile Include="Repositories\System\UserRepository.cs" />
+    <Compile Include="Repositories\System\UserRoleRepository.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Manager.SharedLib\Manager.SharedLib.csproj">
+      <Project>{dd13f093-ee29-4bcb-bad2-1c7da7f6554e}</Project>
+      <Name>Manager.SharedLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Business\IdentityNavigation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Repositories\Business\RpsNavigation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MsSqlStores\Business\StoreNavigation.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,65 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ManageMenuLangModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        @ManagerResource.LB_UPDATE_INFO
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.MenuId)
+            <div class="row">
+                <div class="form-group m-form__group col-md-12">
+                    <label>@ManagerResource.LB_LANGUAGE</label>
+                    @RenderLanguages()
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group m-form__group col-md-12">
+                    <label>@ManagerResource.LB_TITLE</label>
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "m--font-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" onclick='$("#LangCode").removeAttr("disabled");' class="btn btn-primary">
+            @ManagerResource.LB_SAVE
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+    </div>
+}
+
+@helper RenderLanguages()
+{
+    if (Model != null && Model.Languages != null && Model.Languages.Count > 0)
+    {
+        var checkedText = "selected";
+        <select id="@Html.IdFor(m=>m.LangCode)" name="@Html.NameFor(m=>m.LangCode)" @((Model.IsUpdate)? "disabled" : "") class="form-control m-input m-input--square">
+            @foreach (var item in Model.Languages)
+            {
+                <option value="@item.LanguageCultureName" @((item.LanguageCultureName == Model.LangCode) ? checkedText : "")>
+                    @item.LanguageFullName (@item.LanguageCultureName)
+                </option>
+            }
+        </select>
+
+    }
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

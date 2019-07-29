@@ -1,0 +1,49 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.PropertyEditModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        @ManagerResource.LB_UPDATE_INFO
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.PropertyCategoryId)           
+            <div class="row">
+                <div class="form-group m-form__group col-md-12">
+                    <label>@ManagerResource.LB_NAME</label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "m--font-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group m-form__group col-md-12">
+                    <label>@ManagerResource.LB_CODE</label>
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Code, "", new { @class = "m--font-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" onclick='$("#LangCode").removeAttr("disabled");' class="btn btn-primary">
+            @ManagerResource.LB_SAVE
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+    </div>
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

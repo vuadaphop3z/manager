@@ -1,0 +1,71 @@
+﻿@model Manager.WebApp.Models.FrontEndSettingsViewModel
+
+@{
+    ViewBag.Title = "Cấu hình";
+}
+
+@Html.Partial("_Notifications")
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("FrontEndSettings", "System", FormMethod.Post, new { id = "frmFrontEndSettings", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.CurrentFrontEndSettingsType)
+            <!--begin::Portlet-->
+            <div class="m-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                FrontEndSettings
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <ul class="nav nav-tabs  m-tabs-line m-tabs-line--primary" role="tablist">
+                        <li class="nav-item m-tabs__item" @(Model.CurrentFrontEndSettingsType == Model.SystemSestings.General.GetType().Name?"active":"")>
+                            <a class="nav-link m-tabs__link active" data-toggle="tab" href="#@Model.SystemSestings.General.GetType().Name" role="tab">
+                                <i class="fa fa-cog"></i>
+                                General
+                            </a>
+                        </li>                       
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active @(Model.CurrentFrontEndSettingsType == Model.SystemSestings.General.GetType().Name ? "active in" : "")" id="@Model.SystemSestings.General.GetType().Name" role="tabpanel">
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.SiteName)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.SiteName, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.General.SiteName, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.General.SiteName) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.SiteName, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelForRequired(m => m.SystemSestings.General.AdminEmail)
+                                @Html.HelpButtonFor(m => m.SystemSestings.General.AdminEmail, "m-form__heading-help-icon flaticon-info", "i", "right", "dark")
+                                <div>
+                                    @Html.TextBoxFor(m => m.SystemSestings.General.AdminEmail, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.SystemSestings.General.AdminEmail) })
+                                    @Html.ValidationMessageFor(m => m.SystemSestings.General.AdminEmail, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+            <!--end::Portlet-->
+
+            <div class="pull-right">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fa fa-floppy-o"></i>
+                    SAVE SETTINGS
+                </button>
+            </div>
+        }
+
+    </div>
+</div>
+

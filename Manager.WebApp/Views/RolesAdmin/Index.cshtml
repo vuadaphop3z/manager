@@ -1,0 +1,165 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.IndexRoleViewModel
+
+@{
+    ViewBag.Title = ManagerResource.LB_ROLE;
+}
+
+
+@Html.Partial("_Notifications")
+
+
+<div class="modal fade" id="frmUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    @ManagerResource.LB_INFORMATION
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Create", "RolesAdmin", FormMethod.Post, new { role = "form" }))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.CurrentRole.Id, new { id = "CurrentID" })
+                        <label>@ManagerResource.LB_NAME</label>
+                        @Html.TextBoxFor(m => m.CurrentRole.Name, new { id = "txtName", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentRole.Name, "", new { @class = "m--font-danger" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">
+                        @ManagerResource.LB_SAVE
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        @ManagerResource.BT_CANCEL
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix pull-right">
+            <button type="button" onclick="UpdateData('create','0')" class="btn btn-white btn-info"><i class="fa fa-plus"></i> @ManagerResource.LB_ADDNEW</button>
+        </div>
+        <br />
+        <br />
+
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ManagerResource.LB_LIST
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content">
+                        <table id="sample-table-1" class="table m-table m-table--head-bg-brand">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>@ManagerResource.LB_NAME</th>
+                                    <th>@ManagerResource.LB_ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.RoleList != null && Model.RoleList.Count > 0)
+                                {
+                                    var counter = 0;
+                                    foreach (var record in Model.RoleList)
+                                    {
+                                        counter++;
+                                        <tr>
+                                            <th scope="row">@counter</th>
+                                            <td>@record.Name</td>
+                                            <td width="120px">
+                                                <input type="hidden" id="hdName_@record.Id" value="@record.Name" />
+                                                @if (record.Name.ToLower() != "admin")
+                                                {
+                                                    <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" onclick="UpdateData('edit','@record.Id')" href="javascript:;" title="@ManagerResource.LB_EDIT">
+                                                        <i class="la la-pencil"></i>
+                                                    </a>
+
+                                                    <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("DeleteRole", "RolesAdmin", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                        <i class="la la-trash"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+@section PagePluginStyles
+{
+
+}
+
+@section PageInlineStyles
+{
+    <style>
+    </style>
+}
+
+@section PagePluginScripts
+ {
+
+
+}
+
+
+@section PageInlineScripts
+{
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        function UpdateData(action, id) {
+            if (action === 'create') {
+                $("#frmUpdateLabel").html("Create new role");
+                $("#frmUpdate form").attr("action", "/RolesAdmin/Create");
+                $("#txtName").val("");
+            }
+            else {
+                $("#frmUpdate form").attr("action", "/RolesAdmin/Update");
+                $("#frmUpdateLabel").html("Edit role");
+                $("#txtName").val($("#hdName_" + id).val());
+            }
+            $("#CurrentID").val(id);
+
+            $('#frmUpdate').modal('show');
+        }
+    </script>
+}
+
+
+
+
+
+

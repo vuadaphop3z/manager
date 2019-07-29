@@ -1,0 +1,240 @@
+﻿@using Manager.WebApp.Models;
+@model Manager.WebApp.Models.Log4netRecordDetailsView
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">Log record details</h4>
+</div>
+<div class="modal-body">  
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#general_info">
+                    Record details
+                </a>
+            </li>
+
+            <li class="">
+                <a data-toggle="tab" href="#source_info">
+                    Source info
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="general_info" class="tab-pane fade active in">
+                @if (Model != null && Model.details != null && Model.details.recordInfo != null)
+                {
+                    @RenderGeneralInfo()
+                }               
+            </div>
+
+            <div id="source_info" class="tab-pane fade ">
+                @if (Model != null && Model.details != null && Model.details.fileInfo != null)
+                {
+                    @RenderSourceInfo()
+                }              
+            </div>
+        </div>
+    </div>  
+</div>
+<div class="modal-footer">
+
+</div>
+
+@helper RenderGeneralInfo()
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> EntryId </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.EntryId</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Item </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Item</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> TimeStamp </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.TimeStamp.ToString()</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Level </div>
+                    <div class="profile-info-value">
+                        <span><b>@Model.details.recordInfo.Level</b></span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Thread </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Thread</span>
+                    </div>
+                </div>                
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Message </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Message</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Machine Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.MachineName</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> User Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.UserName</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Host Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.HostName</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> App </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.App</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Throwable </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Throwable</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Class </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Class</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Method </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.Method</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> File </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.File</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Date Created </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.DateCreated.ToString()</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Log Path </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.LogPath</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> File Id </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.recordInfo.FileId</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <br />
+}
+
+@helper RenderSourceInfo()
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> File Id </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.FileId</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Folder Path</div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.FolderPath</span>
+                    </div>
+                </div>          
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> File Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.FileName</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Full Path </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.FullPath</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Date Created</div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.DateCreated.ToString()</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Current Item </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.CurrentItem</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> File Status </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.FileStatus</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Machine Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.MachineName</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Machine IP </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.MachineIP</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Last Updated </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.LastUpdated.ToString()</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Comments </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.MachineName</span>
+                    </div>
+                </div> 
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> App Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.details.fileInfo.AppName</span>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <br />
+}

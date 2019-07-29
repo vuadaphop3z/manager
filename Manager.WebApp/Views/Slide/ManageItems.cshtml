@@ -1,0 +1,135 @@
+﻿@using Manager.WebApp.Settings;
+@using Manager.WebApp.Models;
+@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.ManageSlideItemModel
+
+@{
+    ViewBag.Title = "Quản lý các thành phần của slide";
+    ViewBag.HideSubHeader = true;
+}
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_DefaultModal")
+
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h4 class="m-portlet__head-text">
+                    @ManagerResource.LB_ADDNEW
+                </h4>
+            </div>
+        </div>
+    </div>
+    <!--begin::Form-->
+    @RenderAddSlideForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderAddSlideForm()
+{
+using (Html.BeginForm("CreateSlideItem", "Slide", FormMethod.Post, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed", enctype = "multipart/form-data" }))
+{
+        @Html.HiddenFor(m => m.SlideId)
+        @Html.Partial("../Slide/_UpdateSlideItemForm", new Manager.WebApp.Models.SlideItemUpdateModel())
+    }
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h4 class="m-portlet__head-text">
+                            @ManagerResource.LB_LIST
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="sample-table-1" class="table m-table m-table--head-bg-brand">
+                            <thead>
+                                <tr>
+                                    <th width="50">#</th>
+                                    <th>@ManagerResource.LB_TITLE</th>
+                                    <th>@ManagerResource.LB_DESCRIPTION</th>
+                                    <th>@ManagerResource.LB_LINK</th>
+                                    <th>@ManagerResource.LB_IMAGE</th>
+                                    <th>@ManagerResource.LB_ORDER_DISPLAY</th>
+                                    <th>@ManagerResource.LB_STATUS</th>
+                                    <th>@ManagerResource.LB_ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResults)
+                                    {
+                                        stt++;
+                                        <tr>
+                                            <td>@stt</td>
+                                            <td>
+                                                @record.Title
+                                            </td>
+                                            <td>
+                                                @record.Description
+                                            </td>
+                                            <td>
+                                                <a href="@record.Link" target="_blank">@record.Link</a>
+                                            </td>
+                                            <td>
+                                                <img src="@SocialCdnHelper.GetFullImgPath(record.ImageUrl)" class="img-res" width="100" height="50" style="float:left;margin-right:10px;" />
+                                            </td>
+                                            <td>@record.SortOrder</td>
+                                            <td>
+                                                @Html.Partial("../Widgets/_Status", record.Status)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var newModel = Model;
+                                                    newModel.Id = record.Id;
+                                                    newModel.SearchExec = "Y";
+                                                }
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("EditSlideItem", "Slide", new { id = record.Id })" title="@ManagerResource.LB_EDIT">
+                                                    <i class="la la-pencil"></i>
+                                                </a>
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("DeleteSlideItem", "Slide", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                    <i class="la la-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+@section PageInlineScripts{
+    <script src="~/Scripts/Common/common.mediaselect.js"></script>
+}

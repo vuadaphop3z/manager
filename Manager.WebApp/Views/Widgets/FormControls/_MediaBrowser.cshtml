@@ -1,0 +1,16 @@
+﻿@using Manager.WebApp.Models
+@model MediaFileViewModel
+
+<input type="file" name="@Model.FieldName" id="@Model.FieldName" class="hidden FilePreviewChange" data-preview="thumb-@Model.FieldName" />
+<div id="thumb-@Model.FieldName">
+    @if (!string.IsNullOrEmpty(Model.FieldValue))
+    {
+        <img src="@SocialCdnHelper.GetFullImgPath(Model.FieldValue)" class="img-res thumbImg img-thum-preview" width="100" height="50" />
+    }
+</div>
+
+<button class="btn btn-info btn-sm" type="button" onclick="return $('#@Model.FieldName').click();"><i class="fa fa-folder-open-o"></i> Máy tính</button>
+@*<a data-toggle="modal" class="btn btn-info btn-sm myBrowserBtn" data-control="@Model.StorageElementName" href="javascript:;" data-target="#fileModal">
+    <i class="fa fa-sellsy"></i> Thư viện
+</a>*@
+<input type="hidden" value="@Model.FieldValue" id="@Model.StorageElementName" name="@Model.StorageElementName" data-preview="thumb-@Model.FieldName" />

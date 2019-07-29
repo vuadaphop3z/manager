@@ -1,0 +1,37 @@
+﻿@using Manager.WebApp.Resources
+@using Manager.WebApp.Models
+
+@model Manager.WebApp.Models.UserViewModel
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">@ManagerResource.LB_INFORMATION</h4>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("Update", "UsersAdmin", FormMethod.Post, new { role = "form" }))
+    {
+        <div class="row">
+            <div class="col-sm-12 col-xs-12">
+                <div class="form-group">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.UserInfoViewModel.Id, new { id = "CurrentID" })
+                    <label>@ManagerResource.LB_USERNAME</label>
+                    @Html.TextBoxFor(m => m.UserInfoViewModel.UserName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>@ManagerResource.LB_EMAIL</label>
+                    @Html.TextBoxFor(m => m.UserInfoViewModel.Email, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>@ManagerResource.LB_PHONE</label>
+                    @Html.TextBoxFor(m => m.UserInfoViewModel.PhoneNumber, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-danger" type="submit" value="@ManagerResource.LB_SAVE" />
+            <button class="btn" data-dismiss="modal">@ManagerResource.BT_CANCEL</button>
+        </div>
+    }
+</div>

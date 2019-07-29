@@ -1,0 +1,118 @@
+﻿@using Manager.WebApp.Models;
+@model NotificationApproveModel
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    @if (Model.Approved == (int)EnumApprovedStatus.Approved)
+    {
+        <h4 class="modal-title" id="myModalLabel">Are you sure you want to approve this notification ?</h4>
+    }
+    else
+    {
+        <h4 class="modal-title" id="myModalLabel">Are you sure you want to unapprove this notification ?</h4>
+    }
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.NotificationId)
+    @Html.HiddenFor(m => m.Approved)
+    
+    <div class="form-group">
+        <div class="col-xs-12">
+            @RenderNotificationPreview()      
+        </div>
+    </div>    
+    <div class="form-group">
+        <div class="col-xs-12">
+            <br />    
+            <label for="Comment">
+                <span class="text-danger">Comment</span>
+            </label>
+            @Html.TextAreaFor(m=>m.ApprovedComment,new { @class = "form-control"})
+            @Html.ValidationMessageFor(m => m.ApprovedComment, "", new { @class = "text-danger" })
+            <br />
+        </div>
+    </div>
+    
+    
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">No</button>
+        <input class="btn btn-danger" type="submit" value="Yes" />
+    </div>
+}
+
+@helper RenderNotificationPreview()
+{
+    if (Model != null && Model.NotificationInfo != null)
+    {
+        var totalCount = Model.NotificationInfo.BodyContent.Count;
+        var appList = Model.NotificationInfo.BodyContent.Select(m => m.ApplicationId).Distinct().ToList();
+        var appNameList = Model.NotificationInfo.BodyContent.Select(m => m.ApplicationName).Distinct().ToList();
+        var appCount = appList.Count;
+        var contentIdx = 0;
+        for (var appidx = 0; appidx < appCount; appidx++)
+        {
+            var app = appList[appidx];
+            var langList = Model.NotificationInfo.BodyContent.Where(m => m.ApplicationId == app).Select(m => m.LanguageCode).Distinct().ToList();
+
+            var contentIdxTemp = contentIdx;
+
+            <h6> @appNameList[appidx]</h6>
+
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                    {
+                        <li class="@(lngidx == 0 ? "active" : "")">
+                            <a data-toggle="tab" href="#preview_@(Model.NotificationInfo.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp">
+                                @Model.NotificationInfo.BodyContent[contentIdxTemp].LanguageName
+                            </a>
+                        </li>
+
+                        contentIdxTemp += 1;
+                    }
+
+                </ul>
+
+                @{
+                    //Reset index
+                    contentIdxTemp = contentIdx;
+                }
+
+                <div class="tab-content">
+
+                    @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                    {
+                        <div id="preview_@(Model.NotificationInfo.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp" class="tab-pane fade @(lngidx == 0 ? "active in" : "")">
+                            @FillDefaultValueToContent(Model.NotificationInfo.BodyContent[contentIdxTemp].BodyContent)
+                        </div>
+
+                        contentIdxTemp += 1;
+                    }
+
+                </div>
+            </div>
+                    contentIdx += langList.Count;
+        }
+    }
+}
+
+@helper FillDefaultValueToContent(string content)
+{
+    if (!string.IsNullOrEmpty(content))
+    {
+        if (Model != null && Model.NotificationTags.IsAny())
+        {
+            foreach (var tag in Model.NotificationTags)
+            {
+                //var strDefault = "<b style='color:red'>" + tag.Default + "</b>";
+                var strDefault = tag.Default;
+                content = content.Replace(tag.TagCode, strDefault);
+            }
+        }
+    }
+    @Html.Raw(content);
+}
+
+<script src='@Url.Content("~/Scripts/jquery.validate.js")' type='text/javascript'></script>
+<script src='@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")' type='text/javascript'></script>

@@ -1,0 +1,40 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.PostEditModel
+
+@{
+    var title = "Sửa bài viết: " + Model.Title;
+    ViewBag.Title = title;
+    ViewBag.HideSubHeader = true;
+    var currentController = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_LargeModal")
+
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    @ManagerResource.LB_EDIT_POST
+                </h3>
+            </div>
+        </div>
+    </div>
+    <!--begin::Form-->
+    @using (Html.BeginForm("edit", currentController, FormMethod.Post, new { role = "form", @class = "m-form m-form--fit", id = "frmCreate", encType = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.Partial("_PostComposerForm")
+    }
+
+    <!--end::Form-->
+</div>
+<!--end::Portlet-->
+
+@section PageInlineScripts{
+    <script src="~/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/Post/composer.js"></script>
+    <script src="~/Scripts/Common/common.mediaselect.js"></script>
+}

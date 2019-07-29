@@ -1,0 +1,55 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.AssignCategoryModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        @ManagerResource.LB_ASSIGN_CATEGORY
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div class="row">
+                @RenderCategoryList()
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">
+            @ManagerResource.LB_SAVE
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+    </div>
+}
+
+@helper RenderCategoryList()
+    {
+        if (Model != null && Model.Categories != null && Model.Categories.Count > 0)
+        {
+            var counter = 0;
+            var checkedText = "checked";
+            foreach (var item in Model.Categories)
+            {
+                counter++;
+
+                <div class="col-md-3">
+                    <label class="m-radio">
+                        <input type="radio" name="cat" @((counter == 1) ? checkedText : "") id="cat_@item.Id" value="@item.Id">
+                        @item.Name
+                        <span></span>
+                    </label>
+                </div>
+            }
+        }
+}

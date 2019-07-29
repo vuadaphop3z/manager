@@ -1,0 +1,194 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using Manager.WebApp.Models
+@model NotificationModel
+
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        @*@using (Html.BeginForm("Create", "Notification", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))*@
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m=>m.NotificationId)
+            
+            <div class="form-group">
+                @Html.LabelFor(m => m.CategoryId, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.DropDownListFor(m => m.CategoryId, Model.NotifCategories, new { @class = "form-control" , id = "ddlCategory" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.StartTime, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.StartTime, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EndTime, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.EndTime, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div class="col-md-9">
+
+                    <div class="checkbox">
+                        <label>                            
+                            @Html.CheckBoxFor(m => m.IsDefault, new { @class = "", id = "cbxIsDefault" })
+                            <span class="lbl" id="lblIsDefault"> @Html.DisplayNameFor(m => m.IsDefault)</span>
+
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.NotifName, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.NotifName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NotifName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div class="col-md-9">
+
+                    <div class="checkbox">
+                        <label>
+
+                            @Html.CheckBoxFor(m => m.Enabled, new { @class = "" })
+                            <span class="lbl"> @Html.DisplayNameFor(m => m.Enabled)</span>
+
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.BodyContent, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @if (Model.BodyContent!=null)
+                    { 
+                        @RenderNotificationLanguage()
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Index", "Notification")"><i class="ace-icon fa fa-arrow-left"></i> Go back</a>
+                    @if (!string.IsNullOrEmpty(Model.NotificationId))
+                    {
+                        @*<a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Notification", new { id = Model.NotificationId })" data-modal=""><i class="ace-icon fa fa-trash-o"></i> Delete</a>*@
+                    }
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="ace-icon fa fa-check bigger-110"></i> Save</button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+@helper RenderNotificationLanguage()
+{
+    var totalCount = Model.BodyContent.Count;
+    var appList = Model.BodyContent.Select(m => m.ApplicationId).Distinct().ToList();
+    var appNameList = Model.BodyContent.Select(m => m.ApplicationName).Distinct().ToList();
+    var appCount = appList.Count;
+    var contentIdx = 0;
+    for (var appidx = 0; appidx < appCount; appidx++)
+    {
+        var app = appList[appidx];
+        var langList = Model.BodyContent.Where(m => m.ApplicationId == app).Select(m => m.LanguageCode).Distinct().ToList();
+
+        var contentIdxTemp = contentIdx;
+
+        <h2> @appNameList[appidx]</h2>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+
+
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <li class="@(lngidx == 0 ? "active" : "")">
+                        <a data-toggle="tab" data-textarea-id="txt_@contentIdxTemp" href="#lang_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp">
+                            @Model.BodyContent[contentIdxTemp].LanguageName
+                        </a>
+                    </li>
+
+                    contentIdxTemp += 1;
+                }
+
+
+                <li class="pull-right">
+
+                    <div class="btn-group">
+                        <button class="btn btn-xs btn-success" type="button">Insert tags</button>
+
+                        <button data-toggle="dropdown" type="button" class="btn btn-xs btn-success dropdown-toggle">
+                            <span class="ace-icon fa fa-caret-down icon-only"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-success">
+                            @if (Model.NotificationTags != null && Model.NotificationTags.Count > 0)
+                            {
+                                foreach (var tag in Model.NotificationTags)
+                                {
+                                    <li>
+                                        <a class="tag-item" href="javascript:;" data-tag="@tag.TagCode">@tag.TagCode : @tag.TagName</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                </li>
+
+            </ul>
+
+            @{
+                //Reset index
+                contentIdxTemp = contentIdx;
+            }
+
+            <div class="tab-content">
+
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <div id="lang_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp" class="tab-pane fade @(lngidx == 0 ? "active in" : "")">
+                        @Html.HiddenFor(m => m.BodyContent[contentIdxTemp].ApplicationId)
+                        @Html.HiddenFor(m => m.BodyContent[contentIdxTemp].ApplicationName)
+                        @Html.HiddenFor(m => m.BodyContent[contentIdxTemp].LanguageCode)
+                        @Html.HiddenFor(m => m.BodyContent[contentIdxTemp].LanguageName)
+                        @Html.TextAreaFor(m => m.BodyContent[contentIdxTemp].BodyContent, new { @class = "form-control", rows = 6, id =  "txt_" + contentIdxTemp })
+                        @Html.ValidationMessageFor(m => m.BodyContent[contentIdxTemp].BodyContent)
+                    </div>
+
+                    contentIdxTemp += 1;
+                }
+
+            </div>
+        </div>
+
+                contentIdx += langList.Count;
+    }
+}

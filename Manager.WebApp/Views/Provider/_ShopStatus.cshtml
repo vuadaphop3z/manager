@@ -1,0 +1,26 @@
+﻿@model int 
+
+@foreach (var item in Enum.GetValues(typeof(EnumStatus)))
+{
+    var chkItem = (int)item;
+    var cssColor = string.Empty;
+    var txtStatus = EnumExtensions.GetEnumDescription((Enum)item);
+
+    if(chkItem == (int)EnumStatus.Locked)
+    {
+        cssColor = "fa-lock btn-danger";
+    }
+    else if (chkItem == (int)EnumStatus.Activated)
+    {
+        cssColor = "fa fa-check btn-success";
+    }
+    else
+    {
+        cssColor = "btn btn-light";
+    }
+
+    if (chkItem == Model)
+    {
+        <span class="ace-icon fa btn btn-xs fa @cssColor" style="width:80px;cursor:default"> @txtStatus</span>
+    }
+}

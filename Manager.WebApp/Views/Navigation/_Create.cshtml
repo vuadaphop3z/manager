@@ -1,0 +1,98 @@
+﻿@model Manager.WebApp.Models.NavigationViewModels
+
+@using (Html.BeginForm("Create", "Navigation", FormMethod.Post, new { role = "form", @id = "FormNavigation" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        @Html.HiddenFor(s => s.ParentId)
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title)
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, null, new { @class="text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.AbsoluteUri)
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.AbsoluteUri, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SortOrder)
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.SortOrder, new { @class = "form-control", @type = "number" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.CssClass)
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.CssClass, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.IconCss)
+            <div class="col-xs-11">
+                @Html.TextBoxFor(m => m.IconCss, new { @class = "form-control", @onkeyup = "ChangeIcon(this);" })
+            </div>
+            <div class="col-xs-1" style="top:10px">
+                <i class="" id="ViewIconCss"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="m-checkbox-inline">
+                <label class="m-checkbox">
+                    @Html.CheckBoxFor(m => m.Visible)
+                    Hiển thị
+                    <span></span>
+                </label>
+                <label class="m-checkbox">
+                    @Html.CheckBoxFor(m => m.Active)
+                    Kích hoạt
+                    <span></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger btn-sm pull-left" type="submit" data-id="@Model.ParentId" id="btnApprove"><i class="fa fa-plus"></i>  Thêm mới</button>
+        <button class="btn btn-primary btn-sm" data-dismiss="modal">Đóng lại</button>
+    </div>
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    //$("#FormNavigation").submit(function () {
+
+    //});
+
+    //function SaveCreate() {
+    //    if ($("#FormNavigation").valid()) {
+    //        $.ajax({
+    //            url: 'Navigation/SaveCreate',
+    //            data: $("#FormNavigation").serialize(),
+    //            success: function (result) {
+    //                if (result) {
+    //                    if (result.Success == true) {
+    //                        $.showSuccessMessage('Success notice', result.Message, function () { });
+    //                    } else {
+    //                        $.showErrorMessage('Error notice', result.Message, function () { return false; });
+    //                    }
+    //                }
+    //            },
+    //            error: function (jqXHR, textStatus, errorThrown) {
+    //                var responseTitle = "Error encountered"
+    //                $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), function () { });
+    //            }
+    //        });
+    //    }        
+    //}
+
+    function ChangeIcon(e) {
+        $("#ViewIconCss").attr('class', '');
+        $("#ViewIconCss").addClass($(e).val());
+    }
+
+</script>

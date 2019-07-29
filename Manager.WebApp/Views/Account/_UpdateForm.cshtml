@@ -1,0 +1,30 @@
+﻿<div class="upload-box" style="padding:10px">
+    <section id="avatar-upload-box">
+        <input type="file" name="files" id="files" /><br>
+        <div class="upload-file-notice">Max size: <span id="avatar-max-size"></span> MB</div>      
+        <div class="upload-progress col-md-6 hidden">
+            <div class="upload-percent-value pull-left">0%</div>
+            <div class="upload-percent-bar pull-left"></div>
+        </div>
+        <div id="upload-status"></div>
+    </section>
+    <section id="avatar-crop-box" class="hidden"></section>
+    <div id="avatar-result" class="hidden">
+        <img src="" id="avatar-img" alt="Final Image" style="border:1px dotted #ff0000" />
+        <input type="hidden" value="" id="Avatar" name="Avatar" />
+    </div>
+    <section id="avatar-crop-box-temp" class="hidden">
+        <p>
+            <img src="" id="crop-avatar-target" alt="Uploaded image" />
+            <div id="preview-pane">
+                <div class="preview-container">
+                    <img src="" class="jcrop-preview" alt="Preview" />
+                </div>
+            </div>
+        </p>
+        <p>
+            <button class="btn btn-white btn-sm" type="button" onclick="saveAvatar()">Upload </button>
+            <button class="btn btn-white btn-sm" type="button" onclick="clearCropBox()">Cancel</button>
+        </p>
+    </section>
+</div>

@@ -1,0 +1,380 @@
+﻿@using Manager.WebApp.Models;
+@model Manager.WebApp.Models.Log4netViewModel
+
+@{
+    ViewBag.Title = "Logs lookup";
+}
+
+
+@Html.Partial("_Notifications")
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section PageInlineStyles{
+    <style type="text/css">
+       .error-record {
+            color: #fff !important;
+            background-color: red !important;
+        }
+
+        .alert-record {
+            color: #fff !important;
+            background-color: #d2924f !important;
+        }
+
+        .warning-record{           
+            color: #fff !important;
+            background-color: #abd24f !important;
+        }
+
+        .debug-record {
+            color: #502020 !important;
+            background-color: #d8d8d8 !important;
+        }
+
+        .info-record {
+            background-color: #a4defb !important;
+        }
+
+        .log-detail {
+            word-wrap: break-word;
+            word-break: break-all;
+            color: #000;
+            background-color: #efefef;
+        }
+
+        .tab-content {
+            border: 1px solid #999;
+        }
+
+        .profile-info-value {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .tab-content {
+            max-height: 450px;
+            overflow-y: auto;
+        }
+    </style>
+}
+
+
+@using (Html.BeginForm("LogsLookup", "Monitoring", FormMethod.Get, new { role = "form" }))
+{
+    @Html.HiddenFor(m => m.SearchExec)
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="">
+                <i class="ace-icon fa fa-tint"></i>
+                Logs Filtering
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Level)
+                            <div class='form-group'>
+                                <select class="form-control" id="@Html.IdFor(m=>m.Level)" name="@Html.NameFor(m=>m.Level)">
+                                    <option value="">All levels</option>
+                                    <option value="ERROR">ERROR</option>
+                                    <option value="WARNING">WARNING</option>
+                                    <option value="DEBUG">DEBUG</option>
+                                    <option value="INFO">INFO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            @*@Html.LabelFor(m=>m.AppName)
+                            <div class='form-group'>
+                                @Html.TextBoxFor(m => m.AppName, new { @class = "form-control" })
+                            </div>*@
+                            @Html.LabelFor(m => m.AppName)
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.AppName, Model.AppList, "All apps", new { @class = "form-control chosen-select", id = "ddlApps" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                           @Html.LabelFor(m => m.MachineName)
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.MachineName, Model.MachineList, "All machines", new { @class = "form-control chosen-select", id = "ddlMachines" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.FromDate)
+                            <div class='input-group date' id='@Html.IdFor(m=>m.FromDate)-group'>
+
+                                @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control" })
+
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ToDate)
+                            <div class='input-group date' id='@Html.IdFor(m => m.ToDate)-group'>
+
+                                @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control" })
+
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+                
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Message)
+                            <div class='form-group'>
+                                @Html.TextBoxFor(m => m.Message, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">                           
+                            <label>
+                                <input name="@Html.NameFor(m=>m.HaveException)" @(!string.IsNullOrEmpty(Model.HaveException) ? "checked" : null) class="ace ace-checkbox-2 cbx-log" value="1" type="checkbox">
+                                <span class="lbl"> Have Exception</span>
+                            </label>
+                            <div class='form-group'>
+                                @Html.TextBoxFor(m => m.Throwable, new { @class = "form-control", placeholder="Type exception message in here..." })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-purple btn-sm">
+                            Search Logs
+                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th class="hidden-xs text-center">#</th>
+                    <th class="text-center">App Name</th>
+                    <th class="text-center">Machine Name</th>
+                    <th class="text-center">Level</th>
+                    <th class="text-center col-md-5">Message</th>
+                    <th class="text-center">Created Date</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                {
+                    var stt = 0;
+                    foreach (var record in Model.SearchResults)
+                    {
+                        stt++;
+                        var classLevel = string.Empty;                  
+                        if (record.Level == Log4netLevel.ERROR.ToString())
+                        {
+                            if (!string.IsNullOrEmpty(record.Throwable))
+                            {
+                                classLevel = "error-record";
+                            }
+                            else
+                            {
+                                classLevel = "alert-record";
+                            }
+                        }
+                        else
+                        {
+                            classLevel = record.Level.ToLower() + "-record";
+                        }   
+                        <tr>
+                            <td class="hidden-xs">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                            <td>@record.AppName</td>
+                            <td>@record.MachineName</td>
+                            <td class="@classLevel"><b>@record.Level</b></td>
+                            <td class="profile-info-value">
+                                @if (!string.IsNullOrEmpty(record.Message))
+                                {
+                                    if (record.Message.Length > 100)
+                                    {
+                                        @(record.Message.Substring(0, 100) + "...");
+                                    }
+                                    else
+                                    {
+                                        @record.Message
+                                    }
+                                }
+                            </td>
+
+                            <td class="center">@record.TimeStamp.Value</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a class="blue" href="@Url.Action("LogDetails", "Monitoring", new { id = record.EntryId })" data-modal="" title="Show details">
+                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">
+                            No data found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+
+</div>
+
+<div class="space"></div>
+
+@if (Model.SearchResults != null && Model.Total != null)
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="no-margin-top">
+                @*<div class="pull-left">Showing @Model.StartCount() to @Model.EndCount() of @Model.Total entries</div>*@
+                <div class="pull-left">Showing @Model.StartCount() to @Model.EndCount()</div>
+                @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("LogsLookup", "Monitoring",
+                    new
+                    {
+                        Page = index,
+                        SearchExec = "Y",
+                        Level = Model.Level,
+                        AppName = Model.AppName,
+                        MachineName = Model.MachineName,
+                        Message = Model.Message,
+                        Throwable = Model.Throwable,
+                        FromDate = Model.FromDate,
+                        ToDate = Model.ToDate,
+                        HaveException = Model.HaveException
+                    }),
+                    Model.Total, pageSize: Model.PageSize, numberOfLinks: 10)
+            </div>
+        </div>
+    </div>
+}
+
+@section PagePluginStyles
+{
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="/assets/css/chosen.css" />
+    <link rel="stylesheet" href="/assets/css/datepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-timepicker.css" />
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="/assets/css/colorpicker.css" />
+}
+
+
+@section PagePluginScripts
+ {
+
+    <!--[if lte IE 8]>
+      <script src="/assets/js/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="/assets/js/jquery-ui.custom.min.js"></script>
+    <script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+    <script src="/assets/js/date-time/moment.min.js"></script>
+    <script src="/assets/js/date-time/daterangepicker.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
+    <script src="/assets/js/jquery.maskedinput.min.js"></script>
+    <script src="/assets/js/bootstrap-tag.min.js"></script>
+    <script src="/assets/js/typeahead.jquery.min.js"></script>
+
+
+    <script src="/assets/js/jquery.gritter.min.js"></script>
+}
+@section PageInlineScripts{
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $('#@Html.NameFor(m=>m.Level)').val('@Model.Level');
+        });
+
+        jQuery(function ($) {
+            //typeahead.js
+            //example taken from plugin's page at: https://twitter.github.io/typeahead.js/examples/
+            var substringMatcher = function (strs) {
+                return function findMatches(q, cb) {
+                    var matches, substringRegex;
+
+                    // an array that will be populated with substring matches
+                    matches = [];
+
+                    // regex used to determine if a string contains the substring `q`
+                    substrRegex = new RegExp(q, 'i');
+
+                    // iterate through the pool of strings and for any string that
+                    // contains the substring `q`, add it to the `matches` array
+                    $.each(strs, function (i, str) {
+                        if (substrRegex.test(str)) {
+                            // the typeahead jQuery plugin expects suggestions to a
+                            // JavaScript object, refer to typeahead docs for more info
+                            matches.push({ value: str });
+                        }
+                    });
+
+                    cb(matches);
+                }
+            }
+
+
+            $('#@Html.IdFor(m=>m.FromDate)').datetimepicker().next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            });
+
+            $('#@Html.IdFor(m=>m.ToDate)').datetimepicker().next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            });
+
+
+
+        });
+    </script>
+}

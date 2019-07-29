@@ -1,0 +1,26 @@
+﻿@model ModelStateDictionary
+
+@if (Model != null && !Model.IsValid)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="la la-warning"></i>
+        </div>
+        <div class="m-alert__text">
+            <ul class="list-unstyled spaced">
+            @foreach (var modelError in
+                     Model.SelectMany(keyValuePair => keyValuePair.Value.Errors))
+            {
+                <li>
+                    <i class="ace-icon fa fa-circle-o green"></i>
+                    @modelError.ErrorMessage
+                </li>
+            }
+
+        </ul>
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}

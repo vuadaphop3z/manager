@@ -1,0 +1,230 @@
+﻿@using Manager.WebApp.Settings;
+@using Manager.WebApp.Models;
+@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.ManageMemberModel
+
+@{
+    ViewBag.Title = "Quản lý thành viên";
+}
+
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_LargeModal")
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    @RenderSearchForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderSearchForm()
+    {
+        using (Html.BeginForm("Index", "Member", FormMethod.Get, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" }))
+        {
+            @Html.HiddenFor(m => m.SearchExec)
+
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-3 m-form__group--inline">
+                        @Html.LabelFor(m => m.Status)
+                        <select class="form-control" id="@Html.IdFor(m=>m.Status)" name="@Html.NameFor(m=>m.Status)">
+                            <option value="-1">
+                                @ManagerResource.LB_ALL
+                            </option>
+                            <option value="1" @(Model.Status == 1 ? "selected" : string.Empty)>
+                                @ManagerResource.LB_ACTIVATED
+                            </option>
+                            <option value="0" @(Model.Status == 0 ? "selected" : string.Empty)>
+                                @ManagerResource.LB_LOCKED
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label>@ManagerResource.LB_KEYWORD</label>
+                        @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control m-input", placeholder = ManagerResource.LB_KEYWORD_SEARCH })
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-12 m-form__group--inline">
+                        <button type="submit" class="btn btn-primary">
+                            @ManagerResource.LB_SEARCH
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix pull-right">
+            <a class="btn btn-white btn-info" href="@Url.Action("Create", "Member")" title="@ManagerResource.LB_ADDNEW">
+                <i class="la la-plus"></i> @ManagerResource.LB_ADDNEW
+            </a>
+        </div>
+        <br />
+        <br />
+
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ManagerResource.LB_LIST
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="sample-table-1" class="table m-table m-table--head-bg-brand">
+                            <thead>
+                                <tr>
+                                    <th width="50">#</th>
+                                    <th>@ManagerResource.LB_USERNAME</th>
+                                    <th>@ManagerResource.LB_DISPLAYNAME</th>
+                                    <th>@ManagerResource.LB_EMAIL</th>
+                                    <th>@ManagerResource.LB_PHONE</th>
+                                    <th>@ManagerResource.LB_STATUS</th>
+                                    <th>@ManagerResource.LB_ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResults)
+                                    {
+                                        stt++;
+                                        <tr>
+                                            <td>@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                            <td>
+                                                @record.UserName
+                                            </td>
+                                            <td>@record.DisplayName</td>
+                                            <td>@record.Email</td>
+                                            <td>@record.PhoneNumber</td>
+                                            <td>
+                                                @Html.Partial("../Widgets/_Status", record.Status)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var newModel = Model;
+                                                    newModel.Id = record.Id;
+                                                    newModel.SearchExec = "Y";
+                                                }
+
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill member-view-assigned" data-id="@record.Id" title="@ManagerResource.LB_VIEW_ASSIGNED_SHOP">
+                                                    <i class="la la-building"></i>
+                                                </a>
+
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" data-modal="" href="@Url.Action("AssignToShop", "Member", new { memberId = record.Id })" title="@ManagerResource.LB_ASSIGN_TO_SHOP">
+                                                    <i class="la la-user-plus"></i>
+                                                </a>
+
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Edit", "Member", new { id = record.Id })" title="@ManagerResource.LB_EDIT">
+                                                    <i class="la la-pencil"></i>
+                                                </a>
+                                                <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="@Url.Action("Delete", "Member", new { id = record.Id })" data-modal="" title="@ManagerResource.LB_DELETE">
+                                                    <i class="la la-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @RenderPaging()
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+@helper RenderPaging()
+    {
+        if (Model.SearchResults != null && Model.TotalCount > 0)
+        {
+            <div class="m_datatable m-datatable m-datatable--default m-datatable--brand m-datatable--loaded">
+                <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
+                    @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("Index", "Member",
+                                   new
+                                   {
+                                       Page = index,
+                                       SearchExec = "Y",
+                                       Keyword = Model.Keyword,
+                                       Status = Model.Status
+                                   }),
+                                   Model.TotalCount, pageSize: Model.PageSize, numberOfLinks: 10)
+                </div>
+            </div>
+        }
+}
+
+@section PageInlineScripts{
+    <script src="~/Scripts/typeahead.bundle.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".member-view-assigned").click(function () {
+                GetAssignedShop($(this).data("id"));
+            })
+        });
+
+        function GetAssignedShop(userId) {
+            var params = $.extend({}, doAjax_params_default);
+            params['url'] = "/Member/ViewAssignedShops";
+            params['requestType'] = "POST";
+            params['data'] = { memberId: userId };
+            params['dataType'] = "json";
+
+            params['successCallbackFunction'] = function (data) {
+                if (data) {
+                    if (data.success) {
+                        $("#myModal").find("#myModalContent").html(data.html);
+                        $("#myModal").find(".modal-dialog").addClass("modal-lg");
+                        $("#myModal").modal("show");
+                    } else {
+                        bootbox.showmessage({
+                            message: data.message
+                        }, data.success);
+                    }
+                }
+            };
+            doAjax(params);
+        }
+
+        function DeleteAssignedMember(control) {
+            var params = $.extend({}, doAjax_params_default);
+            params['url'] = "/Shop/DeleteAssignedMember";
+            params['requestType'] = "POST";
+            params['data'] = { shopId: control.shopId, userId: control.userId };
+            params['dataType'] = "json";
+
+            params['successCallbackFunction'] = function (data) {
+                GetAssignedShop(control.userId);
+            };
+            doAjax(params);
+        }
+    </script>
+}

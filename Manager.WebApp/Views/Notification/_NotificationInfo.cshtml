@@ -1,0 +1,292 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using Manager.WebApp.Models
+@model NotificationModel
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">Notification details</h4>
+</div>
+<div class="modal-body">  
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#general_info">
+                    @*<i class="green ace-icon fa fa-home bigger-120"></i>*@
+                    General
+                </a>
+            </li>
+
+            <li class="">
+                <a data-toggle="tab" href="#approval_info">
+                    Approval
+                </a>
+            </li>
+
+            <li class="">
+                <a data-toggle="tab" href="#preview_info">
+                    Preview
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="general_info" class="tab-pane fade active in">
+                @RenderNotificationGeneral()
+
+                @RenderNotificationLanguage()
+            </div>
+
+            <div id="approval_info" class="tab-pane fade ">
+                @RenderNotificationApproval()
+            </div>
+
+            <div id="preview_info" class="tab-pane fade ">
+                @RenderNotificationPreview()
+            </div>
+        </div>
+    </div>  
+</div>
+<div class="modal-footer">
+
+</div>
+
+@helper RenderNotificationGeneral() {
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Name </div>
+                    <div class="profile-info-value">
+                        <span>@Model.NotifName</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Description </div>
+                    <div class="profile-info-value">
+                        <span>@Model.Description</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Default </div>
+                    <div class="profile-info-value">
+                        <span>@(Model.IsDefault? "Yes":"No (Overwrite notification)")</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Enabled </div>
+                    <div class="profile-info-value">
+                        <span>@(Model.Enabled ? "Yes" : "No")</span>
+                    </div>
+                </div>
+                @if (!Model.IsDefault)
+                {                   
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Start time </div>
+
+                    <div class="profile-info-value">
+                        <span id="StartTime">@Model.StartTime</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> End time </div>
+
+                    <div class="profile-info-value">
+                        <span id="EndTime">@Model.EndTime</span>
+                    </div>
+                </div>
+                }
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> User created </div>
+
+                    <div class="profile-info-value">
+                        <span>@Model.UserCreated</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Date created </div>
+
+                    <div class="profile-info-value">
+                        <span>@Model.DateCreated</span>
+                    </div>
+                </div>
+                @*<div class="profile-info-row">
+                    <div class="profile-info-name"> User modified </div>
+
+                    <div class="profile-info-value">
+                        <span>@Model.UserModified</span>
+                    </div>
+                </div>*@
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Last Modified </div>
+
+                    <div class="profile-info-value">
+                        <span>@Model.DateCreated @( !string.IsNullOrEmpty(Model.UserModified) ? " - " + Model.UserModified: "")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <br />
+}
+
+@helper RenderNotificationLanguage()
+{
+    var totalCount = Model.BodyContent.Count;
+    var appList = Model.BodyContent.Select(m => m.ApplicationId).Distinct().ToList();
+    var appNameList = Model.BodyContent.Select(m => m.ApplicationName).Distinct().ToList();
+    var appCount = appList.Count;
+    var contentIdx = 0;
+    for (var appidx = 0; appidx < appCount; appidx++)
+    {
+        var app = appList[appidx];
+        var langList = Model.BodyContent.Where(m => m.ApplicationId == app).Select(m => m.LanguageCode).Distinct().ToList();
+
+        var contentIdxTemp = contentIdx;
+
+        <h5> @appNameList[appidx]</h5>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+
+
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <li class="@(lngidx == 0 ? "active" : "")">
+                        <a data-toggle="tab" href="#lang_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp">
+                            @Model.BodyContent[contentIdxTemp].LanguageName
+                        </a>
+                    </li>
+
+                    contentIdxTemp += 1;
+                }
+
+            </ul>
+
+            @{
+                //Reset index
+                contentIdxTemp = contentIdx;
+            }
+
+            <div class="tab-content">
+
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <div id="lang_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp" class="tab-pane fade @(lngidx == 0 ? "active in" : "")">
+                        @Model.BodyContent[contentIdxTemp].BodyContent
+                    </div>
+
+                    contentIdxTemp += 1;
+                }
+
+            </div>
+        </div>
+
+                contentIdx += langList.Count;
+    }
+}
+
+@helper RenderNotificationApproval()
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Approved </div>
+                    <div class="profile-info-value">
+                        <span>@((Model.Approved) ? "Yes" : "No")</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> User approved </div>
+                    <div class="profile-info-value">
+                        <span>@Model.ApprovedUser</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Comment </div>
+                    <div class="profile-info-value">
+                        <span>@Model.ApprovedComment</span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> Approved date </div>
+                    <div class="profile-info-value">
+                        <span>@Model.ApprovedDate</span>
+                    </div>
+                </div>              
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+@helper RenderNotificationPreview() {
+    var totalCount = Model.BodyContent.Count;
+    var appList = Model.BodyContent.Select(m => m.ApplicationId).Distinct().ToList();
+    var appNameList = Model.BodyContent.Select(m => m.ApplicationName).Distinct().ToList();
+    var appCount = appList.Count;
+    var contentIdx = 0;
+    for (var appidx = 0; appidx < appCount; appidx++)
+    {
+        var app = appList[appidx];
+        var langList = Model.BodyContent.Where(m => m.ApplicationId == app).Select(m => m.LanguageCode).Distinct().ToList();
+
+        var contentIdxTemp = contentIdx;
+
+        <h5> @appNameList[appidx]</h5>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <li class="@(lngidx == 0 ? "active" : "")">
+                        <a data-toggle="tab" href="#preview_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp">
+                            @Model.BodyContent[contentIdxTemp].LanguageName
+                        </a>
+                    </li>
+
+                    contentIdxTemp += 1;
+                }
+
+            </ul>
+
+            @{
+                //Reset index
+                contentIdxTemp = contentIdx;
+            }
+
+            <div class="tab-content">
+
+                @for (int lngidx = 0; lngidx < langList.Count; lngidx++)
+                {
+                    <div id="preview_@(Model.BodyContent[contentIdxTemp].LanguageCode)_@contentIdxTemp" class="tab-pane fade @(lngidx == 0 ? "active in" : "")">
+                        @FillDefaultValueToContent(Model.BodyContent[contentIdxTemp].BodyContent)
+                    </div>
+
+                    contentIdxTemp += 1;
+                }
+
+            </div>
+        </div>
+
+                contentIdx += langList.Count;
+    }
+}
+
+@helper FillDefaultValueToContent(string content) {
+    if (!string.IsNullOrEmpty(content))
+    {
+        if (Model != null && Model.NotificationTags.IsAny())
+        {
+            foreach (var tag in Model.NotificationTags)
+            {
+                //var strDefault = "<b style='color:red'>" + tag.Default + "</b>";
+                var strDefault = tag.Default;
+                content = content.Replace(tag.TagCode, strDefault);
+            }
+        }
+    }
+    @Html.Raw(content);
+}

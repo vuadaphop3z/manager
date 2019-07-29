@@ -1,0 +1,109 @@
+﻿@using Newtonsoft.Json
+@using MsSql.AspNet.Identity.Entities
+@model MsSql.AspNet.Identity.Entities.MetaShopPolicy
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.PolicyData))
+    {
+        List<MetaPolicyDataDinning> myList = null;
+        try
+        {
+            myList = JsonConvert.DeserializeObject<List<MetaPolicyDataDinning>>(Model.PolicyData);
+        }
+        catch (Exception ex)
+        {
+            <div>
+                RenderView error: @ex.ToString()
+            </div>
+        }
+
+        @RenderPolicyData(myList)
+    }
+}
+
+@helper RenderPolicyData(List<MetaPolicyDataDinning> myList)
+    {
+        <div class="row property-content">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12" style="height:300px;overflow:auto;">
+                        @if(myList != null && myList.Count > 0)
+                        {
+                            @RenderDinningList(myList)
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-sm btn-white pull-right btnAddPolicy" onclick="AddPolicy(this);" style="margin-right:5px" data-id="@Model.PolicyId" data-code="@Model.PolicyCode" typeof="button"><i class="fa fa-icon fa-plus"></i> Thêm mới</button>
+            </div>
+        </div>
+}
+
+@helper RenderDinningList(List<MetaPolicyDataDinning> myList)
+    {
+        var counter = 0;
+        <table class="table table-responsive table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:20px" class="text-center">STT</th>
+                    <th class="text-center">Mô tả</th>
+                    <th style="width:80px" class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in myList)
+                {
+                    counter++;
+                    var mealName = string.Empty;
+                    var buffetText = string.Empty;
+                    <tr>
+                        <td class="text-center">@counter</td>
+                        <td class="text-left">                            
+                            @if (item.DinningType == (int)EnumMealTypes.Breakfast)
+                            {
+                                mealName = "Bữa sáng";
+                            }
+                            else if (item.DinningType == (int)EnumMealTypes.Lunch) {
+                                mealName = "Bữa trưa";
+                            }
+                            else if (item.DinningType == (int)EnumMealTypes.Dinner)
+                            {
+                                mealName = "Bữa tối";
+                            }
+
+                            @if(item.IsBuffet == 1)
+                            {
+                                buffetText = "Tự chọn";
+                            }
+
+                            @if(item.Surcharge > 0)
+                            {
+                                <p>+ @mealName @buffetText.ToLower() kèm phụ phí @(string.Format("{0:n0}", item.Surcharge)) @item.CurrencyCode</p>
+                            }
+                            else {
+                                <p>+ @mealName @buffetText.ToLower() miễn phí</p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(item.Note))
+                            {
+                                <p>
+                                    <b>* Ghi chú: </b>
+                                    @Html.Raw(item.Note)
+                                </p>
+                            }
+                        </td>                      
+                        <td style="width:120px;" class="text-center">
+                            <div class="btn-group">
+                                <button class="btn btn-xs btn-danger btnDeleteDinningPolicy" onclick="DeleteDinningPolicy(this);" data-policyid="@Model.PolicyId" data-id="@item.Id" data-code="@Model.PolicyCode">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                <tr></tr>
+            </tbody>
+        </table>
+}

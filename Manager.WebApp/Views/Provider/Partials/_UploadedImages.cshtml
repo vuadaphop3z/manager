@@ -1,0 +1,23 @@
+﻿@using MsSql.AspNet.Identity.Entities
+@model List<MetaShopImage>
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <li>
+            <a href="@item.Url" data-rel="colorbox">
+                <img width="100" height="100" alt="100x100" src="@item.Url" />
+                <div class="text">
+                    <div class="inner">@item.Name</div>
+                </div>
+            </a>
+
+            <div class="tools tools-bottom">
+                <a href="javascript:;" data-url="@item.Url" data-id="@item.Id" onclick="RemoveImage(this);">
+                    <i class="ace-icon fa fa-times red"></i>
+                </a>
+            </div>
+        </li>
+    }
+}

@@ -1,0 +1,172 @@
+﻿@model Manager.WebApp.Models.ActivityLogViewModel
+
+@{
+    ViewBag.Title = "User Activities";
+}
+
+@section PagePluginStyles
+{
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="/assets/css/chosen.css" />
+}
+
+@Html.Partial("_Notifications")
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("UserActivity", "System", FormMethod.Get, new { role = "form" }))
+{
+    @Html.HiddenFor(m => m.SearchExec)
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="widget-title">
+                <i class="ace-icon fa fa-tint"></i>
+                Activity Filtering
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email)
+                            <div class='form-group'>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                        </div>                       
+                    </div>
+                     <div class="col-sm-6 col-xs-12">
+                         <div class="form-group">
+                             @Html.LabelFor(m => m.ActivityText)
+                             <div class='form-group'>
+                                 @Html.TextBoxFor(m => m.ActivityText, new { @class = "form-control" })
+                             </div>
+                         </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.FromDate)
+                            <div class='form-group'>
+                                @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ToDate)
+                                <div class='form-group'>
+                                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", type = "date" })
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ActivityType)
+                            @Html.DropDownListFor(m => m.ActivityType, Model.ActivityTypeList, "All activity types", new { @class = "form-control chosen-select" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-purple btn-sm">
+                            Search Activity Log
+                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th class="hidden-xs">#</th>
+                    <th>User Name</th>
+                    <th>Content</th>
+                    <th class="hidden-xs">Activity Type</th>
+                    <th class="hidden-xs">Activity Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                {
+                    var stt = 0;
+                    foreach (var record in Model.SearchResults)
+                    {
+                        stt++;
+                        <tr>
+                            <td class="hidden-xs">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                            <td>@record.UserName</td>
+                            <td>@record.ActivityText</td>
+                            <td class="hidden-xs">@record.ActivityType</td>
+                            <td class="hidden-xs">@record.ActivityDate.ToLocalTime()</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="blue" href="@Url.Action("UserActivityDetails", "System", new { id = record.ActivityLogId, SearchExec = 'Y', Page = Model.CurrentPage, Email = Model.Email, FromDate = Model.FromDate, ToDate = Model.ToDate })" data-modal="" title="Show details">
+                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">
+                            No user data found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+
+</div>
+
+<div class="space"></div>
+
+@if (Model.SearchResults != null && Model.Total != null)
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="no-margin-top">      
+                <div class="pull-left">Showing @Model.StartCount() to @Model.EndCount() of @Model.Total entries</div>          
+                @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("UserActivity", "System",
+                    new
+                    {
+                        Page = index , 
+                        SearchExec = "Y",
+                        Email = Model.Email,
+                        ActivityText = Model.ActivityText,
+                        FromDate = Model.FromDate,
+                        ToDate = Model.ToDate,
+                        ActivityType = Model.ActivityType            
+                    }),
+                    Model.Total, pageSize: Model.PageSize, numberOfLinks: 10)
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,146 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using Manager.WebApp.Models
+@model NotificationModel
+
+@{
+    ViewBag.Title = "Create new notification";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header smaller lighter green">
+            <i class="ace-icon fa fa-list"></i>
+            Notification properties
+        </h3>
+    </div>
+</div>
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("_NotificationForm", Model)
+
+<input type="hidden" value="" id="hdCurrentTextArea" />
+
+@section PagePluginStyles
+{
+    <link rel="stylesheet" href="/assets/css/datepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-timepicker.css" />
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-datetimepicker.css" />
+
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" />
+}
+
+@section PageInlineStyles{
+    <style type="text/css">
+        textarea{ resize:none; }
+    </style>
+}
+
+@section PagePluginScripts
+ {
+
+    <!--[if lte IE 8]>
+      <script src="/assets/js/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="/assets/js/fuelux/fuelux.spinner.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+    <script src="/assets/js/date-time/moment.min.js"></script>
+    <script src="/assets/js/date-time/daterangepicker.min.js"></script>
+    <script src="/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
+    <script src="/assets/js/jquery.maskedinput.min.js"></script>
+    <script src="/assets/js/bootstrap-tag.min.js"></script>
+    <script src="/assets/js/jquery.gritter.min.js"></script>
+}
+
+
+@section PageInlineScripts{
+    <script type="text/javascript">
+        $('#@Html.IdFor(m=>m.StartTime)').datetimepicker({
+            dateFormat: 'mm/dd/yy',
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            pickTime: true,
+            format: 'YYYY-MM-DD HH:mm:00'
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
+        $('#@Html.IdFor(m=>m.EndTime)').datetimepicker({
+            dateFormat: 'mm/dd/yy',
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            pickTime: true,
+            format: 'YYYY-MM-DD HH:mm:00'
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
+        $("textarea").click(function () {
+            $("#hdCurrentTextArea").val($(this).attr("id"));
+        });
+
+        jQuery.fn.extend({
+            insertAtCaret: function (myValue) {
+                return this.each(function (i) {
+                    if (document.selection) {
+                        //For browsers like Internet Explorer
+                        this.focus();
+                        var sel = document.selection.createRange();
+                        sel.text = myValue;
+                        this.focus();
+                    }
+                    else if (this.selectionStart || this.selectionStart == '0') {
+                        //For browsers like Firefox and Webkit based
+                        var startPos = this.selectionStart;
+                        var endPos = this.selectionEnd;
+                        var scrollTop = this.scrollTop;
+                        this.value = this.value.substring(0, startPos) + myValue + this.value.substring(endPos, this.value.length);
+                        this.focus();
+                        this.selectionStart = startPos + myValue.length;
+                        this.selectionEnd = startPos + myValue.length;
+                        this.scrollTop = scrollTop;
+                    } else {
+                        this.value += myValue;
+                        this.focus();
+                    }
+                });
+            }
+        });
+
+        $(".tag-item").click(function () {
+            $("#" + $("#hdCurrentTextArea").val()).insertAtCaret($(this).data("tag"));
+        });
+
+        $(document).on('shown.bs.tab click', 'a[data-toggle="tab"]', function (e) {
+            $("#" + $(e.target).data("textarea-id")).focus();
+            $("#hdCurrentTextArea").val($(e.target).data("textarea-id"));
+        });
+
+        function CheckCategory() {
+            if ($("#ddlCategory").val() === '44f00f69-39c3-11e6-9f11-005056918297') {
+                $("#lblIsDefault").hide();
+                $("#cbxIsDefault").hide();
+                $("#cbxIsDefault").prop("checked", false);
+            }
+            else {
+                $("#lblIsDefault").show();
+                $("#cbxIsDefault").show();
+            }            
+        }
+       
+        $("#ddlCategory").change(function () {
+            CheckCategory();
+        });
+
+        $(document).ready(function () {
+            CheckCategory();
+        });
+</script>    
+}

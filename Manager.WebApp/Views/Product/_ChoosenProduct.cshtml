@@ -1,0 +1,150 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ProductChoosenModel
+
+@*<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        @ManagerResource.LB_GOODS_ISSUE
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>*@
+
+@using (Html.BeginForm("ChoosenProductSearch", "Product", FormMethod.Post, new { role = "form", @class = "", id="frmChoosenProduct" }))
+{
+    <div class="modal-body">
+        @*<div class="form-group">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.ProductId)
+                <div class="row">
+                    <div class="form-group m-form__group col-md-12">
+                        <h3>Goods Issue Screen</h3>
+                        @if (Model.ProductInfo != null)
+                        {
+                            <h4>@Model.ProductInfo.Name</h4>
+                        }
+                        else
+                        {
+                            <h4>UnSelect product</h4>
+                        }
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="m-portlet">
+            <!--begin::Form-->
+            @RenderSearchForm()
+            <!--end::Form-->
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" onclick="AllowChoosenProduct();">
+            @ManagerResource.BT_ALLOW
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+    </div>
+}
+
+@helper RenderSearchForm()
+{
+    var productCategories = CommonHelpers.GetListProductCategory();
+    var providers = CommonHelpers.GetListProvider();
+    using (Html.BeginForm("ChoosenProduct", "Product", FormMethod.Get, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" }))
+    {
+        @Html.HiddenFor(m => m.SearchExec)        
+        @Html.HiddenFor(m => m.CallbackFunction)        
+        @Html.HiddenFor(m => m.CurrentPage)        
+        <div class="m-portlet__body">
+            <div class="form-group m-form__group row">
+                <div class="col-lg-2 m-form__group--inline">
+                    <select name="@Html.NameFor(m => m.ProviderId)" id="@Html.IdFor(m=>m.ProviderId)" class="form-control selectpicker btn-white" data-live-search="true">
+                        <option value="0">--- @ManagerResource.LB_SELECT_PROVIDER ---</option>
+                        @if (Model.Providers.HasData())
+                        {
+                            foreach (var item in providers)
+                            {
+                                var chkItem = item.Id;
+                                var chkStr = string.Empty;
+                                if (chkItem == Model.ProviderId)
+                                {
+                                    chkStr = "selected";
+                                }
+                                <option value="@chkItem" @chkStr>@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    <select name="@Html.NameFor(m => m.ProductCategoryId)" id="@Html.IdFor(m=>m.ProductCategoryId)" class="form-control selectpicker btn-white" data-live-search="true">
+                        <option value="0">--- @ManagerResource.LB_SELECT_PRODUCT_CATEGORY ---</option>
+                        @if (Model.ProductCategories.HasData())
+                        {
+                            foreach (var item in Model.ProductCategories)
+                            {
+                                var chkItem = item.Id;
+                                var chkStr = string.Empty;
+                                if (chkItem == Model.ProductCategoryId)
+                                {
+                                    chkStr = "selected";
+                                }
+                                <option value="@chkItem" @chkStr>@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3 m-form__group--inline">
+                    @Html.TextBoxFor(m => m.Keyword, new { @class = "form-control m-input", placeholder = ManagerResource.LB_KEYWORD_SEARCH })
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    <button type="button" class="btn btn-info" onclick="ChoosenProductSearch();">
+                        @ManagerResource.LB_SEARCH
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ProductChoosenList">
+            @Html.Partial("_ChoosenProductList", Model)
+        </div>
+    }
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(".selectpicker").selectpicker();
+
+    function ChoosenProductSearchNext(pageNum) {
+        $("#CurrentPage").val(pageNum)
+        ChoosenProductSearch();
+    }
+
+    function ChoosenProductSearch() {
+        var frmData = $("#frmChoosenProduct").serialize();
+        var params = $.extend({}, doAjax_params_default);
+        params['url'] = "/Product/ChoosenProductSearch";
+        params['requestType'] = "POST";
+        params['data'] = frmData;
+        params['dataType'] = "html";
+
+        params['successCallbackFunction'] = function (data) {
+            $("#ProductChoosenList").html(data);
+        };
+
+        doAjax(params);
+    }
+
+    function AllowChoosenProduct() {
+        if ($("#CallbackFunction").val() != "") {
+            eval($("#CallbackFunction").val() + "()");
+        } else {
+            alert("Please define CallbackFunction");
+        }
+    }
+</script>

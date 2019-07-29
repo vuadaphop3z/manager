@@ -1,0 +1,107 @@
+﻿@using Manager.WebApp.Helpers.Business
+@using MsSql.AspNet.Identity.Entities
+@model MetaDataShop
+
+@{ 
+    var propertyGroups = CommonHelpers.GetListGroupProperty();
+
+    var listProperties = CommonHelpers.GetListProperty();
+
+    var currentProperties = new List<string>();
+
+    if(Model != null && !string.IsNullOrEmpty(Model.Amenities))
+    {
+        currentProperties = Model.Amenities.Split(',').ToList();
+    }
+}
+
+@if(propertyGroups != null && propertyGroups.Count > 0)
+{
+    <div id="accordion" class="accordion-style1 panel-group">
+    @foreach (var group in propertyGroups)
+    {
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_@group.Id">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;@group.Name
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in" id="collapse_@group.Id">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div>
+                                @if (listProperties != null && listProperties.Count > 0)
+                                {
+                                    foreach (var op in listProperties)
+                                    {
+                                        if(op.GroupId == group.Id)
+                                        {
+                                            var isChecked = false;
+
+                                            if (currentProperties != null && currentProperties.Count > 0)
+                                            {
+                                                foreach (var per in currentProperties)
+                                                {
+                                                    if (!string.IsNullOrEmpty(per))
+                                                    {
+                                                        if (op.Id == Convert.ToInt32(per))
+                                                        {
+                                                            isChecked = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (isChecked)
+                                            {
+                                            <div class="checkbox inline no_indent">
+                                                <label>
+                                                    <input name="selectedOperations" id="@op.Id" value="@op.Id" class="ace ace-checkbox-2 permission-cbx" checked type="checkbox">
+                                                    @if (!string.IsNullOrEmpty(op.Icon))
+                                                    {
+                                                        <span class="lbl"> <i class="fa @op.Icon"></i> @op.Name</span>
+                                                    }
+                                                    else {
+                                                        <span class="lbl"> @op.Name</span>
+                                                    }
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="checkbox inline no_indent">
+                                                <label>
+                                                    <input name="selectedOperations" id="@op.Id" value="@op.Id" class="ace permission-cbx" type="checkbox">
+                                                    @if (!string.IsNullOrEmpty(op.Icon))
+                                                    {
+                                                        <span class="lbl"> <i class="fa @op.Icon"></i> @op.Name</span>
+                                                    }
+                                                    else {
+                                                        <span class="lbl"> @op.Name</span>
+                                                    }
+                                                </label>
+                                            </div>
+                                        }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <div><label class="label label-default">No properties in here</label></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+}

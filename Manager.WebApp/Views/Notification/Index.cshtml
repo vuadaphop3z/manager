@@ -1,0 +1,282 @@
+﻿@model Manager.WebApp.Models.NotificationFilterView
+@using Manager.WebApp.Models;
+@using MySql.Auth.Store.Entities;
+
+@{
+    ViewBag.Title = "Manage Notification";
+}
+@section PagePluginStyles
+{
+    <link href="~/assets/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/bootstrap-editable.css" />
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" />
+    <link href="~/assets/css/daterangepicker.css" rel="stylesheet" />
+}
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Index", "Notification", FormMethod.Get, new { role = "form" }))
+{
+    @Html.HiddenFor(m => m.SearchExec)
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4 class="widget-title">
+                <i class="ace-icon fa fa-tint"></i>
+                Notification Filtering
+            </h4>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <div class="row">                    
+                    <div class="col-md-5 col-xs-12">
+                        <div class="control-group">
+                            <label class="control-label bolder blue">@Html.LabelFor(m => m.CategoryId)</label>
+                            <div class="radio">
+                                <label>
+                                    @{
+                                         var strCheckAll = string.IsNullOrEmpty(Model.CategoryId)? "checked" : "";
+                                    }
+                                    <input name="@Html.NameFor(m => m.CategoryId)" type="radio" value="" @strCheckAll class="ace @Html.NameFor(m => m.CategoryId)">
+                                    <span class="lbl popover-success" data-rel="popover" data-placement="right" title="Description" data-content="All notifications"> All notifications</span>
+                                </label>
+                            </div>
+                            @if (Model.NotifCategories != null && (Model.NotifCategories.Count() > 0))
+                            {
+                                for (int i = 0; i < Model.NotifCategories.Count(); i++)                                
+                                {                                    
+                                    var record = Model.NotifCategories[i];
+                                    var strCheck = record.Id == Model.CategoryId? "checked" : "";
+                                    
+                                    <div class="radio">
+                                        <label>
+                                            <input name="@Html.NameFor(m => m.CategoryId)" type="radio" @strCheck value="@record.Id" class="ace @Html.NameFor(m => m.CategoryId)">
+                                            <span class="lbl popover-success" data-rel="popover" data-placement="right" title="Description" data-content="@record.Description"> @record.CategoryName</span>
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.NotifName, new { @class = "control-label blue" })
+                            @Html.TextBoxFor(m => m.NotifName, new { @class = "form-control" })
+                        </div>
+                        <br />
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.ScheduleTime, new { @class = "control-label blue" })
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar bigger-110"></i>
+                                </span>
+
+                                @Html.TextBoxFor(m => m.ScheduleTime, new { @class = "date-range-picker form-control" })
+                            </div>
+                        </div>
+                        <br />
+                        <div class="control-group">
+                            <label class="control-label bolder blue">@Html.LabelFor(m => m.Approved)</label>
+                            @Html.DropDownListFor(m => m.Approved, EnumHelper.GetSelectList(typeof(EnumApprovedStatus)), new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="space"></div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-purple btn-sm">
+                            Search notification
+                            <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix pull-right">
+
+            @using (Html.BeginForm("Create", "Notification", FormMethod.Get, new { role = "form" }))
+            {                
+                @Html.HiddenFor(m => m.CategoryId)
+                <button class="btn btn-white btn-info" type="submit">Create</button>
+            }
+
+            @*<a class="btn btn-white btn-info" href="@Url.Action("Create", "Notification", new { ApplicationId = Model.ApplicationId, CategoryId = Model.CategoryId })" title="Create new notification">Create</a>*@
+        </div>
+    </div>
+</div>
+<br />
+
+@RenderAvailableNotifications()
+
+<div class="space"></div>
+
+@if (Model.AvailableNotifications != null && Model.Total != null)
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="no-margin-top">
+                @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("Index", "Notification",
+                new {                    
+                    CategoryId = Model.CategoryId,
+                    NotifName = Model.NotifName,
+                    ScheduleTime = Model.ScheduleTime,
+                    SearchExec = 'Y',
+                    Page = index,
+                    Approved = Model.Approved
+                }),
+                    Model.Total, pageSize: Model.PageSize, numberOfLinks: 10)
+            </div>
+        </div>
+    </div>
+}
+
+
+@helper RenderAvailableNotifications() {
+    <div class="row">
+        <div class="col-sm-12 table-responsive">
+            <table id="sample-table-1" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th class="hidden-xs text-center">#</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Category</th>
+                        <th class="hidden-xs text-center">Start time</th>
+                        <th class="hidden-xs text-center">End time</th>
+                        <th class="text-center">Enabled</th>
+                        <th class="text-center">Approved</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.AvailableNotifications != null && Model.AvailableNotifications.Count > 0)
+                    {
+                        var stt = 0;
+                        foreach (var record in Model.AvailableNotifications)
+                        {
+                            stt++;
+                            <tr class="@(record.IsDefault? "alert-info":"")">
+                                <td class="hidden-xs text-center">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                <td>@record.NotifName</td>
+                                <td>@record.CategoryCode</td>
+                                <td class="hidden-xs text-center">@record.StartTime</td>
+                                <td class="hidden-xs text-center">@record.EndTime</td>
+                                <td class="text-center">
+                                    @if (record.Enabled)
+                                    {
+                                        <span>Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="red">No</span>
+                                    }                                   
+                                </td>
+                                <td class="text-center">
+                                    @if (record.Approved)
+                                    {
+                                        <a class="red" href="@Url.Action("Approve", "Notification", new { id = record.NotificationId, approved = 0 })" data-modal="" title="Unapprove this notification">
+                                            <i class="ace-icon fa fa-check bigger-120 green"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="red" href="@Url.Action("Approve", "Notification", new { id = record.NotificationId, approved = 1 })" data-modal="" title="Approve this notification">
+                                            <i class="ace-icon fa fa-ban bigger-120"></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">                                        
+                                        <a class="red" href="@Url.Action("Details", "Notification", new { id = record.NotificationId })" data-modal="" title="Show details">
+                                            <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                        </a>                                        
+                                        <a class="red" href="@Url.Action("Edit", "Notification", new { id = record.NotificationId })" title="Edit notification">
+                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                        </a>                                        
+                                        <a class="red" href="@Url.Action("Delete", "Notification", new { id = record.NotificationId })" data-modal="" title="Delete this device">
+                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">
+                                No notification data found
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+}
+
+@if (Model.AvailableNotifications != null && Model.AvailableNotifications.Count > 0)
+{
+    <div class="space"></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-left alert-info" style="width: 20px;height:20px;"></div> &nbsp;Basic notification
+        </div>
+    </div>
+}
+
+
+
+@section PageInlineScripts{
+<script src="~/assets/js/date-time/moment.min.js"></script>
+<script src="~/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="~/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="~/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
+<script src="~/assets/js/date-time/daterangepicker.min.js"></script>
+
+<script src="~/assets/js/jquery.hotkeys.min.js"></script>
+<script src="~/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="~/assets/js/x-editable/bootstrap-editable.min.js"></script>
+<script src="~/assets/js/x-editable/ace-editable.min.js"></script>
+<script src="~/assets/js/jquery.gritter.min.js"></script>
+
+<script type="text/javascript">
+    $('[data-rel=popover]').popover({ html: true, trigger: "hover" });
+    
+    $(".@Html.NameFor(m => m.CategoryId)").on('click change', function (e) {
+        $("#@Html.NameFor(m => m.CategoryId)").val($(this).val());
+    });
+
+    //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
+    $('.date-range-picker').daterangepicker({
+        'applyClass': 'btn-sm btn-success',
+        'cancelClass': 'btn-sm btn-default',
+        locale: {
+            applyLabel: 'Apply',
+            cancelLabel: 'Cancel'            
+        },
+        format: 'YYYY/MM/DD'
+    })
+    .prev().on(ace.click_event, function () {
+        $(this).next().focus();
+    });
+</script>
+}
+
+

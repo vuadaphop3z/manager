@@ -1,0 +1,310 @@
+﻿@using Manager.WebApp.Models;
+@using MySql.Epg.Store.Entities;
+@model Manager.WebApp.Models.Log4netViewModel
+
+@{
+    ViewBag.Title = "Realtime logs view";
+}
+
+
+@section PagePluginStyles
+{
+
+    <link rel="stylesheet" href="/assets/css/jquery.gritter.css" />
+}
+
+@section PageInlineStyles{
+    <style type="text/css">      
+        .error-record {
+            color: #fff !important;
+            background-color: red !important;
+        }
+
+        .alert-record {
+            color: #fff !important;
+            background-color: #d2924f !important;
+        }
+
+        .warning-record{           
+            color: #fff !important;
+            background-color: #abd24f !important;
+        }
+
+        .debug-record {
+            color: #502020 !important;
+            background-color: #d8d8d8 !important;
+        }
+
+        .info-record {
+            background-color: #a4defb !important;
+        }
+
+        .log-detail {
+            word-wrap: break-word;
+            word-break: break-all;
+            color: #000;
+            background-color: #efefef;
+        }
+
+        .log-content{
+            /*max-height:150px;
+            overflow: auto;*/
+        }
+
+        .tab-content {
+            border: 1px solid #999;
+        }
+
+        .profile-info-value{ word-wrap: break-word;word-break: break-all; }
+        .tab-content{max-height: 450px;overflow-y: auto;}
+    </style>
+}
+
+@Html.Partial("_Notifications")
+
+<!-- modal placeholder-->
+<div id='myModal' class="modal fade in" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content" id="abc">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-xs-12">
+        <div class="widget-box transparent" id="recent-box">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="control-group form-inline">
+                            <div class="form-group">
+                                <label class="control-label bolder blue">Log type:</label>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" checked class="ace ace-checkbox-2 cbx-log" value="ERROR" type="checkbox">
+                                        <span class="lbl"> Error </span>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" class="ace ace-checkbox-2 cbx-log" value="WARNING" type="checkbox">
+                                        <span class="lbl"> Warning </span>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" class="ace ace-checkbox-2 cbx-log" value="DEBUG" type="checkbox">
+                                        <span class="lbl"> Debug</span>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="form-field-checkbox" class="ace ace-checkbox-2 cbx-log" value="INFO" type="checkbox">
+                                        <span class="lbl"> Info</span>
+                                    </label>
+                                </div>                                
+                            </div>
+                        </div>                        
+                    </div> 
+                    
+                    <div class="col-md-6 col-xs-12">
+                        <div class="pull-right">
+                            <button class="btn btn-info btn-sm" type="button" onclick="ReloadWithFilters();">Reload</button>
+                            <button class="btn btn-default btn-sm" type="button" onclick="ClearView();">Clear view</button>
+                        </div>
+                    </div>                  
+                </div>      
+                <div class="row">
+                    @*<div class="col-md-6 col-xs-12">
+                        <button class="btn btn-info btn-sm" type="button" onclick="ReloadWithFilters();">Reload</button>
+                        <button class="btn btn-default btn-sm" type="button" onclick="ClearView();">Clear view</button>
+                    </div>*@
+                </div>        
+            </div>
+            <div class="widget-body">
+                <div class="widget-main padding-4">
+                    <div class="tab-content padding-8" style="margin-left: -7px;">
+                        <div id="comment-tab" class="tab-pane active">
+                            <div id="logList" class="panel-group accordion-style1 accordion-style2">
+                                @if (Model != null && Model.SearchResults != null && Model.SearchResults.Any())
+                                {
+                                    @RenderLogsList(Model.SearchResults);
+                                }
+                            </div>                            
+                        </div>
+                    </div>
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div><!-- /.widget-box -->
+    </div>
+</div>
+
+@helper RenderLogsList(List<Log4netRecord> searchResults)
+{
+    foreach (var item in searchResults)
+    {
+        @RenderLogItem(item);
+    }
+}
+
+@helper RenderLogItem(Log4netRecord item)
+{
+    @Html.Partial("_Log4netRecordPartial", item);
+}
+
+@section PageInlineScripts{
+    <script src="~/assets/js/jquery.gritter.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(".overlay").remove();
+        //Auto get data after 30 seconds
+        setInterval(function () {
+            RefreshData();
+        }, 30000);
+    });
+
+    $(document).on({
+        ajaxStart: function () {
+            $body.removeClass("loading");
+        },
+        ajaxStop: function () {
+            $body.removeClass("loading");
+        }
+    });
+
+    function GetFilterTypes() {
+        var strType = "";
+        $(".cbx-log").each(function () {
+            if ($(this).is(':checked')) {
+                strType += $(this).val() + ",";
+            }
+        });
+        return strType.slice(0, -1);
+    }
+
+    function ReloadWithFilters() {
+        var logTypes = GetFilterTypes();
+        if (logTypes.length > 0) {
+            $("#logList").html("");
+            RefreshData();
+        } else {
+            $.showErrorMessage('Error message', "Please choose at least one log type", null);
+        }
+    }
+
+    function RefreshData() {
+        var maxId = $(".log-item").first().data("id");
+        var reload = (maxId === undefined);
+        $.ajax({
+            type: "POST",
+            url: "GetNewestLogs",
+            data: { maxId: maxId, logTypes: GetFilterTypes() },
+            success: function (data) {
+                var msg = '';
+                if (data.success) {
+                    if (data.results !== null) {
+                        ProcessBeforeShow(data.results, reload);
+                    }
+                }
+                else {
+                    if (data.hasOwnProperty('message'))
+                        msg += data.message;
+                    $.showErrorMessage('Error notice', msg, function () { return; });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var responseTitle = "Error encountered"
+                $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), null);
+            }
+        });
+    }
+
+    function ClearView() {
+        $('#logList').html("");
+    }
+
+    function ProcessBeforeShow(results, reload) {
+        $.each(results, function (idx, obj) {
+            var newId = obj.EntryId;
+            var isDuplicate = false;
+            $(".log-item").each(function () {
+                if (newId === $(this).data("id")) {
+                    isDuplicate = true;
+                }
+            });
+
+            if (!isDuplicate) {
+                var newLogHtml = RenderLogRecord(obj);
+                if (reload) {
+                    $("#logList").append(newLogHtml);
+                } else {
+                    $("#logList").prepend(newLogHtml);
+                }
+            }
+        });
+
+        $(".new-log").fadeIn("slow");
+        $('#logList').scrollTop(0);
+        $(".new-log").removeClass("new-log");
+    }
+
+    function RenderLogRecord(record) {
+        var classLevel = "";
+        if (record.Level == "@Log4netLevel.ERROR.ToString()") {
+            if (record.Throwable.length > 0) {
+                classLevel = "error-record";
+            }
+            else {
+                classLevel = "alert-record";
+            }
+        }
+        else {
+            classLevel = record.Level.toLowerCase() + "-record";
+        }
+
+
+        var timeStamp = new Date(parseInt(record.TimeStamp.replace("/Date(", "").replace(")/", ""), 10));
+        //var arrTime = timeStamp.toLocaleString().split(',');
+        //var strDate = (timeStamp.getMonth() + 1) + "/" + timeStamp.getDate() + "/" + timeStamp.getFullYear();
+        if (record.Message.length > 300)
+            record.Message = record.Message.substr(0, 300) + " ...";
+
+        var strHtml = "<div class='row panel panel-default new-log'><div class='panel-heading'>";
+        strHtml += "<a href='#faq-" + record.EntryId + "' data-id='" + record.EntryId + "' data-parent='#logList' data-toggle='collapse' class='accordion-toggle collapsed log-item " + classLevel + "'>";
+        strHtml += "<i class='ace-icon fa fa-chevron-left pull-right' data-icon-hide='ace-icon fa fa-chevron-down' data-icon-show='ace-icon fa fa-chevron-left'></i>";
+        strHtml += "<i class='ace-icon fa fa-credit-card bigger-130'></i>&nbsp;";
+        strHtml += "<b>" + record.Level + ": " + record.AppName + " (" + record.MachineName + ")" + " - " + timeStamp.toLocaleDateString() + " " + timeStamp.toLocaleTimeString() + "</b>";
+        strHtml += "</a></div>";
+        strHtml += "<div class='panel-collapse collapse in' id='faq-" + record.EntryId + "'>";
+        strHtml += "<div class='row panel-body log-detail'><div class='col-md-11 log-content'>" + record.Message + "</div>";
+        strHtml += "<div class='col-md-1'><a data-toggle='modal' data-target='#myModal' class='btn btn-sm btn-info pull-right record-link' onclick='GetDetails(this);' href='#' data-id='" + record.EntryId + "'  data-modal='' title='Show log details'>";
+        strHtml += "<i class='ace-icon fa fa-search-plus bigger-120'></i></a></div>";
+        strHtml += "</div></div></div>";
+
+        $(".new-log").hide();
+        return strHtml;
+    }
+        function GetDetails(event) {
+            $.ajax({
+                url: 'LogDetails',
+                data: {
+                    id: $(event).data("id")
+                },
+                success: function (data) {
+                    $('#myModalContent').html(data);
+                    $('#myModalContent').modal('show');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var responseTitle = "Error encountered"
+                    $.showErrorMessage('Error message', $(responseTitle).text() + "\n" + formatErrorMessage(jqXHR, errorThrown), null);
+                }
+            });
+        }
+
+        function HideModal() {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        }
+    </script>
+}

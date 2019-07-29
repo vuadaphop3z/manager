@@ -1,0 +1,104 @@
+﻿@using Manager.WebApp.Settings
+@model Manager.WebApp.Models.Business.StatisticsUsersOnlineModel
+
+@{ 
+    ViewBag.Title = "Thống kê lượng truy cập hệ thống";
+}
+
+<div class="modal fade" id="m_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_modal_title">
+                    Các thiết bị kết nối
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body" id="m_modal_body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="UsersList">
+    @Html.Partial("_Users", Model)
+</div>
+
+@section PagePluginStyles{
+    <style>
+        .m--img-rounded{border:1px solid #ccc;}
+        .m-widget4__item{border-bottom:unset;}
+    </style>
+}
+
+@section PagePluginScripts{
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="@SystemSettings.MyCloudServer/signalr/hubs/"></script>
+    <script type="text/javascript">
+        var userInfo = {
+            UserName: "admin",
+            UserId: "0"
+        };
+
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var commonGateHub = $.connection.commonGateHub;
+            $.connection.hub.url = "@SystemSettings.MyCloudServer/signalr/hubs/";
+            $.connection.hub.start().done(function () {
+                console.log('Connected to MyCloud server successfully');
+
+                registerEvents(commonGateHub);
+
+            }).fail(function (error) {
+                console.log("Cannot connect to MyCloud server because: " + error);
+                });
+
+            //Register all client methods
+            registerClientMethods(commonGateHub);
+        });
+
+        function registerEvents(commonGateHub) {
+            commonGateHub.server.connect(userInfo);
+        }
+
+        function refresh() {
+            $.ajax({
+                url: 'refresh',
+                method: 'get',
+                success: function (data) {
+                    $("#UsersList").html(data);
+                }
+            });
+        }
+
+        function registerClientMethods(commonGateHub) {
+            // Calls when user successfully logged in
+            commonGateHub.client.onConnected = function (connectionId) {
+                //console.log("Your current ConnectionId: " + connectionId);
+            }
+
+            // On New User Connected
+            commonGateHub.client.onNewUserConnected = function (id, name) {
+                //console.log(name + " connected to MyCloud. ConnectionId: " + id);
+                refresh();
+               
+            }
+
+            // On User Disconnected
+            commonGateHub.client.onUserDisconnected = function (id, userName) {
+                //$("#user-" + userName).fadeOut(2000);
+                refresh();
+            }
+        }
+    </script>
+}

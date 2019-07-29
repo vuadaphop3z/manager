@@ -1,0 +1,92 @@
+﻿@using MySql.Epg.Store;
+
+@model MySql.Epg.Store.Entities.ActivityLog
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">View Activity Log Details</h4>
+</div>
+
+<div class="modal-body">
+    <div class="tabbable">        
+        <div class="tab-content">
+            <div id="acc_registration" class="tab-pane fade active in">
+
+                <div class="profile-user-info">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> UserId </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.UserId</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Email </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.UserName</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Activity Type </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.ActivityType</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Activity Content </div>
+
+                        <div class="profile-info-value">
+                            @*<span style="word-break: break-all;">@Model.ActivityText</span>*@
+                            @*<span style="word-break: break-all;">@Html.Raw(Model.ActivityText).ToHtmlString()</span>*@
+                            <span style="white-space: pre-line;word-break: break-all;">@Model.ActivityText</span>
+
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Target Type </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.TargetType</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Target ID </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.TargetId</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> IP Address </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.IPAddress</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> Date Time </div>
+
+                        <div class="profile-info-value">
+                            <span>@Model.ActivityDate.ToLocalTime()</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+</div>

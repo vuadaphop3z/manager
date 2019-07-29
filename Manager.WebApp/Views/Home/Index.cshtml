@@ -1,0 +1,90 @@
+﻿@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.ManageWarehouseModel
+
+@{
+    ViewBag.Title = ManagerResource.LB_DASHBOARD;
+
+    var hasStockPermission = PermissionHelper.CheckPermission("Index", "Warehouse");
+    var hasHistoryPermission = PermissionHelper.CheckPermission("History", "Warehouse");
+}
+
+@if (!hasHistoryPermission && !hasStockPermission)
+{
+    <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert" id="DashboardWelcome">
+        <div class="m-alert__icon">
+            <i class="la la-check"></i>
+        </div>
+        <div class="m-alert__text">
+            @ManagerResource.LB_DASHBOARD_WELCOME_TO
+            <strong>
+                @WebContext.GetSiteSettings().General.SiteName
+                <small>(v1.0)</small>
+            </strong>
+            @ManagerResource.LB_DASHBOARD_WELCOME_SLOGAN
+        </div>
+        <div class="m-alert__close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+@Html.AntiForgeryToken()
+
+<div id="StockOutList">
+
+</div>
+
+<div id="StockHistoryList">
+
+</div>
+
+@section PageInlineScripts{
+    @if (hasStockPermission)
+    {
+        <script type="text/javascript">
+            function GetListProductStockOut() {
+                var params = $.extend({}, doAjax_params_default);
+                params['showloading'] = true;
+                params['url'] = "/Warehouse/GetListProductStockOut";
+                params['requestType'] = "GET";
+                params['data'] = {};
+                params['dataType'] = "html";
+
+                params['successCallbackFunction'] = function (data) {
+                    $("#StockOutList").html(data);
+
+                    $("#DashboardWelcome").fadeOut();
+                };
+                doAjax(params);
+            }
+
+            setTimeout(function () {
+                GetListProductStockOut();
+            }, 500);
+        </script>
+    }
+
+    @if (hasHistoryPermission)
+    {
+        <script type="text/javascript">
+            function GetWarehouseActivityHistory() {
+                var params = $.extend({}, doAjax_params_default);
+                params['url'] = "/Warehouse/GetWarehouseActivityList";
+                params['requestType'] = "GET";
+                params['showloading'] = false;
+                params['data'] = { PageSize: 5 };
+                params['dataType'] = "html";
+
+                params['successCallbackFunction'] = function (data) {
+                    $("#StockHistoryList").html(data);
+                    $("#DashboardWelcome").fadeOut();
+                };
+                doAjax(params);
+            }
+
+            setTimeout(function () {
+                GetWarehouseActivityHistory();
+            }, 500);
+        </script>
+    }
+}

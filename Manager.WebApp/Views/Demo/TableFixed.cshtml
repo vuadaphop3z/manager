@@ -1,0 +1,1481 @@
+﻿<script type="text/javascript">
+    var MyBKBasePath = ("https:" == document.location.protocol ? "https://" : "http://") + "localhost:8383";
+    var MyBKConfigs = {
+        languageCode: 'vi-VN',
+        colorScheme: 'default',
+        productKey: 'd23c7aehwlf1l9c',
+        searchForm: {
+            showHeader: true
+        }
+    };
+
+    (function () {
+        var ibe = document.createElement("script");
+        ibe.type = "text/javascript"; ibe.async = true;
+        ibe.src = MyBKBasePath + "/content/searchform/embed.js";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(ibe, s);
+    })();
+</script>
+
+<div class="MyBKSearchForm"></div>
+
+@*<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix">
+            <div class="pull-right tableTools-container">
+                <button class="btn btn-white" href="#" onclick="location.reload();">
+                    <i class="ace-icon fa fa-refresh"></i>
+                    Làm mới
+                </button>
+                <a class="btn btn-sm btn-primary" href="/Ticketing/UpdatePNR" data-modal="">
+                    <i class="ace-icon fa fa-cloud-download"></i>
+                    Cập nhật PNR
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive" style="height:500px;">
+            <table id="dynamic-table" class="table table-striped table-bordered table-hover table-responsive fancyTable">
+                <thead>
+                    <tr>
+                        <th class="text-center">Tình trạng xuất vé</th>
+                        <th class="text-center">Người liên hệ</th>
+                        <th class="text-center">Phụ trách</th>
+                        <th class="text-center">Ngày đặt</th>
+                        <th class="text-center hidden-sm hidden-xs">Hành trình</th>
+                        <th class="text-center">Lịch trình</th>
+                        <th class="text-center">PNR</th>
+                        <th class="text-center hidden-sm hidden-xs">Hãng</th>
+                        <th class="text-center hidden-sm hidden-xs">Chênh lệch</th>
+                        <th class="text-center hidden-sm hidden-xs">Giá vé</th>
+                        <th class="text-center" style="width:100px">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>89b7c
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>anhnguyen@iflyvietnam.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0936277217
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="PHAM QUOC HUY">
+                                        PHAM QUOC HUY
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                15/11/2017 09:07:44 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - PQC</b> 25/11/2017 15:45
+                        </td>
+                        <td>
+                            <b>54707207</b>
+                            <br>
+                            16/11/2017 09:10
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VJ</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('133')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,918,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/133" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>95ae2
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>anhnguyen@iflyvietnam.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0936277217
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGUYEN KIM ANH">
+                                        NGUYEN KIM ANH
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                15/11/2017 08:41:55 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 25/11/2017 23:40
+                        </td>
+                        <td>
+                            <b>54705420</b>
+                            <br>
+                            16/11/2017 08:43
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VJ</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('123')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,302,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/123" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>bee87
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>thaont@goingo.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0962072168
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGUYEN THI THAO">
+                                        NGUYEN THI THAO
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                15/11/2017 08:36:39 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 20/11/2017 10:00
+                        </td>
+                        <td>
+                            <b>YSMNBP</b>
+                            <br>
+                            15/11/2017 20:36
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('121')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,367,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/121" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>cbf55
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>thaont@goingo.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0962072168
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGUYEN THI THAO">
+                                        NGUYEN THI THAO
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                15/11/2017 08:35:11 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 20/11/2017 10:00
+                        </td>
+                        <td>
+                            <b>EKQJGT</b>
+                            <br>
+                            15/11/2017 20:35
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('120')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,367,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/120" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>739e4
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>qvv.hn.vn@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0985252002
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="VU QUYNH">
+                                        VU QUYNH
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                15/11/2017 02:32:12 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Khứ hồi</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 17/11/2017 06:30<br><b>SGN - HAN</b> 30/11/2017 16:00
+                        </td>
+                        <td>
+                            <b>EXYTTG</b>
+                            <br>
+                            16/11/2017 02:32
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('115')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">4,155,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/115" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>33bd4
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>huongthuy71@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0913016058
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="THI THANH THUY NGUYEN">
+                                        THI THANH THUY NGUYEN
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 22:32:45 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 16/11/2017 10:30
+                        </td>
+                        <td>
+                            <b>KRGIAL</b>
+                            <br>
+                            15/11/2017 22:32
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('108')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">4,936,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/108" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>f8390
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>phuongthao112292@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>01644695596
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="LY KY DUYEN">
+                                        LY KY DUYEN
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 22:06:29 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Khứ hồi</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - DAD</b> 16/11/2017 06:30<br><b>DAD - SGN</b> 21/11/2017 17:15
+                        </td>
+                        <td>
+                            <b>YFZRYP</b>
+                            <br>
+                            15/11/2017 10:06
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('107')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,854,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/107" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>b47ae
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>dongnt@starcom.vn
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0979944809
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGUYEN VAN THUONG">
+                                        NGUYEN VAN THUONG
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 21:59:51 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 26/12/2017 14:10
+                        </td>
+                        <td>
+                            <b>54696939</b>
+                            <br>
+                            15/11/2017 22:02
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VJ</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('106')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,190,900</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/106" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>0b61e
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>hathu.9x@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0973967010
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGO QUANG BINH">
+                                        NGO QUANG BINH
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 21:03:20 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Khứ hồi</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 25/12/2017 19:00<br><b>SGN - HAN</b> 31/12/2017 19:00
+                        </td>
+                        <td>
+                            <b>JGYAOO</b>
+                            <br>
+                            15/11/2017 09:03
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('102')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">8,538,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/102" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>f57f2
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>pnthang25@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0912940782
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="PHAM NAM THANG">
+                                        PHAM NAM THANG
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 20:35:19 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - CXR</b> 01/12/2017 06:20
+                        </td>
+                        <td>
+                            <b>JDSMGY</b>
+                            <br>
+                            15/11/2017 08:35
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('101')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,423,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/101" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>ef7dc
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>lananhvt91@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>01656003442
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="PHAM THI LAN ANH">
+                                        PHAM THI LAN ANH
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 17:52:18 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - VII</b> 23/11/2017 10:30
+                        </td>
+                        <td>
+                            <b>PKNMZF</b>
+                            <br>
+                            15/11/2017 05:52
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('98')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,367,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/98" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>3c161
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>nguyenthuha61990@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0946466617
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="MY LIN TRAN">
+                                        MY LIN TRAN
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 17:47:46 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - HAN</b> 19/11/2017 21:45
+                        </td>
+                        <td>
+                            <b>APVYBF</b>
+                            <br>
+                            15/11/2017 05:47
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('97')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,367,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/97" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>18137
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>hathuminh83@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0935368384
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="HA THU MINH">
+                                        HA THU MINH
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 13:48:12 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - HAN</b> 15/11/2017 21:30
+                        </td>
+                        <td>
+                            <b>YMMBAV</b>
+                            <br>
+                            15/11/2017 13:48
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('88')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">2,743,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/88" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>8acdb
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>hathu.9x@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0973967010
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="DO THU">
+                                        DO THU
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 13:18:18 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - DAD</b> 16/11/2017 10:30
+                        </td>
+                        <td>
+                            <b>YJNVEN</b>
+                            <br>
+                            15/11/2017 13:18
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('86')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,478,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/86" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>845b7
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>yenbui0701@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0989539228
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="BUI THI YEN">
+                                        BUI THI YEN
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 09:38:42 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Khứ hồi</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - HPH</b> 30/11/2017 05:55<br><b>HPH - SGN</b> 04/12/2017 16:35
+                        </td>
+                        <td>
+                            <b>ZBOHMA</b>
+                            <br>
+                            14/11/2017 21:38
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('77')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">2,460,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/77" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>44f8a
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>nhanpt@easyfly.com.vn
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0988906122
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="LUC GIAC">
+                                        LUC GIAC
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                14/11/2017 08:46:17 AM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>BMV - SGN</b> 21/11/2017 12:00
+                        </td>
+                        <td>
+                            <b>PD4GTS</b>
+                            <br>
+                            15/11/2017 08:46
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">JQ</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('76')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">708,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/76" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>e297d
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>hathu.9x@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0973967010
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="DO THU">
+                                        DO THU
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                13/11/2017 23:50:48 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>SGN - HAN</b> 16/11/2017 17:00
+                        </td>
+                        <td>
+                            <b>VOINEP</b>
+                            <br>
+                            14/11/2017 22:45
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('73')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">2,237,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/73" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>29f0e
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>vfvdaiphat@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0981001211
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="NGO NHU">
+                                        NGO NHU
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                13/11/2017 21:07:39 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HUI - SGN</b> 09/12/2017 13:15
+                        </td>
+                        <td>
+                            <b>TFQCPU</b>
+                            <br>
+                            14/11/2017 21:07
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('72')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,313,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/72" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>19a51
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>vfvdaiphat@gmail.com
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0981001212
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="PHAM HUY HAI">
+                                        PHAM HUY HAI
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                13/11/2017 19:58:50 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - DAD</b> 17/11/2017 14:00
+                        </td>
+                        <td>
+                            <b>NITUVK</b>
+                            <br>
+                            14/11/2017 07:58
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">VN</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('71')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">927,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/71" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="text-center">
+                            <span class="ace-icon fa btn btn-xs fa ace-icon btn-white fa-space-shuttle" style="width:130px;cursor:default"> Đặt chỗ</span>
+
+                        </td>
+                        <td>
+                            <span class="btn-link popover-success cursor-pointer" data-rel="popover" data-placement="top" data-container="body" data-toggle="popover" title="" data-content="    <ul class=&quot;list-unstyled&quot;>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Mã đơn hàng: </span>44a0d
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Giới tính: </span>
+Nam        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Email: </span>dongnt@starcom.vn
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Phone: </span>0902196980
+        </li>
+        <li>
+            <i class=&quot;ace-icon fa fa-caret-right blue&quot;></i>
+            <span class=&quot;text-primary&quot;>Địa chỉ: </span>
+        </li>
+    </ul>
+" data-original-title="LUU MINH DUC">
+                                        LUU MINH DUC
+                                    </span>
+                            <br>
+                            <span>(Khách lẻ)</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td class="text-center" style="width:100px;">
+                            <p>
+                                13/11/2017 19:56:11 PM
+                            </p>
+                        </td>
+                        <td class="hidden-sm hidden-xs">
+                            <span>Một chiều</span>
+                        </td>
+                        <td style="min-width:120px">
+                            <b>HAN - SGN</b> 16/12/2017 18:35
+                        </td>
+                        <td>
+                            <b>BGFTPT</b>
+                            <br>
+                            14/11/2017 19:56
+                        </td>
+                        <td class="text-center hidden-sm hidden-xs">JQ</td>
+                        <td class="text-right hidden-sm hidden-xs">
+                            <span style="color:orange;cursor:pointer" data-class="ip-number-vn" class="" data-action="ChangeDiffCost('70')" data-val="0">
+                                0
+                            </span>
+                        </td>
+                        <td class="text-right hidden-sm hidden-xs">1,071,000</td>
+                        <td class="text-left">
+                            <div class="btn-group">
+                                <a class="btn btn-xs btn-white" href="/Ticketing/TicketingDetails/70" data-modal="" title="Xem chi tiết">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+@section PagePluginStyles{
+        <link href="~/Content/Plugins/FixedHeader/css/fixedheadertable.css" rel="stylesheet" />
+    <link href="~/Content/Plugins/FixedHeader/css/960.css" rel="stylesheet" />
+    <link href="~/Content/Plugins/FixedHeader/css/myTheme.css" rel="stylesheet" />
+}
+
+@section PageInlineScripts{        
+    <script src="~/Content/Plugins/FixedHeader/js/jquery.fixedheadertable.min.js"></script>
+    <script type="text/javascript">
+        $('#dynamic-table').fixedHeaderTable({
+            footer: false,
+            cloneHeadToFoot: false,
+            altClass: 'odd',
+            autoResize: true,
+            fixedColumns: 1
+        });
+
+        //$('#dynamic-table').fixedHeaderTable({ altClass: 'odd', footer: true, fixedColumns: 1 });
+    </script>
+}*@

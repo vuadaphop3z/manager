@@ -1,0 +1,23 @@
+﻿@model Manager.WebApp.Models.FunctionViewModel
+@using Manager.WebApp.Resources
+
+<div class="modal-header">
+    <h5 class="modal-title" id="">
+        @ManagerResource.CONFIRM_DELETE
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">No</button>
+        <input class="btn btn-danger" type="submit" value="Yes" />
+    </div>
+}

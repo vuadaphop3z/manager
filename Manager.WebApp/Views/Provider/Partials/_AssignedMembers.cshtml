@@ -1,0 +1,91 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.ShopAssignToMemberModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        <i class="fa fa-users"></i> @ManagerResource.LB_ASSIGNED_USER
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ShopId)
+    @Html.HiddenFor(m => m.MemberId)
+    <div class="modal-body">
+         @if (Model.AssignedMembers.HasData())
+         {
+             <div class="form-group m-form__group" row>
+                <div class="">
+                    <a class="" data-modal="" href="@Url.Action("AssignToMember", "Shop", new { shopId = Model.ShopId })" title="@ManagerResource.LB_ASSIGN_TO_USER">
+                        <i class="fa fa-user-plus"></i> @ManagerResource.LB_ADDNEW
+                    </a>
+                </div>
+            </div>
+         }        
+        <div class="form-group m-form__group row">
+            <div class="col-md-12">
+                @if (Model.AssignedMembers.HasData())
+                {
+                    var counter = 0;
+                    <table class="table table-sm m-table m-table--head-bg-brand table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Thành viên</th>
+                                <th class="text-center">SĐT</th>
+                                @*<th class="text-center">Email</th>*@
+                                <th class="text-center">Sở hữu</th>
+                                <th class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.AssignedMembers)
+                            {
+                                counter++;
+                                <tr>
+                                    <td class="text-center">@counter</td>
+                                    <td class="text-left">@item.DisplayName (@item.UserName)</td>
+                                    <td class="text-left">@item.PhoneNumber</td>
+                                    @*<td class="text-center">@item.Email</td>*@
+                                    <td class="text-center">
+                                        @if (item.IsOwner)
+                                        {
+                                            <i class="fa fa-check text-danger"></i>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;" title="@ManagerResource.LB_DELETE"
+                                           onclick="ConfirmFirst(DeleteAssignedMember, '@ManagerResource.CONFIRM_DELETE', { shopId: @Model.ShopId, userId: @item.Id })">
+                                            <i class="la la-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="text-danger">
+                        <i class="fa fa-warning text-danger"></i> @ManagerResource.LB_HAS_NO_ASSIGNED_USER
+
+                        <a class="" data-modal="" href="@Url.Action("AssignToMember", "Shop", new { shopId = Model.ShopId })" title="@ManagerResource.LB_ASSIGN_TO_SHOP">
+                            <i class="fa fa-plus-circle"></i> @ManagerResource.LB_ADDNEW
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+            @ManagerResource.LB_CLOSE
+        </button>
+    </div>
+}

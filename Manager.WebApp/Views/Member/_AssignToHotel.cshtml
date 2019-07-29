@@ -1,0 +1,101 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.MemberAssignToShopModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        <i class="fa fa-user-plus"></i> @ManagerResource.LB_ASSIGN_TO_SHOP
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm("AssignToShop", "Member", FormMethod.Post, new { role = "form", id = "FrmAssign", @class = "m-form m-form--fit m-form--label-align-right" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.ShopId)
+    @Html.HiddenFor(m=>m.MemberId)
+<div class="modal-body">
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-3 col-sm-12">
+            @ManagerResource.LB_SELECT_SHOP
+        </label>
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="m-typeahead">
+                @Html.TextBoxFor(m => m.ShopName, new { @class = "form-control m-input", placeholder = ManagerResource.LB_TYPE_SHOP_NAME + "..." })
+                @Html.ValidationMessageFor(m => m.ShopName, null, new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group m-form__group row">
+        <label class="col-form-label col-lg-3 col-sm-12">
+            
+        </label>
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="m-checkbox-inline">
+                <label class="m-checkbox">
+                    <input name="@Html.NameFor(m => m.IsOwner)" value="true" type="checkbox">
+                    @ManagerResource.LB_IS_OWNER
+                    <span></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+            @ManagerResource.LB_CLOSE
+        </button>
+        <button type="submit" class="btn btn-brand m-btn">
+            @ManagerResource.LB_SAVE
+        </button>
+    </div>
+}
+
+<!--validate-->
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("body").on("click",".ac-shop-item", function () {
+            $("#ShopId").val($(this).data("id"));
+        });
+    })
+
+    $('#ShopName').typeahead({
+            highlight: true,
+            minLength: 1,
+            hint: false,
+            delay: 2000
+        },
+        {
+            source: function (query, process) {
+                var params = $.extend({}, doAjax_params_default);
+                params['url'] = '/Shop/GetListShopToAssign';
+                params['requestType'] = 'POST';
+                params['data'] = { query: query };
+                params['dataType'] = "json";
+                params['async'] = false;
+
+                params['successCallbackFunction'] = function (result) {
+                    process(result.data);
+                };
+                doAjax(params);
+            },
+            display: 'Name',
+            templates: {
+                // empty always shows up...
+                //empty: "no places found yet",
+                // and "suggestion" never does, even though my source function works fine!!
+                suggestion: function (data) {
+                    return "<div class='ac-shop-item' data-id='"+ data.Id +"'><i class='fa fa-building'></i> "+ data.Name +"</div>";
+                }
+            }
+        });
+
+    $("#ShopName").on('typeahead:selected', function (evt, item) {
+        $("#ShopId").val(item.Id);
+    });
+</script>

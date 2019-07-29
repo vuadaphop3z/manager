@@ -1,0 +1,97 @@
+﻿@using Newtonsoft.Json
+@using MsSql.AspNet.Identity.Entities
+@model Manager.WebApp.Models.ShopEditModel
+
+<div class="tabbable tabs-left">
+    @if (Model.Policies != null && Model.Policies.Count > 0)
+    {
+        @RenderAllPolicyTabs()
+
+        var currentPolicies = new List<MetaShopPolicy>();
+        try
+        {
+            if (Model.MetaData != null)
+            {
+                if (!string.IsNullOrEmpty(Model.MetaData.Policies))
+                {
+                    currentPolicies = JsonConvert.DeserializeObject<List<MetaShopPolicy>>(Model.MetaData.Policies);
+                }
+            }
+
+            currentPolicies = currentPolicies.OrderBy(x => x.PolicyId).ToList();
+
+            <div class="tab-content">
+                @RenderPolicyItem(currentPolicies)
+            </div>
+        }
+        catch(Exception ex)
+        {
+            <div class="tab-content">
+                RenderView error: @ex.ToString()
+            </div>
+        }
+    }
+</div>
+
+@helper RenderAllPolicyTabs()
+    {
+        var counter = 0;
+        <ul class="nav nav-tabs" id="policiTabs">
+            @foreach (var policy in Model.Policies)
+            {
+                counter++;
+                <li class="@((counter == 1)? "active": "")">
+                    <a data-toggle="tab" href="#Policy_@policy.Id">
+                        @policy.Name
+                    </a>
+                </li>
+            }
+        </ul>
+}
+
+@helper RenderPolicyItem(List<MetaShopPolicy> currentPolicies)
+{
+        var counter = 0;
+        foreach (var policy in Model.Policies)
+        {
+            counter++;
+            var isMatched = false;
+            <div id="Policy_@policy.Id" class="tab-pane @((counter == 1)? "in active": "")">
+                @if (currentPolicies != null && currentPolicies.Count > 0)
+                {
+                    foreach (var item in currentPolicies)
+                    {
+                        if (item.PolicyId == policy.Id)
+                        {
+                            @Html.Partial(string.Format("Partials/Policies/{0}", policy.Code), item)
+                            isMatched = true;
+                            break;
+
+                        }
+
+                        continue;
+                    }
+
+                    if (!isMatched)
+                    {
+                        @RenderNoInformationPolicy(policy)
+                    }
+                }
+                else
+                {
+                    @RenderNoInformationPolicy(policy)
+                }
+            </div>
+        }
+}
+
+@helper RenderNoInformationPolicy(IdentityPolicy policy) { 
+    <div class="row property-content">
+        <div class="col-md-9">
+            Không có thông tin
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-sm btn-white pull-right btnAddPolicy" onclick="AddPolicy(this);" data-id="@policy.Id" data-code="@policy.Code" typeof="button"><i class="fa fa-icon fa-plus"></i> Cập nhật</button>
+        </div>
+    </div>
+}

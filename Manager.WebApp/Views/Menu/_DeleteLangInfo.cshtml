@@ -1,0 +1,29 @@
+﻿@using Manager.WebApp.Models
+@using Manager.WebApp.Resources
+
+@model Manager.WebApp.Models.ManageMenuLangModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="">
+        @ManagerResource.CONFIRM_DELETE
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.Id)
+    @Html.HiddenFor(m=>m.MenuId)
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            @ManagerResource.LB_NO
+        </button>
+        <button type="submit" class="btn btn-primary">
+            @ManagerResource.LB_YES
+        </button>
+    </div>
+}

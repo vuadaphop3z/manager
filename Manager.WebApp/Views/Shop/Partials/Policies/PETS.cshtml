@@ -1,0 +1,54 @@
+﻿@using Newtonsoft.Json
+@using MsSql.AspNet.Identity.Entities
+@model MsSql.AspNet.Identity.Entities.MetaShopPolicy
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.PolicyData))
+    {
+        MetaPolicyDataPets myPolicy = null;
+        try
+        {
+            myPolicy = JsonConvert.DeserializeObject<MetaPolicyDataPets>(Model.PolicyData);
+        }
+        catch (Exception ex)
+        {
+            <div>
+                RenderView error: @ex.ToString()
+            </div>
+        }
+
+        if (myPolicy != null)
+        {
+            @RenderPolicyData(myPolicy)
+        }
+    }
+}
+
+@helper RenderPolicyData(MetaPolicyDataPets myPolicy)
+    {
+        <div class="row property-content">
+            <div class="col-md-9">
+                @if (myPolicy.Accepted == 1)
+                {
+                    <p>+ Được phép mang theo @((myPolicy.Pets > 0) ? myPolicy.Pets.ToString() : "") vật nuôi.</p>
+                }
+                else
+                {
+                    <p>+ Không được phép mang theo vật nuôi.</p>
+                }
+
+                @if (!string.IsNullOrEmpty(myPolicy.Note))
+                {
+                    <p>
+                        <b>* Ghi chú: </b>
+                        @Html.Raw(myPolicy.Note)
+                    </p>
+                }
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-sm btn-white pull-right btnEditPolicy" onclick="EditPolicy(this);" data-id="@Model.PolicyId" data-code="@Model.PolicyCode" typeof="button"><i class="fa fa-icon fa-pencil"></i> Cập nhật</button>
+            </div>
+        </div>
+}
+

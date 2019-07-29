@@ -1,0 +1,40 @@
+﻿@using Manager.WebApp.Resources
+@model Manager.WebApp.Models.WarehouseActionModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel" style="font-size:20px;">
+       <i class="fa fa-refresh fz-20"></i> @ManagerResource.LB_REFLECT_STOCK_TAKE
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            &times;
+        </span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ProductId)
+            <div class="row">
+                <div class="form-group m-form__group col-md-12">
+                  <i class="fa fa-warning text-warning fz-20"></i>  @ManagerResource.LB_CONFIRM_REFLECT_STOCK_TAKE
+                </div>
+            </div>           
+        </div>
+    </div>
+    <div class="modal-footer" style="display:block;">
+        <button type="submit" class="btn btn-warning pull-left">
+            @ManagerResource.BT_ALLOW
+        </button>
+        <button type="button" class="btn btn-outline-info pull-right" data-dismiss="modal">
+            @ManagerResource.LB_CANCEL
+        </button>
+        <br />
+    </div>
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

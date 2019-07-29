@@ -1,0 +1,329 @@
+﻿@using Manager.WebApp.Settings;
+@using Manager.WebApp.Models;
+@using Manager.WebApp.Resources;
+@model Manager.WebApp.Models.WarehouseHistoryModel
+
+@{
+    ViewBag.Title = ManagerResource.LB_WAREHOUSE_HISTORY;
+}
+
+
+@Html.Partial("_Notifications")
+
+@Html.Partial("../Widgets/Modals/_LargeModal")
+
+<!-- modal placeholder-->
+<div id='prdModalSelect' class='modal modal-wide fade '>
+    <div class="modal-dialog modal-wide-dialog">
+        <div class="modal-content">
+            <div id='prdModalSelectContent'></div>
+        </div>
+    </div>
+</div>
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    @RenderSearchForm()
+    <!--end::Form-->
+</div>
+
+@helper RenderSearchForm()
+{
+    using (Html.BeginForm("History", "Warehouse", FormMethod.Get, new { role = "form", @class = " m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" }))
+    {
+        @Html.HiddenFor(m => m.SearchExec)
+        <input type="hidden" value="" id="SelectedId" />
+        <div class="m-portlet__body">
+            <div class="form-group row">
+                <div class="col-md-2 m-form__group--inline">
+                    <label>@ManagerResource.LB_KEYWORD</label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control m-input" })
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    @Html.LabelFor(m => m.ActivityType, new { @class = "form-control-label" })
+                    <select name="@Html.NameFor(m => m.ActivityType)" id="@Html.IdFor(m=>m.ActivityType)" class="form-control selectpicker btn-white" data-live-search="true">
+                        <option value="0">----- @ManagerResource.LB_ALL -----</option>
+                        @foreach (var item in Enum.GetValues(typeof(EnumWarehouseActivityType)))
+                        {
+                            var itemValue = (int)item;
+                            var chkStr = string.Empty;
+                            if (itemValue == Model.ActivityType)
+                            {
+                                chkStr = "selected";
+                            }
+
+                            <option value="@itemValue" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    @Html.LabelFor(m => m.StaffId, new { @class = "form-control-label" })
+                    <select name="@Html.NameFor(m => m.StaffId)" id="@Html.IdFor(m=>m.StaffId)" class="form-control selectpicker btn-white" data-live-search="true">
+                        <option value="0">----- @ManagerResource.LB_ALL -----</option>
+                        @if (Model.Users.HasData())
+                        {
+                            foreach (var item in Model.Users)
+                            {
+                                var chkStr = string.Empty;
+                                if (item.StaffId == Model.StaffId)
+                                {
+                                    chkStr = "selected";
+                                }
+                                <option value="@item.StaffId" @chkStr>@item.UserName</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    @Html.LabelFor(m => m.DeviceId, new { @class = "form-control-label" })
+                    <select name="@Html.NameFor(m => m.DeviceId)" id="@Html.IdFor(m=>m.DeviceId)" class="form-control selectpicker btn-white" data-live-search="true">
+                        <option value="0">----- @ManagerResource.LB_ALL -----</option>
+                        @if (Model.Devices.HasData())
+                        {
+                            foreach (var item in Model.Devices)
+                            {
+                                var chkStr = string.Empty;
+                                if (item.Id == Model.DeviceId)
+                                {
+                                    chkStr = "selected";
+                                }
+                                <option value="@item.Id" @chkStr>@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2 m-form__group--inline">
+                    @Html.LabelFor(m => m.FromDate, new { @class = "form-control-label" })
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control m-input datepicker-input", autocomplete = "off" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar-check-o"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 m-form__group--inline">
+                    @Html.LabelFor(m => m.ToDate, new { @class = "form-control-label" })
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control m-input datepicker-input", autocomplete = "off" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar-check-o"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">                
+                <div class="col-lg-2 m-form__group--inline">
+                    @*<label class="form-control-label">&nbsp;</label>*@
+                    <button type="submit" class="btn btn-info form-control" style="">
+                        @ManagerResource.LB_SEARCH
+                    </button>
+                </div>
+
+                <div class="col-lg-2 m-form__group--inline">
+                    @*<label class="form-control-label">&nbsp;</label>*@
+                    <button type="reset" class="btn btn-outline-info form-control">
+                        @ManagerResource.BT_CLEAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="m-portlet">
+            <div class="m-portlet__body">
+                <!--end::Section-->
+                <!--begin::Section-->
+                <div class="m-section">
+                    <div class="m-section__content table-responsive">
+                        <table id="dataTable" class="table m-table m-table--head-bg-brand table-bordered dataTable">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="50">#</th>
+                                    <th class="text-center">@ManagerResource.LB_EVENT_ACTIVITY</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_CODE</th>
+                                    <th class="text-center">@ManagerResource.LB_ITEM_NAME</th>
+                                    <th class="text-center">@ManagerResource.LB_QTY</th>
+                                    <th class="text-center">@ManagerResource.LB_UNIT</th>
+                                    <th class="text-center">@ManagerResource.LB_OPERATION_DATE</th>
+                                    <th class="text-center">@ManagerResource.LB_STAFF</th>
+                                    <th class="text-center">@ManagerResource.LB_DEVICE_NAME</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.SearchResults != null && Model.SearchResults.Count > 0)
+                                {
+                                    var stt = 0;
+                                    foreach (var record in Model.SearchResults)
+                                    {
+                                        stt++;
+                                        <tr class="@string.Empty : " text-danger")" data-id="@record.Id" data-productid="@record.ProductId">
+                                            <td class="text-center">@(stt + (Model.CurrentPage - 1) * Model.PageSize) </td>
+                                            <td class="text-center">
+                                                @foreach (var item in Enum.GetValues(typeof(EnumWarehouseActivityType)))
+                                                {
+                                                    var itemValue = (int)item;
+                                                    if (record.ActivityType == itemValue)
+                                                    {
+                                                        @EnumExtensions.GetEnumDescription((Enum)item)
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @if (record.ProductInfo != null)
+                                                {
+                                                    @record.ProductInfo.Code
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (record.ProductInfo != null)
+                                                {
+                                                    <b class="">
+                                                        @record.ProductInfo.Name
+                                                    </b>
+                                                }
+                                            </td>
+                                            <td class="text-right">
+                                                <b title="@ManagerResource.LB_QTY">@Utils.DoubleToStringFormat(record.NumberOfProducts)</b>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (record.ProductInfo != null)
+                                                {
+                                                    if (Model.Units.HasData())
+                                                    {
+                                                        var myUnit = Model.Units.Where(x => x.Id == record.ProductInfo.UnitId).FirstOrDefault();
+                                                        if (myUnit != null)
+                                                        {
+                                                            <span>@myUnit.Name</span>
+                                                        }
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="text-center">@((record.CreatedDate != null) ? record.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm") : string.Empty)</td>
+                                             <td class="text-center">
+                                                @if (Model.Users.HasData())
+                                                {
+                                                    var user = Model.Users.Where(x => x.StaffId == record.StaffId).FirstOrDefault();
+                                                    if (user != null)
+                                                    {
+                                                        <span>@user.UserName</span>
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @if (Model.Devices.HasData())
+                                                {
+                                                    var myDevice = Model.Devices.Where(x => x.Id == record.DeviceId).FirstOrDefault();
+                                                    if (myDevice != null)
+                                                    {
+                                                        <span>@myDevice.Name</span>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            @ManagerResource.LB_NO_RECORD
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @RenderPaging()
+                    </div>
+                </div>
+                <!--end::Section-->
+            </div>
+            <!--end::Form-->
+        </div>
+    </div>
+
+</div>
+
+<div class="m-portlet">
+    <!--begin::Form-->
+    <div class="m-portlet__body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="javascript:;" class="btn btn-warning pull-left exportcsv" data-tableid="dataTable" data-filename="StockHistory">
+                    @ManagerResource.BT_OUTPUT_CSV
+                </a>
+            </div>
+        </div>
+        <!--end::Form-->
+    </div>
+</div>
+
+@helper RenderPaging()
+{
+<div class="m_datatable m-datatable m-datatable--default m-datatable--brand m-datatable--loaded">
+    <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
+        @if (Model.WasOverRecordsInPage())
+        {
+
+            @Html.BootstrapPager(Model.CurrentPage, index => Url.Action("History", "Warehouse",
+                     new
+                     {
+                         Page = index,
+                         SearchExec = "Y",
+                         ActivityType = Model.ActivityType,
+                         ProductId = Model.ProductId,
+                         StaffId = Model.StaffId,
+                         Name = Model.Name,
+                         FromDate = Model.FromDate,
+                         ToDate = Model.ToDate
+                     }),
+                     Model.TotalCount, pageSize: Model.PageSize, numberOfLinks: 10)
+        }
+
+        @if (Model.TotalCount > 0)
+        {
+            <div class="m-datatable__pager-info">
+                <span class="m-datatable__pager-detail">
+                    @ManagerResource.LB_DISPLAYING @Model.StartCount() @ManagerResource.LB_TO @Model.EndCount(Model.SearchResults.Count()) @ManagerResource.LB_OF @Model.TotalCount @ManagerResource.LB_RECORDS
+                </span>
+            </div>
+        }
+    </div>
+    
+</div>
+
+}
+
+@section PageInlineScripts{
+    <script type="text/javascript">
+        var BootstrapDatepicker = {
+            init: function () {
+                $(".datepicker-input").datepicker({
+                    todayBtn: "linked",
+                    clearBtn: !0,
+                    todayHighlight: !0,
+                    format: 'dd/mm/yyyy',
+                    templates: {
+                        leftArrow: '<i class="la la-angle-left"></i>',
+                        rightArrow: '<i class="la la-angle-right"></i>'
+                    }
+                })
+            }
+        };
+        jQuery(document).ready(function () {
+            BootstrapDatepicker.init()
+        });
+    </script>
+}

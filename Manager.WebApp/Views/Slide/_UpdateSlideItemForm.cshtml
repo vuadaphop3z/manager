@@ -1,0 +1,99 @@
+﻿@using Manager.WebApp.Resources
+@using Manager.WebApp.Models
+@model Manager.WebApp.Models.SlideItemUpdateModel
+
+@Html.AntiForgeryToken()
+<div class="m-portlet__body">
+    <div class="form-group m-form__group row">
+        @Html.HiddenFor(m=>m.Id)
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>@ManagerResource.LB_TITLE</label>
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>@ManagerResource.LB_DESCRIPTION</label>
+            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <label>
+                @ManagerResource.LB_IMAGE
+            </label>
+            <div class="form-group">
+                @Html.Partial("../Widgets/FormControls/_MediaBrowser", new MediaFileViewModel { FieldName = "ImageUpload", FieldValue = Model.CurrentImageUrl, StorageElementName = "CurrentImageUrl" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group m-form__group row">
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>@ManagerResource.LB_LINK (Url)</label>
+            @Html.TextBoxFor(m => m.Link, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Link, null, new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>@ManagerResource.LB_ACTION</label>
+            <select name="@Html.NameFor(m => m.LinkAction)" id="@Html.IdFor(m => m.LinkAction)" class="form-control btn-white">
+                @foreach (var item in Enum.GetValues(typeof(EnumLinkActionClick)))
+                {
+                    var chkItem = (int)item;
+                    var chkStr = string.Empty;
+                    if (chkItem == Model.LinkAction)
+                    {
+                        chkStr = "selected";
+                    }
+                    <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>@ManagerResource.LB_ORDER_DISPLAY</label>
+            @Html.TextBoxFor(m => m.SortOrder, new { @class = "form-control", type = "number" })
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <label>
+                @ManagerResource.LB_STATUS
+            </label>
+            <select name="@Html.NameFor(m => m.Status)" id="@Html.IdFor(m => m.Status)" class="form-control btn-white">
+                @foreach (var item in Enum.GetValues(typeof(EnumStatus)))
+                {
+                    var chkItem = (int)item;
+                    var chkStr = string.Empty;
+                    if (chkItem == Model.Status)
+                    {
+                        chkStr = "selected";
+                    }
+                    <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<div class="m-portlet__foot m-portlet__foot--fit">
+    <div class="m-form__actions m-form__actions">
+        <div class="row">
+            <div class="col-lg-12 ml-lg-auto">
+                @if (Model.Id > 0)
+                {
+                    <a href="/Slide/ManageItems/@Model.SlideId" class="btn btn-danger">
+                        <i class="fa fa-arrow-left"></i> @ManagerResource.LB_GOBACK
+                    </a>
+                }
+                else
+                {
+                    <a href="/Slide" class="btn btn-danger">
+                        <i class="fa fa-arrow-left"></i> @ManagerResource.LB_GOBACK
+                    </a>
+                }
+
+                <button type="submit" class="btn btn-info">
+                    <i class="fa fa-floppy-o"></i> @ManagerResource.LB_SAVE
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿@using MsSql.AspNet.Identity.Entities
+
+@model List<IdentityProvince>
+
+<option value="0">Chọn tỉnh/thành phố</option>
+@if(Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
+}

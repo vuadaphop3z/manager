@@ -1,0 +1,363 @@
+﻿@using Manager.WebApp.Settings
+@using MsSql.AspNet.Identity.Entities
+@model Manager.WebApp.Models.ReportModel
+
+@{
+    ViewBag.Title = "Doanh thu xuất vé";
+}
+
+@{
+    var hasData = (Model.SearchResults != null && Model.SearchResults.Count > 0);
+    var tongTien = 0;
+    var tongPhiDV = 0;
+    var tongChenh = 0;
+    var tongPhiKhac = 0;
+}
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog" style="width: 60%; height: auto;max-height: 100%;margin: 0 auto;">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("manually", "report", FormMethod.Get, new { id = "searchForm", role = "form" }))
+{
+    @Html.HiddenFor(m => m.SearchExec)
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col" id="widget-container-col-1">
+            @*<div class="widget-box collapsed" id="widget-box-1">
+
+                </div>*@
+            <div class="widget-box" id="widget-box-1">
+                <div class="widget-header">
+                    <h5 class="widget-title">Bộ lọc</h5>
+                    <div class="widget-toolbar">
+                        @*<div class="widget-menu">
+                                <a href="#" data-action="settings" data-toggle="dropdown">
+                                    <i class="ace-icon fa fa-bars"></i>
+                                </a>
+                            </div>*@
+
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+
+                        @*<a href="#" data-action="close">
+                                <i class="ace-icon fa fa-times"></i>
+                            </a>*@
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.ProviderId)
+                                    <div class='form-group'>
+                                        <select name="@Html.NameFor(m=>m.ProviderId)" class="form-control selectpicker" data-live-search="true">
+                                            <option value="0">Tất cả</option>
+                                            @if (Model.ListAgency != null && Model.ListAgency.Count > 0)
+                                            {
+                                                foreach (var item in Model.ListAgency)
+                                                {
+                                                    <option value="@item.Id" @( Model.ProviderId == item.Id ? "selected" : "")>@item.TenAgency</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PhuTrachId)
+                                    <div class='form-group'>
+                                        <select id="@Html.IdFor(m=>m.PhuTrachId)" name="@Html.NameFor(m=>m.PhuTrachId)" class="form-control selectpicker" data-live-search="true">
+                                            <option value="">Tất cả</option>
+                                            @if (Model.ListUser != null && Model.ListUser.Count > 0)
+                                            {
+                                                foreach (var item in Model.ListUser)
+                                                {
+                                                    <option value="@item.Id" @( Model.PhuTrachId == item.Id ? "selected" : "")>@item.UserName - @item.Email</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.FromDate)
+                                    <div class='form-group'>
+                                        <div class='input-group date' id='@Html.IdFor(m => m.FromDate)-group'>
+                                            @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control datetime-picker" })
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-xs-12">
+                                @Html.LabelFor(m => m.ToDate)
+                                <div class="form-group">
+                                    <div class='input-group date' id='@Html.IdFor(m => m.ToDate)-group'>
+                                        @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control datetime-picker" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-purple btn-sm">
+                                    Xem thống kê
+                                    <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="clearfix">
+            <div class="pull-left">
+                @if (hasData)
+                {
+                    var fistItem = Model.SearchResults[0];
+
+                    <b>Số liệu thống kê: </b>
+                    <b>
+                        @(((DateTime)fistItem.FromDate).ToString("dd/MM/yyyy HH:mm"))
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        @(((DateTime)fistItem.ToDate).ToString("dd/MM/yyyy HH:mm"))
+                    </b>
+                }
+            </div>
+            @if (hasData)
+            {
+                <div class="pull-right tableTools-container">
+                    <a id="btnExport" class="btn btn-purple btn-sm buttons-csv buttons-html5 btn btn-white btn-primary btn-bold" title="Xuất Excel">
+                        <span>
+                            <i class="fa fa-file-excel-o bigger-110 orange"></i> Xuất excel
+                        </span>
+                    </a>
+                </div>
+            }
+        </div>
+        <br />
+        <div class="table-responsive" style="max-height: 500px; overflow: auto;">
+            <table id="dynamic-table" class="table table-striped table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Công ty/Đại lý/Khách lẻ</th>
+                        <th class="text-center">Người phụ trách</th>
+                        <th class="text-center">PNR</th>
+                        <th class="text-center">Ngày xuất</th>
+                        <th class="text-center">Giá</th>
+                        <th class="text-center">Phí dịch vụ</th>
+                        <th class="text-center">Chênh lệch</th>
+                        <th class="text-center">Phí khác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (hasData)
+                    {
+                        var stt = 0;
+                        foreach (var record in Model.SearchResults)
+                        {
+                            stt++;
+                            var giaVe = record.TongTien;
+                            
+                            tongTien += (record.TongTien);
+                            tongPhiDV += record.TongPhiDV;
+                            tongChenh += (record.ChenhLech+record.ChenhLechTicket);
+                            tongPhiKhac += record.PhiKhac;
+
+                            //var customerDetails = RenderCustomerDetails(record).ToHtmlString();
+
+                            <tr>
+                                <td class="text-center">@stt</td>
+                                <td class="text-left">
+                                    @if (!string.IsNullOrEmpty(record.TenAgency))
+                                    {
+                                        <span>@record.TenAgency</span>
+                                    }
+                                    else
+                                    {
+                                        if (string.IsNullOrEmpty(record.NguoiLienHe))
+                                        {
+                                            <span>Khách lẻ</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@record.NguoiLienHe (Khách lẻ)</span>
+                                        }
+                                    }
+                                </td>
+                                <td class="text-left">@record.NguoiPhuTrach</td>
+                                <td class="text-left">@record.PNR</td>
+                                <td class="text-center">@(((DateTime)record.NgayXuat).ToString("dd/MM/yyyy HH:mm"))</td>
+                                <td class="text-right">@string.Format("{0:n0}", giaVe)</td>
+                                <td class="text-right">@string.Format("{0:n0}", record.TongPhiDV)</td>
+                                <td class="text-right">@string.Format("{0:n0}", (record.ChenhLech+record.ChenhLechTicket))</td>
+                                <td class="text-right">@string.Format("{0:n0}", record.PhiKhac)</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">
+                                No data found
+                            </td>
+                        </tr>
+                    }
+                    @if (hasData)
+                    {
+                        <tr>
+                            <th colspan="5" align="left">Tổng</th>
+                            <th align="right" class="text-right">@string.Format("{0:n0}", tongTien)</th>
+                            <th align="right" class="text-right">@string.Format("{0:n0}", tongPhiDV)</th>
+                            <th align="right" class="text-right">@string.Format("{0:n0}", tongChenh)</th>
+                            <th align="right" class="text-right">@string.Format("{0:n0}", tongPhiKhac)</th>
+                        </tr>
+                        <tr>
+                            <th align="left" colspan="5" class="text-left">Thành tiền (VNĐ)</th>
+                            <th align="right" colspan="4" class="text-right">@string.Format("{0:n0}", tongTien + tongPhiDV + tongChenh+tongPhiKhac)</th>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="space"></div>
+
+@if (Model.SearchResults != null && Model.TotalCount > 0)
+{
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="no-margin-top">
+                <div class="pull-left">Showing @Model.StartCount() to @Model.EndCount(Model.SearchResults.Count()) of @Model.TotalCount entries</div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper RenderCustomerDetails(IdentityReport record)
+{
+    @*<ul class="list-unstyled">
+            <li>
+                <i class="ace-icon fa fa-caret-right blue"></i>
+                <span class="text-primary">Mã đơn hàng: </span>@record.MaDonHang
+            </li>
+            @if (record.ProviderId != 0)
+            {
+                <li>
+                    <i class="ace-icon fa fa-caret-right blue"></i>
+                    <span class="text-primary">Mã đại lý: </span>@record.MaAgency
+                </li>
+            }
+            <li>
+                <i class="ace-icon fa fa-caret-right blue"></i>
+                <span class="text-primary">Giới tính: </span>
+                @foreach (var item in Enum.GetValues(typeof(EnumGioiTinh)))
+                {
+                    var chkItem = (int)item;
+                    if (record.GioiTinh == chkItem)
+                    {
+                        @EnumExtensions.GetEnumDescription((Enum)item)
+                    }
+                }
+            </li>
+            <li>
+                <i class="ace-icon fa fa-caret-right blue"></i>
+                <span class="text-primary">Email: </span>@record.Email
+            </li>
+            <li>
+                <i class="ace-icon fa fa-caret-right blue"></i>
+                <span class="text-primary">Phone: </span>@record.SoDienThoai
+            </li>
+            <li>
+                <i class="ace-icon fa fa-caret-right blue"></i>
+                <span class="text-primary">Địa chỉ: </span>@record.DiaChi
+            </li>
+        </ul>*@
+}
+
+@section PagePluginStyles{
+
+    <link href="~/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap-select.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        /* The max width is dependant on the container (more info below) */
+        .popover {
+            max-width: 100%; /* Max Width of the popover (depending on the container!) */
+        }
+    </style>
+}
+
+@section PagePluginScripts{
+    <!-- page specific plugin scripts -->
+    <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/js/bootstrap-timepicker.min.js"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/daterangepicker.min.js"></script>
+    <script src="/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/number/jquery.number.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+
+}
+
+@section PageInlineScripts{
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $('.datetime-picker')
+                .datetimepicker(
+                //{ format: 'DD/MM/YYYY HH:MM A' }
+                ).next().on(ace.click_event, function () {
+                    $(this).prev().focus();
+                });
+            $('.selectpicker').selectpicker({
+                style: "btn-white"
+            });
+        });
+
+        jQuery(function ($) {
+            $('[data-rel=popover]').popover({ html: true });
+
+            $('[data-rel=popover]').click(function () {
+                $('[data-rel=popover]').not(this).popover('hide'); //all but this
+            });
+
+            $("#btnExport").click(function () {
+                return tableToExcel('dynamic-table', 'Booking Export', 'Export');
+            });
+        });
+    </script>
+}

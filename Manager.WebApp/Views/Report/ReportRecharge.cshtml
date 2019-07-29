@@ -1,0 +1,335 @@
+﻿@using Manager.WebApp.Settings
+@model Manager.WebApp.Models.SearchNapTienModel
+
+@{
+    ViewBag.Title = "Thống kê nạp tiền";
+    var hasData = (Model.SearchResult != null && Model.SearchResult.Count > 0);
+
+}
+
+@Html.Partial("_Notifications")
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("reportrecharge", "report", FormMethod.Get, new { id = "searchForm", role = "form" }))
+{
+    @Html.HiddenFor(m => m.SearchExec)
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col" id="widget-container-col-1">
+            @*<div class="widget-box collapsed" id="widget-box-1">
+
+                </div>*@
+            <div class="widget-box" id="widget-box-1">
+                <div class="widget-header">
+                    <h5 class="widget-title">Tìm kiếm</h5>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row">
+                            <div class="col-md-4 col-xs-12">
+                                @Html.LabelFor(m => m.LoaiKH)
+                                <div class="form-group">
+                                    <select name="@Html.NameFor(m => m.LoaiKH)" id="@Html.IdFor(m => m.LoaiKH)" class="form-control" onchange="GetListDoiTac();">
+                                        <option value="0" @(Model.LoaiKH == 0 ? "selected" : "")>Tất cả</option>
+                                        @foreach (var item in Enum.GetValues(typeof(EnumLoaiKH)))
+                                        {
+                                            var chkItem = (int)item;
+                                            var chkStr = string.Empty;
+                                            if (chkItem == Model.LoaiKH)
+                                            {
+                                                chkStr = "selected";
+                                            }
+                                            <option value="@chkItem" @chkStr>@EnumExtensions.GetEnumDescription((Enum)item)</option>
+                                        }
+                                        <option value="3" @(Model.LoaiKH == 3 ? "selected" : "")>Khách lẻ</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xs-12">
+                                @Html.LabelFor(m => m.DoiTacId)
+                                <div class="form-group">
+                                    <select name="@Html.NameFor(m => m.DoiTacId)" id="ddlDoiTac" class="form-control selectpicker" data-style="btn-white" data-live-search="true">
+                                        <option value="-1">Chọn khách hàng</option>
+                                        @if (Model.ListItemKhachHang != null && Model.ListItemKhachHang.Count() > 0)
+                                        {
+                                            foreach (var item in Model.ListItemKhachHang)
+                                            {
+                                                var chkItem = item.Value;
+                                                var chkStr = string.Empty;
+                                                if (chkItem == Model.DoiTacId.ToString())
+                                                {
+                                                    chkStr = "selected";
+                                                }
+                                                <option value="@chkItem" @chkStr>@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xs-12">
+                                @Html.LabelFor(m => m.NganHangId)
+                                <div class="form-group">
+                                    <select name="@Html.NameFor(m => m.NganHangId)" id="ddlNganHang" class="form-control selectpicker" data-style="btn-white" data-live-search="true">
+                                        <option value="-">Chọn ngân hàng</option>
+                                        @if (Model.ListNganHang != null && Model.ListNganHang.Count() > 0)
+                                        {
+                                            foreach (var item in Model.ListNganHang)
+                                            {
+                                                var chkItem = item.Id;
+                                                var chkStr = string.Empty;
+                                                if (chkItem == Model.NganHangId)
+                                                {
+                                                    chkStr = "selected";
+                                                }
+                                                <option value="@chkItem" @chkStr>@item.TenNganHang</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.FromDate)
+                                    <div class='form-group'>
+                                        <div class='input-group date' id='@Html.IdFor(m => m.FromDate)-group'>
+                                            @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control datetime-picker" })
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-xs-12">
+                                @Html.LabelFor(m => m.ToDate)
+                                <div class="form-group">
+                                    <div class='input-group date' id='@Html.IdFor(m => m.ToDate)-group'>
+                                        @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control datetime-picker" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-purple btn-sm">
+                                    <i class="ace-icon fa fa-flag icon-on-right bigger-110"></i>
+                                    Báo cáo nạp tiền
+                                </button>
+                                <div class="pull-right">
+                                    @if (Model.TienDatCoc > 0)
+                                    {
+                                        <span class="label label-success"><b>Đặt cọc</b> </span><span><b> @string.Format("{0:n0}", Model.TienDatCoc)</b> đ</span>
+
+                                    }
+                                    @if (Model.TienHanMuc > 0 || Model.TienDatCoc > 0)
+                                    {
+                                        <span class="label label-warning" style='margin-left:40px;'><b>Hạn mức</b></span><span style="margin-right:40px"><b> @string.Format("{0:n0}", Model.TienHanMuc)</b> đ</span>
+                                    }
+                                    @if (hasData)
+                                    {
+
+                                        <a id="btnExport" class="btn btn-purple btn-sm buttons-csv buttons-html5 btn btn-white btn-primary btn-bold" title="Xuất Excel">
+                                            <span>
+                                                <i class="fa fa-file-excel-o bigger-110 orange"></i> Xuất excel
+                                            </span>
+                                        </a>
+
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="space"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">Tổng tiền</th>
+                        <th class="text-right">
+                            @{ var tongtien = 0;
+                                foreach (var record in Model.SearchResult)
+                                {
+                                    tongtien += record.SoTien;
+                                }
+
+                            }
+                            <b>@string.Format("{0:n0}", tongtien)</b>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Ngày nạp</th>
+                        <th class="text-center">Mã khách hàng</th>
+                        <th class="text-center">Tên khách hàng</th>
+                        <th class="text-center">Kế toán</th>
+                        <th class="text-center">Loại giao dịch</th>
+                        <th class="text-center">Hình thức thanh toán</th>
+                        <th class="text-center">Ghi chú</th>
+                        <th class="text-center">Số tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.SearchResult != null && Model.SearchResult.Count > 0)
+                    {
+                        var stt = 0;
+                        foreach (var record in Model.SearchResult)
+                        {
+                            stt++;
+                            var strloaitien = "<span class='label label-info'>Đặt cọc</span>";
+                            if (record.LoaiTien == (int)EnumLoaiTien.DatVe)
+                            {
+                                strloaitien = "<span class='label label-success'>Nạp tiền</span>";
+                            }
+                            else if(record.LoaiTien == (int)EnumLoaiTien.HoanVe)
+                            {
+                                strloaitien = "<span class='label label-warning'>Hoàn vé</span>";
+                            }
+                            <tr>
+                                <td class="text-center">@stt  </td>
+                                <td class="text-center">@(record.NgayTao == null ? "" : Convert.ToDateTime(record.NgayTao).ToString("dd/MM/yyyy"))</td>
+                                <td>
+                                    @record.KyHieu
+                                </td>
+                                <td>
+                                    @(record.TenAgency == "" ? record.TenKhachHang : record.TenAgency)
+                                </td>
+                                <td>
+                                    @record.UserName
+                                </td>
+                                <td class="text-center">@Html.Raw(strloaitien)</td>
+                                <td>@(record.NganHangId == 0 ? "Tiền mặt" : (record.MaNganHang + " - " + record.TenNganHang))</td>
+                                <td>
+                                    @record.GhiChu
+                                </td>
+                                <td class="text-right">@string.Format("{0:n0}", record.SoTien)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="8" class="text-center"><b>Tổng tiền</b></td>
+                            <td class="text-right"><b>@string.Format("{0:n0}", tongtien)</b></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11">
+                                No data found
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="space"></div>
+
+@section PagePluginStyles{
+
+    <link href="~/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap-select.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        /* The max width is dependant on the container (more info below) */
+        .popover {
+            max-width: 100%; /* Max Width of the popover (depending on the container!) */
+        }
+    </style>
+}
+
+
+@section PagePluginScripts{
+    <!--datetime-->
+    <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/js/bootstrap-timepicker.min.js"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/daterangepicker.min.js"></script>
+    <script src="/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/assets/js/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/number/jquery.number.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+}
+
+@section PageInlineScripts{
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $("#btnExport").click(function () {
+                return tableToExcel('dynamic-table', 'Xuất báo cáo nạp tiền', 'Báo cáo nạp tiền');
+            });
+            $('.datetime-picker').datetimepicker(
+                { format: 'DD/MM/YYYY' }
+            ).next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            });
+            $('#ddlDoiTac').selectpicker('refresh', {
+                style: "btn-white"
+            });
+        });
+        function GetListDoiTac() {
+            var loaikh = $("#LoaiKH").val();
+            if (loaikh != "0") {
+                $("#ddlDoiTac").empty();
+                $.ajax({
+                    type: "GET",
+                    datatype: "Json",
+                    url: "/Bill/GetListDoiTac",
+                    data: { loaikh: loaikh },
+                    success: function (data) {
+                        $('#ddlDoiTac').append('<option value="-1">Chọn khách hàng</option>');
+                        $.each(data, function (index, item) {
+                            $('#ddlDoiTac').append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                        });
+                        $('#ddlDoiTac').selectpicker('refresh', {
+                            style: "btn-white"
+                        });
+                    }
+                });
+            }
+            else {
+                $("#ddlDoiTac").empty();
+                $('#ddlDoiTac').append('<option value="-1">Chọn khách hàng</option>');
+                $('#ddlDoiTac').selectpicker('refresh', {
+                    style: "btn-white"
+                });
+            }
+        }
+    </script>
+}
+
+
+

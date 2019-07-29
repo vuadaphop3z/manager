@@ -1,0 +1,53 @@
+﻿@using Manager.WebApp.Resources
+
+@{
+    Layout = "~/Views/Shared/_LayoutError.cshtml";
+    ViewBag.Title = ManagerResource.ERROR_PAGE_NOT_FOUND;
+}
+
+
+<div class="error-container">
+    <div class="well">
+        <h1 class="text-danger lighter smaller">
+            <span class="blue bigger-125">
+                <i class="ace-icon fa fa-warning fz-30"></i>
+                404
+            </span>
+            @ManagerResource.ERROR_PAGE_NOT_FOUND
+        </h1>
+
+        <hr />
+
+        <div>
+            <div class="space"></div>
+            <h4 class="smaller">@ManagerResource.LB_TRY_ONE_FOLLOWING:</h4>
+
+            <ul class="list-unstyled spaced inline bigger-110 margin-15">
+                <li>
+                    <i class="ace-icon fa fa-hand-o-right blue"></i>
+                    @ManagerResource.LB_CHECK_VALID_LINK
+                </li>
+
+                <li>
+                    <i class="ace-icon fa fa-hand-o-right blue"></i>
+                   @ManagerResource.LB_TELL_ADMIN_ABOUTIT
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+        <div class="space"></div>
+
+        <div class="center">
+            @*<a href="javascript:history.back()" class="btn btn-grey">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Go Back
+                </a>*@
+
+            <a href="@Url.Action("Index","Home")" class="btn btn-info">
+                <i class="ace-icon fa fa-home"></i>
+                @ManagerResource.LB_DASHBOARD
+            </a>
+        </div>
+    </div>
+</div>
