@@ -220,7 +220,7 @@
     <Compile Include="Controllers\Business\SlideController.cs" />
     <Compile Include="Controllers\Business\CompanyController.cs" />
     <Compile Include="Controllers\Business\ProjectCategoryController.cs" />
-    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\Business\ProjectController.cs" />
     <Compile Include="Controllers\System\MyAccountController.cs" />
     <Compile Include="Controllers\System\AvatarController.cs" />
     <Compile Include="Controllers\Business\AreaControllers.cs" />
