@@ -1298,6 +1298,9 @@
     <None Include="Views\ProjectCategory\Index.cshtml" />
     <Content Include="Views\ProjectCategory\_PopupDelete.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\Create.cshtml" />
+    <None Include="Views\Project\Create.cshtml_old" />
+    <Content Include="Views\Project\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Log4net\Logs\" />

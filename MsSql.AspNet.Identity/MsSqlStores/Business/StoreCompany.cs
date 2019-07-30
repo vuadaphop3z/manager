@@ -26,6 +26,7 @@ namespace MsSql.AspNet.Identity.MsSqlStores.Business
     {
 
         private readonly string _connectionString;
+
         private RpsCompany myRepository;
 
         public StoreCompany() : this("DefaultConnection")

@@ -13,6 +13,10 @@ namespace MsSql.AspNet.Identity.MsSqlStores
     public interface IStoreProject
     {
         List<IdentityProject> GetByPage(IdentityProject filter, int currentPage, int pageSize);
+        IdentityProject GetById(int Id);
+        int Insert(IdentityProject identity);
+        bool Update(IdentityProject identity);
+        bool Delete(int Id);
 
     }
      public class StoreProject : IStoreProject
@@ -38,8 +42,29 @@ namespace MsSql.AspNet.Identity.MsSqlStores
             return myRepository.GetByPage(filter, currentPage, pageSize);
         }
 
+        public IdentityProject GetById(int Id)
+        {
+            return myRepository.GetById(Id);
+        }
 
+        public int Insert(IdentityProject filter)
+        {
+            return myRepository.Insert(filter);
+        }
 
+        public bool Update (IdentityProject identity)
+        {
+            return myRepository.Update(identity);
+        }
 
+        public bool Delete(int Id)
+        {
+            return myRepository.Delete(Id);
+        }
+
+        public bool Update(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

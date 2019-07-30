@@ -35,8 +35,8 @@ namespace MsSql.AspNet.Identity.Repositories
 
             var paramaters = new Dictionary<string, object>
             {
-                {@"Keywork", filter.Keyword },
-                //{@"", filter.Keyword },
+                {@"Keyword", filter.Keyword },
+                {@"Status", filter.Status },
                 {@"offset", offset },
                 {@"pageSize", pageSize },
             };
@@ -79,7 +79,10 @@ namespace MsSql.AspNet.Identity.Repositories
                 {
                     using(var reader = MsSqlHelper.ExecuteReader(conn, CommandType.StoredProcedure, sqlCmd, parameters))
                     {
-                        info = ExtractProjectData(reader);
+                        if (reader.Read())
+                        {
+                            info = ExtractProjectData(reader);
+                        }
                     }
                 }
             }
@@ -131,6 +134,8 @@ namespace MsSql.AspNet.Identity.Repositories
 
             var newId = 0;
 
+            var strNow = DateTime.Now.ToString("dd/mm/yyyy h:mm");
+
             var parameters = new Dictionary<string, object>
             {
                 {@"Code",identity.Code  },
@@ -142,7 +147,7 @@ namespace MsSql.AspNet.Identity.Repositories
                 {@"BeginDate",identity.BeginDate  },
                 {@"FinishDate",identity.FinishDate },
                 {@"CreatedBy",identity.CreatedBy  },
-                {@"CreatedDate",identity.CreatedDate  },
+                {@"CreatedDate", strNow  },
                 {@"Status",identity.Status  },
             };
 
@@ -166,13 +171,26 @@ namespace MsSql.AspNet.Identity.Repositories
 
         }
 
-        public bool Update(int Id)
+        public bool Update(IdentityProject identity)
         {
             var sqlCmd = @"Project_Update";
 
+            var strNow = DateTime.Now.ToString("dd/mm/yyyy h:mm");
+
             var parameters = new Dictionary<string, object>
             {
-                {@"Id", Id }
+                {@"Id", identity.Id },
+                {@"Code",identity.Code  },
+                {@"ProjectCategoryId",identity.ProjectCategoryId  },
+                {@"CompanyId",identity.CompanyId },
+                {@"Name",identity.Name  },
+                {@"ShortDescription",identity.ShortDescription  },
+                {@"Detail",identity.Detail  },
+                {@"BeginDate",identity.BeginDate  },
+                {@"FinishDate",identity.FinishDate },
+                {@"CreatedBy",identity.CreatedBy  },
+                {@"CreatedDate", strNow  },
+                {@"Status",identity.Status  },
             };
 
             try
@@ -231,6 +249,7 @@ namespace MsSql.AspNet.Identity.Repositories
                 var record = ExtractProjectData(reader);
 
                 //Extends information
+                if (reader.HasColumn("TotalCount"))
                 record.TotalCount = Utils.ConvertToInt32(reader["TotalCount"]);
 
                 listData.Add(record);
@@ -244,7 +263,7 @@ namespace MsSql.AspNet.Identity.Repositories
             var record = new IdentityProject();
 
             record.Id = Utils.ConvertToInt32(reader["Id"]);
-            record.Name = reader["Code"].ToString();
+            record.Code = reader["Code"].ToString();
             record.ProjectCategoryId = Utils.ConvertToInt32(reader["ProjectCategoryId"]);
             record.CompanyId = Utils.ConvertToInt32(reader["CompanyId"]);
             record.Name = reader["Name"].ToString();

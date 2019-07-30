@@ -104,14 +104,20 @@ namespace MsSql.AspNet.Identity.Repositories.Business
         public List<IdentityCompany> GetList()
         {
             var sqlCmd = @"Company_GetList";
-            List<IdentityCompany> listData = null;
+            //List<IdentityCompany> listData = new List<IdentityCompany>();
 
+            List<IdentityCompany> listData = null;
             try
             {
                 using (var conn = new SqlConnection(_connectionString))
                 {
                     using (var reader = MsSqlHelper.ExecuteReader(conn, CommandType.StoredProcedure, sqlCmd, null))
                     {
+                        //while (reader.Read())
+                        //{
+                        //    var record = ExtractCompanyData(reader);
+                        //    listData.Add(record);
+                        //}
                         listData = ParsingListFromReader(reader);
                     }
                 }
@@ -244,6 +250,7 @@ namespace MsSql.AspNet.Identity.Repositories.Business
                 var record = ExtractCompanyData(reader);
 
                 //Extends information
+                if (reader.HasColumn("TotalCount"))
                 record.TotalCount = Utils.ConvertToInt32(reader["TotalCount"]);
 
                 listData.Add(record);

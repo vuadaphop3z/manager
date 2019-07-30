@@ -149,5 +149,20 @@ namespace Manager.WebApp.Helpers
                 logger.Error(strError);
             }
         }
+
+        public static void ClearProjectCache(int projectId)
+        {
+            var strError = string.Empty;
+            try
+            {
+                var cacheProvider = GlobalContainer.IocContainer.Resolve<ICacheProvider>();
+                cacheProvider.Clear(string.Format("PROEJCT_{0}", projectId));
+            }
+            catch (Exception ex)
+            {
+                strError = string.Format("Failed ClearProjectCache: {0}", ex.ToString());
+                logger.Error(strError);
+            }
+        }
     }
 }

@@ -629,26 +629,27 @@ namespace Manager.WebApp.Helpers
         }
 
         // 20190726 Oai ADD
+
         public static List<IdentityCompany> GetListCompany()
         {
-            var myKey = "COMPANY";
+            var myKey = "COMPANYS";
             List<IdentityCompany> myList = null;
 
             try
             {
                 //Check from cache first
-                var cacheClient = GlobalContainer.IocContainer.Resolve<ICacheClient>();
-                myList = cacheClient.Get<List<IdentityCompany>>(myKey);
+                var cacheCompany = GlobalContainer.IocContainer.Resolve<ICacheProvider>();
+                cacheCompany.Get<List<IdentityCompany>>(myKey, out myList);
 
                 if (myList == null)
                 {
                     var myStore = GlobalContainer.IocContainer.Resolve<IStoreCompany>();
                     myList = myStore.GetList();
 
-                    //Storage to cache
-                    cacheClient.Add(myKey, myList);
+                    if (myList.HasData())
+                        //Storage to cache
+                        cacheCompany.Set(myKey, myList);
                 }
-
             }
             catch (Exception ex)
             {
@@ -660,28 +661,30 @@ namespace Manager.WebApp.Helpers
 
         public static List<IdentityProjectCategory> GetListProjectCatefory()
         {
-            var myKey = "PROJECTCATEGORY";
+            var myKey = "PROJECTCATEGORYS";
             List<IdentityProjectCategory> myList = null;
 
             try
             {
                 //Check from cache first
-                var cacheClient = GlobalContainer.IocContainer.Resolve<ICacheClient>();
-                myList = cacheClient.Get<List<IdentityProjectCategory>>(myKey);
+                var cacheProjectCatefory = GlobalContainer.IocContainer.Resolve<ICacheProvider>();
+                cacheProjectCatefory.Get<List<IdentityProjectCategory>>(myKey, out myList);
 
                 if (myList == null)
                 {
                     var myStore = GlobalContainer.IocContainer.Resolve<IStoreProjectCategory>();
                     myList = myStore.GetList();
 
-                    //Storage to cache
-                    cacheClient.Add(myKey, myList);
+                    if(myList.HasData())
+                        //Storage to cache
+                        cacheProjectCatefory.Set(myKey, myList);
+
                 }
 
             }
-            catch (Exception ex)
+           catch (Exception ex)
             {
-                logger.Error("Could not GetListCompany: " + ex.ToString());
+                logger.Error("Could not GetListProjectCatefory: " + ex.ToString());
             }
 
             return myList;

@@ -102,7 +102,7 @@ namespace MsSql.AspNet.Identity.Repositories
 
             var sqlCmd = @"ProjectCategory_GetList";
 
-            List<IdentityProjectCategory> listData = null;
+            List<IdentityProjectCategory> listData = new List<IdentityProjectCategory>();
 
             try
             {
@@ -110,7 +110,12 @@ namespace MsSql.AspNet.Identity.Repositories
                 {
                     using (var reader = MsSqlHelper.ExecuteReader(conn, CommandType.StoredProcedure, sqlCmd, null))
                     {
-                        listData = ParsingListFromReader(reader);
+                        while (reader.Read())
+                        {
+                            var record = ExtractProjectCategory(reader);
+
+                            listData.Add(record);
+                        }
                     }
                 }
 
@@ -221,6 +226,8 @@ namespace MsSql.AspNet.Identity.Repositories
                 var record = ExtractProjectCategory(reader);
 
                 //Extends information
+
+                if (reader.HasColumn("TotalCount"))
                 record.TotalCount = Utils.ConvertToInt32(reader["TotalCount"]);
 
                 listData.Add(record);
